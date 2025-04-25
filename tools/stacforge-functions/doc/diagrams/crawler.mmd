@@ -1,0 +1,9 @@
+sequenceDiagram
+    participant O as Orchestration
+    participant C as Crawler
+    participant DS as Data storage
+
+    O ->> C: Get list of scenes
+    C ->> DS: List directories
+    DS ->> C: List of directories
+    C ->> O: List of scenes

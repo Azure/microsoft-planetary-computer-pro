@@ -1,0 +1,15 @@
+sequenceDiagram
+    participant O as Orchestration
+    participant T as Transformer
+    participant E as STACForge engine
+    participant DS as Data storage
+    participant SS as STACForge storage
+
+    O ->> T: Transform scene
+    T ->> E: Render template (scene url)
+    E ->> DS: Get scene data
+    DS ->> E: Scene data
+    E ->> T: STAC item
+    T ->> SS: Store STAC item
+    SS ->> T: STAC item url
+    T ->> O: STAC item url

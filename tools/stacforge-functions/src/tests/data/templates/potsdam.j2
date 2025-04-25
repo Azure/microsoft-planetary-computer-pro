@@ -1,0 +1,50 @@
+{#
+  We assume scene_info is the URL of a .tif file.
+  There also should be a world file (https://en.wikipedia.org/wiki/World_file) with .tfw extension.
+#}
+{%- set filename = scene_info.split('/')[-1] %}
+{%- set id = filename.replace('.tif', '') %}
+{%- set dataset = get_rasterio_dataset(scene_info ) %}
+{
+  "type": "Feature",
+  "stac_version": "1.0.0",
+  "id": "{{ id }}",
+  "properties": {
+    "created": "{{ now() }}",
+    "datetime": "{{ now() }}",
+{%- with projection = dataset | projection_info %}
+    "proj:epsg": {{ projection.epsg }},
+    "proj:geometry": {{ projection.geometry | tojson }},
+    "proj:bbox": {{ projection.bbox | tojson }},
+    "proj:shape": {{ projection.shape | tojson }},
+    "proj:projjson": {{ projection.projjson | tojson }},
+    "proj:wkt2": "{{ projection.wkt2.replace('"', '\\"') }}"
+{%- endwith %}
+  },
+{%- with geom = dataset | geometry_info %}
+  "geometry": {{ geom.footprint | tojson }},
+  "bbox": {{ geom.bbox | tojson }},
+{%- endwith %}
+  "links": [],
+  "assets": {
+    "image": {
+      "href": "{{ scene_info }}",
+      "type": "image/tiff; application=geotiff",
+      "title": "Raster file",
+      "role": ["data"],
+      "raster:bands": {{ dataset | raster_info | tojson }},
+      "eo:bands": {{ dataset | eo_bands_info | tojson}}
+    },
+    "worldfile": {
+      "href": "{{ scene_info.replace('.tif', '.tfw') }}",
+      "type": "text/plain",
+      "title": "World file",
+      "role": ["metadata"]
+    }
+  },
+  "stac_extensions": [
+    "https://stac-extensions.github.io/projection/v1.1.0/schema.json",
+    "https://stac-extensions.github.io/raster/v1.1.0/schema.json",
+    "https://stac-extensions.github.io/eo/v1.1.0/schema.json"
+  ]
+}

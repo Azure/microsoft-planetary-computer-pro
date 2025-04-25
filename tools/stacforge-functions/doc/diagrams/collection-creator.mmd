@@ -1,0 +1,10 @@
+sequenceDiagram
+    participant O as Orchestration
+    participant CC as Collection creator
+    participant SS as STACForge storage
+
+    O ->> CC: Create collection (item urls)
+    CC ->> CC: Create collection
+    CC ->> SS: Store collection
+    SS ->> CC: Collection url
+    CC ->> O: Collection url

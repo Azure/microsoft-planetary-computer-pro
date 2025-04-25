@@ -1,0 +1,7 @@
+{
+  "storageBlobDataContributorRole": "ba92f5b4-2d11-453d-a403-e96b0029c9fe",
+  "storageQueueDataContributorRole": "974c5e8b-45b9-4653-ba55-5f855dd0fb88",
+  "storageTableDataContributorRole": "0a9a7e1f-b9d0-4cc4-a60d-0319b160aaa3",
+  "storageBlobDelegatorRole": "db58b8e5-c6ad-4a2a-8342-4190687cbf4a",
+  "monitoringMetricsPublisherRole": "3913510d-42f4-4e42-8a64-420c390055eb"
+}

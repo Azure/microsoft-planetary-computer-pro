@@ -1,0 +1,25 @@
+sequenceDiagram
+    actor U as User
+    participant OL as Orchestration launcher
+    participant O as Orchestration
+    participant C as Crawler
+    participant T as Transformer
+    participant CC as Collection creator
+    participant I as Ingestor
+
+    U ->> OL: Start orchestration
+    OL ->> O: Start
+    O ->> OL: Status endpoint
+    OL ->> U: Status endpoint
+    O ->> C: Get list of scenes
+    C ->> O: List of scenes
+    loop scenes
+        O ->> T: Transform scene
+        T ->> O: STAC item
+    end
+    O ->> CC: Create collection
+    CC ->> O: Static STAC collection
+    O ->> I: Ingest collection
+    I ->> O: Ingestion id, run id
+    U ->> O: Get status
+    O ->> U: Status, ingestion id, run id
