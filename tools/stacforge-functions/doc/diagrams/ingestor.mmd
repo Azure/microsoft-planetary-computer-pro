@@ -1,0 +1,17 @@
+sequenceDiagram
+    participant O as Orchestration
+    participant I as Ingestor
+    participant G as GeoCatalog
+    participant SS as STACForge storage
+
+    O ->> I: Ingest collection
+    I ->> G: Get connection infos
+    G ->> I: Connection infos
+    alt Connection info not exist
+        I ->> SS: Get SAS token
+        SS ->> I: SAS token
+        I ->> G: Create connection info
+    end
+    I ->> G: Ingest collection (collection url)
+    G ->> I: Ingestion id, run id
+    I ->> O: Ingestion id, run id

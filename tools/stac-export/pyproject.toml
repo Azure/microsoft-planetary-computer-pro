@@ -1,0 +1,20 @@
+[project]
+name = "stac-export"
+version = "0.1.0"
+description = "STAC Catalog Exporter CLI"
+requires-python = ">=3.11"
+dependencies = [
+    "click>=8.1",
+    "tqdm",
+    "python-dotenv>=1.0",
+    "psycopg2-binary>=2.9",
+    "python-slugify",
+    "pystac[validation]",
+]
+
+[project.scripts]
+stac-export = "stac_export.cli:cli"
+
+[build-system]
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"

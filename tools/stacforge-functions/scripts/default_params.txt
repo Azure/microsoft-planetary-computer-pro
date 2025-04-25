@@ -1,0 +1,20 @@
+# This file supplies all the input required to build the stacforge infrastructure, deploy 
+# the application & create a collection.
+
+# Name of the Azure resource group to use for deploying stacforge. Ex: rg-stacforge-dev 
+resource_group=
+
+# The Azure datacenter location to use for creating stacforge resources. Ex: uksouth
+location=
+
+# Name of the stacforge instance. This will be used in generating a unique string to name 
+# the stacforge resources. Ex: devstacforge
+stacforge_name=
+
+# Function App Service Plan type. Default is 'flex'. The other plan is 'consumption'.
+# Here is a quick comaprison between both the plans 
+# https://learn.microsoft.com/en-us/azure/azure-functions/flex-consumption-plan#benefits.
+app_plan=flex
+
+# Name of the storage account where the source data is available. Ex: devstorage
+source_storage_account=
