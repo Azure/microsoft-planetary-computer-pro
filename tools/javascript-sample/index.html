@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GeoCatalog Code Samples</title>
+  <link rel="stylesheet" href="https://unpkg.com/maplibre-gl@4.0.0/dist/maplibre-gl.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; }
+    
+    .header {
+      background: #0078d4;
+      color: white;
+      padding: 15px 30px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+    .header h1 { font-size: 1.3rem; font-weight: 500; }
+    .header .subtitle { opacity: 0.8; font-size: 0.85rem; }
+    
+    .tabs {
+      display: flex;
+      background: #fff;
+      border-bottom: 1px solid #ddd;
+      padding: 0 20px;
+    }
+    .tab {
+      padding: 15px 25px;
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      font-weight: 500;
+      color: #666;
+      transition: all 0.2s;
+    }
+    .tab:hover { color: #0078d4; background: #f5f5f5; }
+    .tab.active { color: #0078d4; border-bottom-color: #0078d4; }
+    
+    .tab-content {
+      display: none;
+      padding: 30px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .tab-content.active { display: block; }
+    
+    .card {
+      background: white;
+      border-radius: 8px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+    .card h2 { font-size: 1.1rem; margin-bottom: 8px; color: #333; }
+    .card p { color: #666; font-size: 0.9rem; margin-bottom: 15px; }
+    
+    button {
+      background: #0078d4;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 0.9rem;
+      margin-right: 10px;
+      margin-bottom: 10px;
+    }
+    button:hover { background: #106ebe; }
+    button:disabled { background: #ccc; cursor: not-allowed; }
+    button.secondary { background: #6c757d; }
+    button.success { background: #28a745; }
+    
+    .status {
+      padding: 12px 15px;
+      border-radius: 6px;
+      font-size: 0.9rem;
+      margin-bottom: 15px;
+    }
+    .status.info { background: #e7f3ff; color: #004085; }
+    .status.success { background: #d4edda; color: #155724; }
+    .status.error { background: #f8d7da; color: #721c24; }
+    
+    select, input {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 12px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      font-size: 0.9rem;
+    }
+    
+    .output {
+      background: #1e1e1e;
+      color: #d4d4d4;
+      font-family: 'Consolas', 'Monaco', monospace;
+      font-size: 14px;
+      line-height: 1.5;
+      padding: 15px;
+      border-radius: 6px;
+      max-height: 250px;
+      overflow-y: auto;
+      margin-top: 15px;
+    }
+    .output:empty { display: none; }
+    .log-entry { margin: 3px 0; }
+    .log-entry.error { color: #f44; }
+    .log-entry.success { color: #4f4; }
+    .log-entry.info { color: #88f; }
+    
+    .user-info {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px;
+      background: #f8f9fa;
+      border-radius: 6px;
+      margin-bottom: 15px;
+    }
+    .user-info .avatar {
+      width: 48px;
+      height: 48px;
+      background: #0078d4;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+    .user-info .details { flex: 1; }
+    .user-info .name { font-weight: 500; color: #333; }
+    .user-info .email { font-size: 0.85rem; color: #666; }
+    
+    #map {
+      height: 400px;
+      border-radius: 6px;
+      margin-top: 15px;
+    }
+    
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; margin-bottom: 5px; font-weight: 500; color: #333; font-size: 0.9rem; }
+    
+    .results-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      font-size: 0.85rem;
+    }
+    .results-table th, .results-table td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #eee;
+    }
+    .results-table th { background: #f8f9fa; font-weight: 500; }
+    .results-table tr:hover { background: #f8f9fa; }
+    
+    /* Search Tab - 4 Quadrant Layout */
+    .search-tab { max-width: 1400px !important; padding: 20px !important; }
+    .search-tab h2 { font-size: 1.2rem; color: #333; }
+    
+    .search-grid {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      grid-template-rows: auto auto;
+      gap: 15px;
+    }
+    
+    .search-grid .card {
+      margin-bottom: 0;
+      padding: 15px;
+    }
+    .search-grid .card h3 {
+      font-size: 0.95rem;
+      color: #333;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid #eee;
+    }
+    
+    .search-config .form-group { margin-bottom: 12px; }
+    .search-config .form-group label { font-size: 0.85rem; margin-bottom: 4px; }
+    .search-config input, .search-config select { 
+      padding: 8px; 
+      margin-bottom: 0;
+      font-size: 0.85rem;
+    }
+    .search-config button { 
+      padding: 8px 14px; 
+      font-size: 0.85rem;
+      margin: 0;
+    }
+    
+    .search-map-container #search-map {
+      height: 300px;
+      border-radius: 6px;
+    }
+    
+    .search-results {
+      max-height: 350px;
+      display: flex;
+      flex-direction: column;
+    }
+    .search-results h3 { flex-shrink: 0; }
+    #search-results-list {
+      flex: 1;
+      overflow-y: auto;
+      font-size: 0.85rem;
+    }
+    .results-placeholder {
+      color: #888;
+      font-style: italic;
+      padding: 20px;
+      text-align: center;
+    }
+    .result-item {
+      padding: 10px 12px;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background 0.15s;
+    }
+    .result-item:hover {
+      background: #e7f3ff;
+    }
+    .result-item.highlighted {
+      background: #cce5ff;
+    }
+    .result-item .item-id {
+      font-weight: 500;
+      color: #333;
+    }
+    .result-item .item-date {
+      font-size: 0.8rem;
+      color: #666;
+    }
+    #search-count-badge {
+      background: #0078d4;
+      color: white;
+      font-size: 0.75rem;
+      padding: 2px 8px;
+      border-radius: 10px;
+      margin-left: 8px;
+    }
+    #search-count-badge:empty { display: none; }
+    
+    .search-terminal {
+      max-height: 350px;
+      display: flex;
+      flex-direction: column;
+    }
+    .search-terminal h3 { flex-shrink: 0; }
+    .search-terminal .output {
+      flex: 1;
+      margin-top: 0;
+      max-height: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <h1>📚 GeoCatalog Code Samples</h1>
+    <span class="subtitle">Sample web application for Microsoft Planetary Computer Pro</span>
+  </div>
+  
+  <div class="tabs">
+    <div class="tab active" data-tab="auth">🔐 MSAL Authentication</div>
+    <div class="tab" data-tab="stac">📋 STAC API</div>
+    <div class="tab" data-tab="search">🔍 STAC Search</div>
+    <div class="tab" data-tab="tiles">🗺️ Tile Display</div>
+    <div class="tab" data-tab="sas">📥 SAS Downloads</div>
+  </div>
+  
+  <!-- Tab 1: MSAL Authentication -->
+  <div id="tab-auth" class="tab-content active">
+    <div class="card">
+      <h2>MSAL Authentication</h2>
+      <p>Authenticate with Microsoft Entra ID to access your GeoCatalog Pro instance.</p>
+      
+      <div id="auth-status" class="status info">Click "Login with Microsoft" to authenticate</div>
+      
+      <div id="user-info" class="user-info" style="display: none;">
+        <div class="avatar" id="user-avatar">?</div>
+        <div class="details">
+          <div class="name" id="user-name"></div>
+          <div class="email" id="user-email"></div>
+        </div>
+      </div>
+      
+      <button id="btn-login">Login with Microsoft</button>
+      <button id="btn-logout" class="secondary" disabled>Logout</button>
+      
+      <div id="output-auth" class="output"></div>
+    </div>
+  </div>
+  
+  <!-- Tab 2: STAC API -->
+  <div id="tab-stac" class="tab-content">
+    <div class="card">
+      <h2>Query the STAC API</h2>
+      <p>Browse collections and list items in your catalog.</p>
+      
+      <div id="stac-auth-warning" class="status error" style="display: none;">
+        ⚠️ Not authenticated. Please login first.
+      </div>
+      
+      <button id="btn-list-collections">List Collections</button>
+      
+      <div class="form-group" style="margin-top: 15px;">
+        <label>Select Collection:</label>
+        <select id="collection-select" disabled>
+          <option value="">-- Select a collection --</option>
+        </select>
+      </div>
+      
+      <button id="btn-list-items" disabled>List Items</button>
+      
+      <table id="results-table" class="results-table" style="display: none;">
+        <thead>
+          <tr>
+            <th>Item ID</th>
+            <th>Date</th>
+            <th>Bbox</th>
+          </tr>
+        </thead>
+        <tbody id="results-body"></tbody>
+      </table>
+      
+      <div id="output-stac" class="output"></div>
+    </div>
+  </div>
+  
+  <!-- Tab 3: STAC Search -->
+  <div id="tab-search" class="tab-content search-tab">
+    <h2 style="margin-bottom: 15px;">Search Items with Spatial Filter</h2>
+    <p style="color: #666; font-size: 0.9rem; margin-bottom: 15px;">Search across collections and visualize item footprints. Hover over results to highlight on map.</p>
+    
+    <div id="search-auth-warning" class="status error" style="display: none; margin-bottom: 15px;">
+      ⚠️ Not authenticated. Please login first.
+    </div>
+    
+    <div class="search-grid">
+      <!-- Top Left: Search Config -->
+      <div class="search-config card">
+        <h3>Search Configuration</h3>
+        
+        <div class="form-group">
+          <label>Collection:</label>
+          <select id="search-collection-select" disabled>
+            <option value="">-- Select a collection --</option>
+          </select>
+        </div>
+        
+        <div class="form-group">
+          <label>Bounding Box:</label>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+            <input type="number" id="bbox-west" placeholder="West" step="0.01">
+            <input type="number" id="bbox-east" placeholder="East" step="0.01">
+            <input type="number" id="bbox-south" placeholder="South" step="0.01">
+            <input type="number" id="bbox-north" placeholder="North" step="0.01">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Date Range:</label>
+          <div style="display: flex; gap: 6px;">
+            <input type="date" id="date-start" style="flex: 1;">
+            <input type="date" id="date-end" style="flex: 1;">
+          </div>
+        </div>
+        
+        <div class="form-group">
+          <label>Limit:</label>
+          <input type="number" id="search-limit" value="20" min="1" max="100" style="width: 80px;">
+        </div>
+        
+        <div style="display: flex; flex-wrap: wrap; gap: 8px;">
+          <button id="btn-search-execute" disabled>Search</button>
+          <button id="btn-use-map-bounds" class="secondary">Use Map Bounds</button>
+          <button id="btn-search-clear" class="secondary">Clear</button>
+        </div>
+      </div>
+      
+      <!-- Top Right: Map -->
+      <div class="search-map-container card">
+        <h3>Map View</h3>
+        <div id="search-map"></div>
+      </div>
+      
+      <!-- Bottom Left: Results List -->
+      <div class="search-results card">
+        <h3>Results <span id="search-count-badge"></span></h3>
+        <div id="search-results-list">
+          <div class="results-placeholder">Run a search to see results</div>
+        </div>
+      </div>
+      
+      <!-- Bottom Right: Terminal -->
+      <div class="search-terminal card">
+        <h3>Console</h3>
+        <div id="output-search" class="output"></div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Tab 3: Tile Display -->
+  <div id="tab-tiles" class="tab-content">
+    <div class="card">
+      <h2>Display Tiles on a Map</h2>
+      <p>Visualize STAC items and collection mosaics using the tiler API.</p>
+      
+      <div id="tiles-auth-warning" class="status error" style="display: none;">
+        ⚠️ Not authenticated. Please login first.
+      </div>
+      
+      <div class="form-group">
+        <label>Collection:</label>
+        <select id="tile-collection-select" disabled>
+          <option value="">-- Select a collection --</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label>Item:</label>
+        <select id="tile-item-select" disabled>
+          <option value="">-- Select an item --</option>
+        </select>
+      </div>
+      
+      <button id="btn-show-tiles" disabled>Display Item Tiles</button>
+      <button id="btn-show-mosaic" class="secondary" disabled>Display Collection Mosaic</button>
+      
+      <div id="map"></div>
+      
+      <div id="output-tiles" class="output"></div>
+    </div>
+  </div>
+  
+  <!-- Tab 4: SAS Downloads -->
+  <div id="tab-sas" class="tab-content">
+    <div class="card">
+      <h2>Download Data with SAS Tokens</h2>
+      <p>Get temporary SAS tokens to download asset files directly from Azure Blob Storage.</p>
+      
+      <div id="sas-auth-warning" class="status error" style="display: none;">
+        ⚠️ Not authenticated. Please login first.
+      </div>
+      
+      <div class="form-group">
+        <label>Collection:</label>
+        <select id="sas-collection-select" disabled>
+          <option value="">-- Select a collection --</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label>Item:</label>
+        <select id="sas-item-select" disabled>
+          <option value="">-- Select an item --</option>
+        </select>
+      </div>
+      
+      <div class="form-group">
+        <label>Asset:</label>
+        <select id="sas-asset-select" disabled>
+          <option value="">-- Select an asset --</option>
+        </select>
+      </div>
+      
+      <button id="btn-get-sas" disabled>Get SAS Token</button>
+      <button id="btn-download" class="success" disabled>Download File</button>
+      
+      <div id="sas-info" class="status info" style="display: none; word-break: break-all;">
+        <strong>SAS URL:</strong><br>
+        <code id="sas-url" style="font-size: 0.8rem;"></code>
+      </div>
+      
+      <div id="output-sas" class="output"></div>
+    </div>
+  </div>
+  
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>
