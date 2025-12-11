@@ -10,7 +10,6 @@
   },
   "dependencies": {
     "@azure/msal-browser": "^4.27.0",
-    "axios": "^1.6.0",
     "maplibre-gl": "^4.7.1"
   },
   "devDependencies": {

@@ -13,3 +13,12 @@ export const config = {
   scope: 'https://geocatalog.spatio.azure.com/.default',
   };
 
+// Validate required configuration
+const missingVars = [];
+if (!config.catalogUrl) missingVars.push('VITE_CATALOG_URL');
+if (!config.tenantId) missingVars.push('VITE_TENANT_ID');
+  if (!config.clientId) missingVars.push('VITE_CLIENT_ID');
+if (missingVars.length > 0) {
+  throw new Error(`Missing required environment variables: ${missingVars.join(', ')}. Copy .env.example to .env.local and fill in your GeoCatalog configuration.`);
+}
+

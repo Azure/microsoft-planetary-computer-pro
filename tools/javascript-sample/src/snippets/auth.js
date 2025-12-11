@@ -30,6 +30,17 @@ export async function initAuth() {
   msalInstance = new PublicClientApplication(msalConfig);
   await msalInstance.initialize();
   
+  // Handle redirect response (if returning from login)
+  try {
+    const response = await msalInstance.handleRedirectPromise();
+    if (response) {
+      currentAccount = response.account;
+      console.log('Login redirect completed successfully');
+    }
+  } catch (error) {
+    console.error('Redirect handling error:', error);
+  }
+  
   // Check for existing sessions
   const accounts = msalInstance.getAllAccounts();
   if (accounts.length > 0) {
@@ -51,9 +62,10 @@ export async function login() {
     scopes: [config.scope],
   };
   
-  const response = await msalInstance.loginPopup(loginRequest);
-  currentAccount = response.account;
-  return currentAccount;
+  // Use redirect instead of popup to avoid COOP issues in modern browsers
+  await msalInstance.loginRedirect(loginRequest);
+  // Note: This will redirect away from the page, then back after auth
+  // The account will be set in initAuth when the page reloads
 }
 
 /**
@@ -61,7 +73,7 @@ export async function login() {
  */
 export async function logout() {
   if (msalInstance && currentAccount) {
-    await msalInstance.logoutPopup({
+    await msalInstance.logoutRedirect({
       account: currentAccount,
     });
     currentAccount = null;
@@ -89,9 +101,8 @@ export async function getAccessToken() {
     const response = await msalInstance.acquireTokenSilent(tokenRequest);
     return response.accessToken;
   } catch (error) {
-    // Silent token acquisition failed, try interactive
-    const response = await msalInstance.acquireTokenPopup(tokenRequest);
-    return response.accessToken;
+    // Silent token acquisition failed, try redirect
+    await msalInstance.acquireTokenRedirect(tokenRequest);
   }
 }
 

@@ -7,7 +7,7 @@
 
 import { config } from './snippets/config.js';
 import { initAuth, login, logout, getAccessToken, isAuthenticated, getAccount } from './snippets/auth.js';
-import { listCollections, listItems, searchItems, getItem } from './snippets/stac-api.js';
+import { listCollections, listItems, searchItems } from './snippets/stac-api.js';
 import { buildTileUrl, buildMosaicTileUrl, registerMosaic } from './snippets/tile-urls.js';
 import { initializeMap, addTileLayer, updateAccessToken } from './snippets/map-integration.js';
 import { getCollectionSasToken, buildSignedAssetUrl, downloadFile, getAssetInfo } from './snippets/sas-api.js';
@@ -113,6 +113,10 @@ function updateAuthUI() {
     
     // Show user info
     userInfo.style.display = 'flex';
+    $('user-name').textContent = account.name || 'User';
+    $('user-email').textContent = account.username || '';
+    $('user-avatar').textContent = (account.name || 'U').charAt(0).toUpperCase();
+    
     $('btn-login').disabled = true;
     $('btn-logout').disabled = false;
   } else {
@@ -129,15 +133,10 @@ function updateAuthUI() {
 
 async function handleLogin() {
   try {
-    log('auth', 'Initiating MSAL login popup...', 'info');
-    const account = await login();
-    log('auth', 'Successfully authenticated as: demo.user@contoso.com', 'success');
-    
-    const token = await getAccessToken();
-    updateAccessToken(token);
-    log('auth', 'Access token acquired', 'success');
-    
-    updateAuthUI();
+    log('auth', 'Redirecting to Microsoft login...', 'info');
+    await login();
+    // Note: login() redirects away, so code below won't execute
+    // Auth state is restored when page reloads via initAuth()
   } catch (error) {
     log('auth', `Login failed: ${error.message}`, 'error');
   }
@@ -620,8 +619,7 @@ function updateSearchButtons() {
 function initMap() {
   if (map) return;
   
-  const token = isAuthenticated() ? null : null; // Will get fresh token when needed
-  map = initializeMap('map', token);
+  map = initializeMap('map', null); // Will get fresh token when needed
   log('tiles', 'Map initialized', 'success');
 }
 
@@ -863,16 +861,19 @@ document.addEventListener('DOMContentLoaded', async () => {
   
   initTabs();
   
-  // Try to restore session
+  // Initialize auth and handle any redirect response
   try {
     await initAuth();
     if (isAuthenticated()) {
+      const account = getAccount();
+      log('auth', `Authenticated as: ${account.username || account.name || 'user'}`, 'success');
       const token = await getAccessToken();
       updateAccessToken(token);
-      log('auth', 'Restored existing session', 'success');
+      log('auth', 'Access token acquired', 'success');
     }
   } catch (e) {
-    // No existing session
+    // No existing session, user will need to login
+    console.log('No existing session:', e.message);
   }
   
   updateAuthUI();
