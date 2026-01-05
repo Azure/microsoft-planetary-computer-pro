@@ -25,20 +25,20 @@ This sample demonstrates how to build a web application that connects to Microso
 ```bash
 git clone --filter=blob:none --sparse https://github.com/Azure/microsoft-planetary-computer-pro.git
 cd microsoft-planetary-computer-pro
-git sparse-checkout set samples/javascript-quickstart
-cd samples/javascript-quickstart
+git sparse-checkout set tools/javascript-sample
+cd tools/javascript-sample
 ```
 
 **Option B: Download as ZIP**
 
-1. Go to [this folder on GitHub](https://github.com/Azure/microsoft-planetary-computer-pro/tree/main/samples/javascript-quickstart)
-2. Click the "Code" button → "Download ZIP", or use [download-directory.github.io](https://download-directory.github.io/?url=https://github.com/Azure/microsoft-planetary-computer-pro/tree/main/samples/javascript-quickstart)
+1. Go to [this folder on GitHub](https://github.com/Azure/microsoft-planetary-computer-pro/tree/main/tools/javascript-sample)
+2. Click the "Code" button → "Download ZIP", or use [download-directory.github.io](https://download-directory.github.io/?url=https://github.com/Azure/microsoft-planetary-computer-pro/tree/main/tools/javascript-sample)
 
 **Option C: Clone the entire repository**
 
 ```bash
 git clone https://github.com/Azure/microsoft-planetary-computer-pro.git
-cd microsoft-planetary-computer-pro/samples/javascript-quickstart
+cd microsoft-planetary-computer-pro/tools/javascript-sample
 ```
 
 ### 2. Install dependencies
@@ -59,15 +59,20 @@ Edit `.env.local` with your GeoCatalog configuration:
 
 ```env
 # Your GeoCatalog endpoint URL
-VITE_CATALOG_URL=https://your-catalog.geocatalog.spatio.azure.com
+VITE_GEOCATALOG_URL=https://your-catalog.geocatalog.spatio.azure.com
 
-# Microsoft Entra ID (Azure AD) configuration
-VITE_TENANT_ID=your-tenant-id
-VITE_CLIENT_ID=your-app-registration-client-id
+# Microsoft Entra ID configuration
+VITE_ENTRA_TENANT_ID=your-tenant-id
+VITE_ENTRA_CLIENT_ID=your-app-registration-client-id
 
-# API version (optional, defaults to latest)
-VITE_API_VERSION=2025-04-30-preview
+# API version (optional, defaults to 2025-04-30-preview)
+VITE_GEOCATALOG_API_VERSION=2025-04-30-preview
+
+# Development server port (optional, defaults to 5173)
+VITE_DEV_PORT=5173
 ```
+
+> **Note:** If you change `VITE_DEV_PORT`, update your app registration's redirect URI to match (e.g., `http://localhost:3000`).
 
 ### 4. Run the application
 
