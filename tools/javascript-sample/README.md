@@ -1,6 +1,6 @@
 # JavaScript Quickstart: Build a Web Application with GeoCatalog
 
-This sample demonstrates how to build a web application that connects to Microsoft Planetary Computer Pro GeoCatalog, following the [Build a web application quickstart](https://learn.microsoft.com/azure/planetary-computer/build-web-application).
+This sample demonstrates how to build a web application that connects to Microsoft Planetary Computer Pro GeoCatalog, following the [Quickstart: Build a web application with Microsoft Planetary Computer Pro](https://learn.microsoft.com/en-us/azure/planetary-computer/build-web-application).
 
 ## Features
 
@@ -14,7 +14,7 @@ This sample demonstrates how to build a web application that connects to Microso
 
 - [Node.js](https://nodejs.org/) 18 or later
 - A GeoCatalog resource deployed in Azure
-- An app registration in Microsoft Entra ID (see [Application Authentication](https://learn.microsoft.com/azure/planetary-computer/application-authentication))
+- An app registration in Microsoft Entra ID (see [Application Authentication](https://learn.microsoft.com/en-us/azure/planetary-computer/application-authentication))
 
 ## Quick Start
 
@@ -102,16 +102,16 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ## Code Snippets
 
-Each file in `src/snippets/` corresponds to a step in the [Build a web application quickstart](https://learn.microsoft.com/azure/planetary-computer/build-web-application):
+Each file in `src/snippets/` implements key concepts from the [Quickstart: Build a web application with Microsoft Planetary Computer Pro](https://learn.microsoft.com/en-us/azure/planetary-computer/build-web-application):
 
-| File | Documentation Step | Description |
-|------|-------------------|-------------|
-| `config.js` | Step 3 | Configure environment variables |
-| `auth.js` | Step 4 | Initialize MSAL and handle login/logout |
-| `stac-api.js` | Step 5 | List collections, items, and search |
-| `tile-urls.js` | Steps 6 & 8 | Build tile URLs for visualization |
-| `map-integration.js` | Step 7 | Initialize MapLibre GL JS map |
-| `sas-api.js` | - | Get SAS tokens for asset downloads |
+| File | Documentation Section | Description |
+|------|----------------------|-------------|
+| `config.js` | [Configure your application](https://learn.microsoft.com/en-us/azure/planetary-computer/build-web-application#configure-your-application) | Configure environment variables |
+| `auth.js` | [Implement MSAL authentication](https://learn.microsoft.com/en-us/azure/planetary-computer/build-web-application#implement-msal-authentication) | Initialize MSAL and handle login/logout |
+| `stac-api.js` | [STAC API: Query collections and items](https://learn.microsoft.com/en-us/azure/planetary-computer/build-web-application#stac-api-query-collections-and-items) | List collections, items, and search |
+| `tile-urls.js` | [Tile URLs](https://learn.microsoft.com/en-us/azure/planetary-computer/build-web-application#tile-urls-build-urls-for-map-visualization) & [Mosaic tiles](https://learn.microsoft.com/en-us/azure/planetary-computer/build-web-application#mosaic-tiles-display-collection-wide-imagery) | Build tile URLs for visualization |
+| `map-integration.js` | [Map integration: Display tiles with MapLibre GL](https://learn.microsoft.com/en-us/azure/planetary-computer/build-web-application#map-integration-display-tiles-with-maplibre-gl) | Initialize MapLibre GL JS map |
+| `sas-api.js` | [SAS tokens: Download raw assets](https://learn.microsoft.com/en-us/azure/planetary-computer/build-web-application#sas-tokens-download-raw-assets) | Get SAS tokens for asset downloads |
 
 ## Building for Production
 
@@ -123,11 +123,11 @@ The built files will be in the `dist/` directory, ready to deploy to any static 
 
 ## Learn More
 
-- [Microsoft Planetary Computer Pro Documentation](https://learn.microsoft.com/azure/planetary-computer/)
-- [Build a web application quickstart](https://learn.microsoft.com/azure/planetary-computer/build-web-application)
+- [Microsoft Planetary Computer Pro Documentation](https://learn.microsoft.com/en-us/azure/planetary-computer/)
+- [Quickstart: Build a web application](https://learn.microsoft.com/en-us/azure/planetary-computer/build-web-application)
 - [STAC Specification](https://stacspec.org/)
 - [MapLibre GL JS](https://maplibre.org/)
-- [MSAL.js Documentation](https://learn.microsoft.com/azure/active-directory/develop/msal-overview)
+- [MSAL.js Documentation](https://learn.microsoft.com/en-us/entra/identity-platform/msal-overview)
 
 ## License
 
