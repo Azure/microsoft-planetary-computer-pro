@@ -1,0 +1,21 @@
+{
+  "name": "geocatalog-code-samples",
+  "version": "1.0.0",
+  "description": "Sample web application for Microsoft Planetary Computer Pro GeoCatalog",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@azure/msal-browser": "^4.27.0",
+    "maplibre-gl": "^4.7.1"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  },
+  "overrides": {
+    "esbuild": ">=0.25.0"
+  }
+}
