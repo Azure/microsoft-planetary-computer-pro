@@ -65,7 +65,7 @@ This will:
 
 - `register_provider_app.py` - Main registration script
 - `assign_users.py` - User/group assignment management
-- `assign_geocatalog_role.py` - **NEW**: Assign GeoCatalog Administrator role
+- `assign_geocatalog_role.py` - Assign GeoCatalog Administrator role
 - `verify_setup.py` - Setup verification script
 - `requirements.txt` - Python dependencies
 - `.env` - Configuration (not committed to git)
