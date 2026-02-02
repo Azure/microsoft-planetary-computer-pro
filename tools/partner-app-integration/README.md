@@ -1,6 +1,4 @@
-# Azure Planetary Computer Multi-Tenant Application# Azure Planetary Computer GeoCatalog Testing Application
-
-
+# Azure Planetary Computer Multi-Tenant Application
 
 This repository demonstrates a complete multi-tenant architecture for Azure Planetary Computer GeoCatalog access, organized into three main components:This repository contains a Jupyter notebook for testing Azure Planetary Computer Pro GeoCatalog operations using multiple authentication methods.
 

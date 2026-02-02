@@ -2,7 +2,7 @@
 
 ## Repository Overview
 ```
-test-3p-application/
+partner-app-integration/
 ├── client-app/     # Original testing code
 ├── provider-app/   # Multi-tenant app setup
 └── customer-app/   # Customer registration
@@ -30,6 +30,7 @@ cd customer-app
 source .venv/bin/activate            # Activate venv
 az login --tenant <tenant-id>        # Login as customer
 python register_provider_app.py      # Register provider app
+python assign_geocatalog_role.py     # Assign GeoCatalog Administrator role
 python assign_users.py --users user@domain.com
 python verify_setup.py               # Verify setup
 ```
@@ -101,7 +102,9 @@ PROVIDER_APP_NAME=planetary-computer-provider
 ```bash
 CUSTOMER_TENANT_ID=xxx
 PROVIDER_CLIENT_ID=xxx  # From provider
-PROVIDER_TENANT_ID=xxx  # From provider
+AZURE_SUBSCRIPTION_ID=xxx  # Subscription containing GeoCatalog
+GEOCATALOG_RESOURCE_GROUP=xxx
+GEOCATALOG_NAME=xxx
 ```
 
 ### Client App (.env)
@@ -168,24 +171,3 @@ python test_geocatalog.py
 | `provider-app/README.md` | Provider app documentation |
 | `customer-app/README.md` | Customer app documentation |
 | `client-app/README.md` | Original client documentation |
-
----
-
-## What to Build Next?
-
-Pick an option and let me know:
-
-**A)** Provider app features (secret rotation, permissions, etc.)  
-**B)** Customer app features (bulk users, auditing, etc.)  
-**C)** Client app enhancements (multi-tenant testing, etc.)  
-**D)** Infrastructure (Docker, CI/CD, monitoring, etc.)
-
----
-
-## Getting Help
-
-1. Check the relevant README.md
-2. Review ARCHITECTURE.md for concepts
-3. Ask me! I'm here to help build features interactively
-
-**Ready to code? Tell me what you want to build!** 🎯

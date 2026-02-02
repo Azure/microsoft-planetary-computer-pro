@@ -69,7 +69,7 @@ python test_geocatalog.py
 1. **Azure Account**: An active Azure subscription
 2. **Service Principal or App Registration**: A registered Azure AD application with:
    - Client ID (Of the external application)
-   - Tenant ID (Of the destination GeoCatalot resource)
+   - Tenant ID (Of the destination GeoCatalog resource)
    - Client Secret (for app-only authentication)
 3. **GeoCatalog Access**: Access to a Planetary Computer Pro GeoCatalog resource
 4. **Python**: Python 3.10 or higher
@@ -86,13 +86,13 @@ python3 -m venv .venv
 source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 ```
 
-### 1. Install Dependencies
+### 2. Install Dependencies
 
 ```bash
 pip install -r requirements.txt
 ```
 
-### 1. Configure Environment Variables
+### 3. Configure Environment Variables
 
 Copy the example environment file and fill in your credentials:
 
@@ -111,6 +111,8 @@ AZURE_CLIENT_SECRET=your-client-secret-here
 # GeoCatalog Configuration
 GEOCATALOG_URL=https://your-geocatalog.geocatalog.spatio.azure.com
 ```
+
+> **Note**: `AZURE_TENANT_ID` should be set to the **customer's tenant ID** (where the GeoCatalog resource exists), not the provider's tenant ID. The token must be requested from the tenant where the service principal is registered and the resource resides.
 
 **Important**: Never commit the `.env` file to version control! It's already in `.gitignore`.
 
