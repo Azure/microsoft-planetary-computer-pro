@@ -1,0 +1,13 @@
+# Azure authentication
+azure-identity>=1.15.0
+python-dotenv>=1.0.0
+msal>=1.24.0
+
+# HTTP requests
+requests>=2.31.0
+
+# STAC client
+pystac-client>=0.7.5
+
+# Jupyter
+ipykernel>=6.29.0
