@@ -160,8 +160,16 @@ def decode_token_claims(access_token):
         decoded_str = decoded_bytes.decode('utf-8')
         claims = json.loads(decoded_str)
         
-        print("✓ Token claims (decoded):")
-        print(json.dumps(claims, indent=2))
+        print("✓ Token claims (decoded - selected fields only):")
+        display_claims = {
+            "aud": claims.get("aud"),
+            "iss": claims.get("iss"),
+            "appid": claims.get("appid"),
+            "tid": claims.get("tid"),
+            "exp": claims.get("exp"),
+            "iat": claims.get("iat"),
+        }
+        print(json.dumps(display_claims, indent=2))
         
         # Highlight important claims
         print("\nKey Claims:")
