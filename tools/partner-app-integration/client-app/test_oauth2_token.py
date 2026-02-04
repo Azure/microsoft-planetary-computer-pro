@@ -162,29 +162,31 @@ def decode_token_claims(access_token):
         
         print("✓ Token claims (decoded - selected fields only):")
         display_claims = {
-            "aud": claims.get("aud"),
-            "iss": claims.get("iss"),
-            "appid": claims.get("appid"),
-            "tid": claims.get("tid"),
-            "exp": claims.get("exp"),
-            "iat": claims.get("iat"),
+            "aud_present": "aud" in claims,
+            "iss_present": "iss" in claims,
+            "appid_present": "appid" in claims,
+            "tid_present": "tid" in claims,
+            "exp_present": "exp" in claims,
+            "iat_present": "iat" in claims,
         }
         print(json.dumps(display_claims, indent=2))
         
-        # Highlight important claims
+        # Highlight important claims without logging their raw values
         print("\nKey Claims:")
-        print(f"  Audience (aud): {claims.get('aud')}")
-        print(f"  Issuer (iss): {claims.get('iss')}")
-        print(f"  App ID (appid): {claims.get('appid')}")
-        print(f"  Tenant ID (tid): {claims.get('tid')}")
+        print(f"  Audience (aud) present: {'aud' in claims}")
+        print(f"  Issuer (iss) present: {'iss' in claims}")
+        print(f"  App ID (appid) present: {'appid' in claims}")
+        print(f"  Tenant ID (tid) present: {'tid' in claims}")
         
-        # Convert timestamps
+        # Convert timestamps without logging raw claim values
         if 'exp' in claims:
-            exp_time = datetime.fromtimestamp(claims['exp']).strftime('%Y-%m-%d %H:%M:%S')
-            print(f"  Expires (exp): {claims['exp']} ({exp_time})")
+            exp_dt = datetime.fromtimestamp(claims['exp'])
+            exp_time = exp_dt.strftime('%Y-%m-%d %H:%M:%S')
+            print(f"  Expires at (local time): {exp_time}")
         if 'iat' in claims:
-            iat_time = datetime.fromtimestamp(claims['iat']).strftime('%Y-%m-%d %H:%M:%S')
-            print(f"  Issued At (iat): {claims['iat']} ({iat_time})")
+            iat_dt = datetime.fromtimestamp(claims['iat'])
+            iat_time = iat_dt.strftime('%Y-%m-%d %H:%M:%S')
+            print(f"  Issued at (local time): {iat_time}")
         
         return claims
         
