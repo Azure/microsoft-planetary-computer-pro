@@ -102,7 +102,18 @@ def main():
             "--body", patch_body
         ])
 
-    # 4. signInAudience
+    # 4. api.requestedAccessTokenVersion (must be set before signInAudience for AzureADandPersonalMicrosoftAccount)
+    if "api" in web_app_config and web_app_config["api"].get("requestedAccessTokenVersion") is not None:
+        patch_body = json.dumps({"api": {"requestedAccessTokenVersion": web_app_config["api"]["requestedAccessTokenVersion"]}})
+        run_command([
+            "az", "rest",
+            "--method", "PATCH",
+            "--uri", f"https://{graph_uri_base}/v1.0/applications(appId='{web_app_id}')",
+            "--headers", "Content-type=application/json",
+            "--body", patch_body
+        ])
+
+    # 5. signInAudience
     if "signInAudience" in web_app_config:
         patch_body = json.dumps({"signInAudience": web_app_config["signInAudience"]})
         run_command([
@@ -113,7 +124,7 @@ def main():
             "--body", patch_body
         ])
 
-    # 5. web.redirectUris
+    # 6. web.redirectUris
     if "web" in web_app_config and "redirectUris" in web_app_config["web"]:
         patch_body = json.dumps({"web": {"redirectUris": web_app_config["web"]["redirectUris"]}})
         run_command([
@@ -124,7 +135,7 @@ def main():
             "--body", patch_body
         ])
 
-    # 6. web.redirectUriSettings
+    # 7. web.redirectUriSettings
     if "web" in web_app_config and "redirectUriSettings" in web_app_config["web"]:
         patch_body = json.dumps({"web": {"redirectUriSettings": web_app_config["web"]["redirectUriSettings"]}})
         run_command([
@@ -135,7 +146,7 @@ def main():
             "--body", patch_body
         ])
 
-    # 7. web.implicitGrantSettings
+    # 8. web.implicitGrantSettings
     if "web" in web_app_config and "implicitGrantSettings" in web_app_config["web"]:
         patch_body = json.dumps({"web": {"implicitGrantSettings": web_app_config["web"]["implicitGrantSettings"]}})
         run_command([
@@ -146,20 +157,9 @@ def main():
             "--body", patch_body
         ])
 
-    # 8. api.oauth2PermissionScopes
+    # 9. api.oauth2PermissionScopes
     if "api" in web_app_config and "oauth2PermissionScopes" in web_app_config["api"]:
         patch_body = json.dumps({"api": {"oauth2PermissionScopes": web_app_config["api"]["oauth2PermissionScopes"]}})
-        run_command([
-            "az", "rest",
-            "--method", "PATCH",
-            "--uri", f"https://{graph_uri_base}/v1.0/applications(appId='{web_app_id}')",
-            "--headers", "Content-type=application/json",
-            "--body", patch_body
-        ])
-
-    # 9. api.requestedAccessTokenVersion
-    if "api" in web_app_config and web_app_config["api"].get("requestedAccessTokenVersion") is not None:
-        patch_body = json.dumps({"api": {"requestedAccessTokenVersion": web_app_config["api"]["requestedAccessTokenVersion"]}})
         run_command([
             "az", "rest",
             "--method", "PATCH",
