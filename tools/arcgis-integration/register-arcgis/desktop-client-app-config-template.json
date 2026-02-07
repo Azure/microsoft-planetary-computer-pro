@@ -1,0 +1,126 @@
+{
+  "addIns": [],
+  "api": {
+    "acceptMappedClaims": null,
+    "knownClientApplications": [],
+    "oauth2PermissionScopes": [],
+    "preAuthorizedApplications": [],
+    "requestedAccessTokenVersion": null
+  },
+  "appId": "{{APP_ID}}",
+  "appRoles": [],
+  "applicationTemplateId": null,
+  "certification": null,
+  "defaultRedirectUri": null,
+  "deletedDateTime": null,
+  "description": null,
+  "disabledByMicrosoftStatus": null,
+  "groupMembershipClaims": null,
+  "identifierUris": [],
+  "info": {
+    "logoUrl": null,
+    "marketingUrl": null,
+    "privacyStatementUrl": null,
+    "supportUrl": null,
+    "termsOfServiceUrl": null
+  },
+  "isDeviceOnlyAuthSupported": null,
+  "isFallbackPublicClient": null,
+  "keyCredentials": [],
+  "nativeAuthenticationApisEnabled": null,
+  "notes": null,
+  "optionalClaims": null,
+  "parentalControlSettings": {
+    "countriesBlockedForMinors": [],
+    "legalAgeGroupRule": "Allow"
+  },
+  "passwordCredentials": [],
+  "publicClient": {
+    "redirectUris": [
+      "https://login.microsoftonline.com/common/oauth2/nativeclient",
+      "arcgis-pro://auth"
+    ]
+  },
+  "requestSignatureVerification": null,
+  "requiredResourceAccess": [
+    {
+      "resourceAccess": [
+        {
+          "id": "870e9a7e-1d10-42b2-85dc-2cd2b2cd656b",
+          "type": "Scope"
+        }
+      ],
+      "resourceAppId": "6388acc4-795e-43a9-a320-33075c1eb83b"
+    },
+    {
+      "resourceAccess": [
+        {
+          "id": "03e0da56-190b-40ad-a80c-ea378c433f7f",
+          "type": "Scope"
+        }
+      ],
+      "resourceAppId": "e406a681-f3d4-42a8-90b6-c2b029497af1"
+    },
+    {
+      "resourceAccess": [
+        {
+          "id": "f4612e8b-a460-4b35-8020-8ec3cb17a1d9",
+          "type": "Scope"
+        },
+        {
+          "id": "333684a2-8757-4d38-8b65-abdef5db6748",
+          "type": "Scope"
+        }
+      ],
+      "resourceAppId": "{{WEB_APP_ID}}"
+    },
+    {
+      "resourceAccess": [
+        {
+          "id": "e1fe6dd8-ba31-4d61-89e7-88639da4683d",
+          "type": "Scope"
+        }
+      ],
+      "resourceAppId": "00000003-0000-0000-c000-000000000000"
+    }
+  ],
+  "samlMetadataUrl": null,
+  "serviceManagementReference": null,
+  "servicePrincipalLockConfiguration": {
+    "allProperties": true,
+    "credentialsWithUsageSign": true,
+    "credentialsWithUsageVerify": true,
+    "identifierUris": false,
+    "isEnabled": true,
+    "tokenEncryptionKeyId": true
+  },
+  "signInAudience": "AzureADMyOrg",
+  "spa": {
+    "redirectUris": []
+  },
+  "tags": [],
+  "tokenEncryptionKeyId": null,
+  "uniqueName": null,
+  "verifiedPublisher": {
+    "addedDateTime": null,
+    "displayName": null,
+    "verifiedPublisherId": null
+  },
+  "web": {
+    "homePageUrl": null,
+    "implicitGrantSettings": {
+      "enableAccessTokenIssuance": false,
+      "enableIdTokenIssuance": true
+    },
+    "logoutUrl": null,
+    "redirectUriSettings": [
+      {
+        "index": null,
+        "uri": "https://localhost"
+      }
+    ],
+    "redirectUris": [
+      "https://localhost"
+    ]
+  }
+}
