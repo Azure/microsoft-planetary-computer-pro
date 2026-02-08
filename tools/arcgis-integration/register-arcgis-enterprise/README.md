@@ -1,18 +1,18 @@
 # Register ArcGIS Enterprise Cloud Data Stores
 
-Register [Microsoft Planetary Computer Pro](https://planetarycomputer.microsoft.com/) STAC collections as cloud data stores on [ArcGIS Enterprise](https://enterprise.arcgis.com/) Image Server — enabling direct access to GeoCatalog-managed imagery without SAS tokens.
+Register [Microsoft Planetary Computer Pro](https://planetarycomputer.microsoft.com/) STAC collections as [Planetary Computer Pro](https://enterprise.arcgis.com/en/portal/latest/use/add-data-store-item.htm) cloud data stores on [ArcGIS Enterprise](https://enterprise.arcgis.com/) Image Server — enabling direct access to GeoCatalog-managed imagery without SAS tokens.
 
 ## What It Does
 
 1. **Discovers** all STAC collections from your MPC Pro GeoCatalog instance
-2. **Resolves** the backing Azure Blob Storage account and container for each collection
+2. **Resolves** the backing Azure storage account and container for each collection
 3. **Prompts** you to choose which collections to register (or register all via `--all`)
 4. **Creates a service principal** (Entra ID app registration) with GeoCatalog Reader on the GeoCatalog resource — or uses an existing one you provide
-5. **Registers** each selected container as a cloud data store on your ArcGIS Enterprise server
-6. **Validates** each cloud store after registration to confirm ArcGIS Server can access the storage
-7. **Federates** each cloud store to the ArcGIS Enterprise portal for visibility
+5. **Registers** each selected collection as a [Planetary Computer Pro](https://enterprise.arcgis.com/en/portal/latest/use/add-data-store-item.htm) cloud data store on your ArcGIS Enterprise server
+6. **Validates** each data store after registration to confirm ArcGIS Server can access the data
+7. **Federates** each data store to the ArcGIS Enterprise portal for visibility
 
-Each GeoCatalog collection maps to a single managed blob storage container. This tool automates the process of registering those containers so ArcGIS Image Server can read imagery data directly.
+Each GeoCatalog collection maps to a single managed storage container. This tool automates the process of registering those collections as Microsoft Planetary Computer Pro data stores so ArcGIS Image Server can read imagery data directly.
 
 ## Prerequisites
 
@@ -127,11 +127,11 @@ storage_credentials:
 
 ### Storage Credential Types
 
-The `storage_credentials` section defines how ArcGIS Server authenticates to Azure Blob Storage **at runtime** (this is separate from the credential used to query the GeoCatalog):
+The `storage_credentials` section defines how ArcGIS Server authenticates to the underlying Azure storage **at runtime** (this is separate from the credential used to query the GeoCatalog):
 
 | Type | When to use |
 |---|---|
-| `service_principal` | Entra ID service principal with GeoCatalog Reader on the GeoCatalog |
+| `service_principal` | Entra ID service principal with `GeoCatalog Reader` role — required for the Planetary Computer Pro data store type |
 | `access_key` | Storage account key (simplest, but less secure) |
 | `managed_identity` | User-assigned managed identity on the ArcGIS Server VM |
 | `sas_token` | Shared access signature (time-limited) |
@@ -139,18 +139,19 @@ The `storage_credentials` section defines how ArcGIS Server authenticates to Azu
 ## How It Works
 
 ```
-┌───────────────┐    list_collections()    ┌──────────────────────┐
-│  MPC Pro       │ ◄────────────────────── │  This Tool            │
-│  GeoCatalog    │ ──────────────────────► │                        │
-│                │    collections + items   │  1. Discover           │
-└───────────────┘                          │  2. Prompt user        │
-                                           │  3. Create/use SP      │
-┌───────────────┐    az ad sp create       │  4. Assign GeoCatalog  │
-│  Entra ID      │ ◄────────────────────── │     Reader role        │
-│  (Azure AD)    │ ──────────────────────► │  5. Register stores    │
-│                │    client_id + secret    │  6. Validate each      │
-└───────────────┘                          │  7. Federate to portal │
-                                           └──────────┬─────────────┘
+┌───────────────┐    list_collections()    ┌───────────────────────────┐
+│  MPC Pro       │ ◄────────────────────── │  This Tool                 │
+│  GeoCatalog    │ ──────────────────────► │                             │
+│                │    collections + items   │  1. Discover collections    │
+└───────────────┘                          │  2. Prompt user             │
+                                           │  3. Create/use SP           │
+┌───────────────┐    az ad sp create       │  4. Assign GeoCatalog       │
+│  Entra ID      │ ◄────────────────────── │     Reader role             │
+│  (Azure AD)    │ ──────────────────────► │  5. Register as Planetary   │
+│                │    client_id + secret    │     Computer Pro stores     │
+└───────────────┘                          │  6. Validate each store     │
+                                           │  7. Federate to portal      │
+                                           └──────────┬──────────────────┘
                                                       │
 ┌───────────────┐    ds.add() + federate              │
 │  ArcGIS        │ ◄──────────────────────────────────┘
@@ -165,7 +166,7 @@ By default (when `credential_type` is `service_principal`), the tool:
 1. Creates a new Entra ID app registration ("ArcGIS-Server-GeocatalogReader")
 2. Generates a client secret (valid 2 years)
 3. Assigns **GeoCatalog Reader** on the GeoCatalog resource
-4. Uses the new credentials for the cloud store connection strings
+4. Uses the new credentials for the data store connection strings
 
 **To use an existing service principal instead**, either:
 - Set `CREATE_SERVICE_PRINCIPAL=false` and provide `AZURE_CLIENT_ID` / `AZURE_CLIENT_SECRET` / `AZURE_TENANT_ID` in your `.env`
@@ -173,23 +174,23 @@ By default (when `credential_type` is `service_principal`), the tool:
 
 The tool will still offer to assign the GeoCatalog Reader role for an existing SP.
 
-### Cloud Store Validation
+### Data Store Validation
 
-After each cloud store is registered, the tool validates the connection via the ArcGIS Server REST `validateDataItem` endpoint to confirm the server can connect to the blob container. Validation results are shown in the results table:
+After each data store is registered, the tool validates the connection via the ArcGIS Server REST `validateDataItem` endpoint to confirm that ArcGIS Server can access the data through the Planetary Computer Pro data store. Validation results are shown in the results table:
 
-- **passed** — ArcGIS Server confirmed it can read from the container
+- **passed** — ArcGIS Server confirmed it can read from the data store
 - **failed** — connection error (check credentials, network access, firewall rules)
 
 ### Storage Discovery
 
-For each collection, the tool resolves the backing blob container by:
+For each collection, the tool resolves the backing storage account and container by:
 
 1. Checking for `msft:storage_account` and `msft:container` extension properties on the collection (set by some GeoCatalog configurations)
 2. Falling back to querying one STAC item and parsing the asset `href` URL (pattern: `https://<account>.blob.core.windows.net/<container>/...`)
 
-### Cloud Store Naming
+### Data Store Naming
 
-Each cloud store is named after the collection ID with hyphens replaced by underscores (e.g., `sentinel-2-l2a` → `sentinel_2_l2a`).
+Each Planetary Computer Pro data store is named after the collection ID with hyphens replaced by underscores (e.g., `sentinel-2-l2a` → `sentinel_2_l2a`).
 
 ## Project Structure
 
@@ -204,7 +205,7 @@ register-arcgis-enterprise/
     ├── __init__.py
     ├── config.py              # Configuration loading (.env / YAML / env vars)
     ├── discovery.py           # MPC Pro collection + storage discovery
-    ├── registration.py        # ArcGIS Enterprise cloud store registration + validation
+    ├── registration.py        # ArcGIS Enterprise Planetary Computer Pro data store registration + validation
     ├── service_principal.py   # Entra ID service principal create / role assignment
     └── cli.py                 # Interactive prompts, SP step, formatted output
 ```
@@ -220,20 +221,20 @@ register-arcgis-enterprise/
 ### "Could not determine storage for collection"
 
 - The collection may not have any ingested items yet — storage info is discovered from item asset hrefs
-- You can still register the store manually by adding the storage details directly
+- You can still register the data store manually through the ArcGIS Enterprise portal using the Planetary Computer Pro service type
 
-### "Failed to register cloud store"
+### "Failed to register data store"
 
 - Verify the ArcGIS admin credentials have data store registration privileges
-- Check that the ArcGIS Server can reach the blob endpoint (`https://<account>.blob.core.windows.net`)
-- If the store already exists under a different name, use `--list-only` with `--verbose` to debug
+- Check that the ArcGIS Server can reach the storage endpoint (`https://<account>.blob.core.windows.net`)
+- If the data store already exists under a different name, use `--list-only` with `--verbose` to debug
 
-### Cloud store validation failed
+### Data store validation failed
 
 - Verify the service principal has **GeoCatalog Reader** on the GeoCatalog resource
 - Ensure the ArcGIS Server machines can reach `*.blob.core.windows.net` on port 443
 - If using a service principal, confirm the tenant_id, client_id, and client_secret are correct
-- Check that the blob container actually exists and contains data
+- Check that the storage container actually exists and contains data
 
 ### Service principal creation failed
 
