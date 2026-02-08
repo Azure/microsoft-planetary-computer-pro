@@ -398,3 +398,10 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+# User-edited config and secrets files
+.env
+*.env
+!*.env.example
+config.yaml
+config.yml

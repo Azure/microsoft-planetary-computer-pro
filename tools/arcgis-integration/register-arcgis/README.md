@@ -52,7 +52,7 @@ python3 register_arcgis_app.py \
 
 ## Post-Registration: Granting Admin Consent
 
-After running the script, you must use the Azure Portal to grant admin consent for API permissions for both the Web and Desktop client applications:
+After running the script, you must use the Azure Portal to grant admin consent for API permissions for both the Web and Desktop client applications, and in that order (Web application first, then Desktop client application)
 
 1. Go to **Azure Portal > Microsoft Entra ID > Manage > App registrations**.
 2. Find the newly created Web and Desktop client applications.

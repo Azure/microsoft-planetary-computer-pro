@@ -1,0 +1,6 @@
+azure-planetarycomputer>=1.0.0b1
+azure-identity>=1.18.0
+arcgis>=2.2.0
+pyyaml>=6.0
+python-dotenv>=1.0.0
+rich>=13.0.0

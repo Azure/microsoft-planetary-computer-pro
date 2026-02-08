@@ -1,0 +1,48 @@
+# =============================================================================
+# Register ArcGIS Enterprise Cloud Stores — Configuration
+# =============================================================================
+
+# MPC Pro GeoCatalog endpoint
+geocatalog:
+  endpoint: https://my-geocatalog.geocatalog.spatio.azure.com
+
+# ArcGIS Enterprise connection
+arcgis:
+  portal_url: https://portal.domain.com/portal
+  username: admin
+  password: ${ARCGIS_PASSWORD}      # Can reference environment variables
+  verify_cert: true
+  server_role: IMAGE_SERVER          # HOSTING_SERVER or IMAGE_SERVER
+
+# Credentials used by ArcGIS Server to access blob storage at runtime.
+# This is NOT the credential used to query GeoCatalog — that uses
+# DefaultAzureCredential from your local environment.
+storage_credentials:
+  # One of: service_principal, access_key, managed_identity, sas_token
+  credential_type: service_principal
+
+  # --- Service Principal creation (default behavior) ---
+  # Set to true (default) to create a new Entra ID service principal
+  # with GeoCatalog Reader on the GeoCatalog resource.
+  # Set to false to use an existing service principal (provide client_id
+  # and client_secret below).
+  create_service_principal: true
+  sp_display_name: ArcGIS-Server-GeocatalogReader
+
+  # Azure subscription for role assignments (auto-detected from az CLI if empty)
+  subscription_id: ${AZURE_SUBSCRIPTION_ID}
+
+  # --- Existing Service Principal (Entra ID / OAuth2) ---
+  # Only needed if create_service_principal is false
+  tenant_id: ${AZURE_TENANT_ID}
+  client_id: ${AZURE_CLIENT_ID}
+  client_secret: ${AZURE_CLIENT_SECRET}
+
+  # --- Access Key ---
+  # account_key: ${STORAGE_ACCOUNT_KEY}
+
+  # --- Managed Identity ---
+  # managed_identity_client_id: ${MANAGED_IDENTITY_CLIENT_ID}
+
+  # --- SAS Token ---
+  # sas_token: ${SAS_TOKEN}
