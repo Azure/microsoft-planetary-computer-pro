@@ -1,0 +1,317 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "metadata": {
+    "_generator": {
+      "name": "hurricane-forecast-infra-impact",
+      "version": "1.0.0"
+    },
+    "description": "Deploys Azure resources required for the Hurricane Forecast & Infrastructure Impact Analysis notebook: Storage Account, AI Hub, AI Project, and GeoCatalog."
+  },
+  "parameters": {
+    "location": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().location]",
+      "metadata": {
+        "description": "Location for all resources."
+      }
+    },
+    "projectName": {
+      "type": "string",
+      "defaultValue": "hurricaneforecast",
+      "minLength": 3,
+      "maxLength": 20,
+      "metadata": {
+        "description": "Base name for all resources. Must be lowercase and alphanumeric."
+      }
+    },
+    "storageAccountSku": {
+      "type": "string",
+      "defaultValue": "Standard_LRS",
+      "allowedValues": [
+        "Standard_LRS",
+        "Standard_GRS",
+        "Standard_RAGRS",
+        "Standard_ZRS",
+        "Premium_LRS"
+      ],
+      "metadata": {
+        "description": "Storage account SKU."
+      }
+    },
+    "geoCatalogName": {
+      "type": "string",
+      "defaultValue": "[concat(parameters('projectName'), 'geocat')]",
+      "minLength": 3,
+      "maxLength": 50,
+      "metadata": {
+        "description": "Name of the GeoCatalog resource for STAC API."
+      }
+    },
+    "deployAIFoundry": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Set to true to deploy Azure AI Foundry resources (AI Hub and AI Project)."
+      }
+    },
+    "deployGeoCatalog": {
+      "type": "bool",
+      "defaultValue": true,
+      "metadata": {
+        "description": "Set to true to deploy Microsoft Planetary Computer Pro GeoCatalog."
+      }
+    },
+    "auroraVmSku": {
+      "type": "string",
+      "defaultValue": "Standard_NC24ads_A100_v4",
+      "metadata": {
+        "description": "VM SKU for the Aurora managed compute deployment. Must be a GPU-enabled SKU with sufficient VRAM."
+      }
+    },
+    "auroraInstanceCount": {
+      "type": "int",
+      "defaultValue": 1,
+      "minValue": 1,
+      "metadata": {
+        "description": "Number of VM instances for the Aurora deployment."
+      }
+    }
+  },
+  "variables": {
+    "uniqueSuffix": "[uniqueString(resourceGroup().id)]",
+    "storageAccountName": "[concat(parameters('projectName'), 'st', variables('uniqueSuffix'))]",
+    "containerNames": [
+      "model-outputs",
+      "era5-data",
+      "forecast-results"
+    ],
+    "aiHubName": "[concat(parameters('projectName'), '-aihub-', variables('uniqueSuffix'))]",
+    "aiProjectName": "[concat(parameters('projectName'), '-aiproject')]",
+    "keyVaultName": "[concat(parameters('projectName'), 'kv', variables('uniqueSuffix'))]",
+    "applicationInsightsName": "[concat(parameters('projectName'), '-appins-', variables('uniqueSuffix'))]",
+    "logAnalyticsName": "[concat(parameters('projectName'), '-logs-', variables('uniqueSuffix'))]",
+    "geoCatalogFullName": "[concat(parameters('geoCatalogName'), variables('uniqueSuffix'))]"
+  },
+  "resources": [
+    {
+      "comments": "Storage Account for model data and outputs",
+      "type": "Microsoft.Storage/storageAccounts",
+      "apiVersion": "2023-01-01",
+      "name": "[variables('storageAccountName')]",
+      "location": "[parameters('location')]",
+      "sku": {
+        "name": "[parameters('storageAccountSku')]"
+      },
+      "kind": "StorageV2",
+      "properties": {
+        "accessTier": "Hot",
+        "supportsHttpsTrafficOnly": true,
+        "allowBlobPublicAccess": false,
+        "minimumTlsVersion": "TLS1_2",
+        "networkAcls": {
+          "defaultAction": "Allow",
+          "bypass": "AzureServices"
+        }
+      }
+    },
+    {
+      "comments": "Blob Containers for data storage",
+      "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
+      "apiVersion": "2023-01-01",
+      "name": "[concat(variables('storageAccountName'), '/default/', variables('containerNames')[copyIndex()])]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+      ],
+      "copy": {
+        "name": "containerCopy",
+        "count": "[length(variables('containerNames'))]"
+      }
+    },
+    {
+      "comments": "Log Analytics Workspace for AI Hub",
+      "condition": "[parameters('deployAIFoundry')]",
+      "type": "Microsoft.OperationalInsights/workspaces",
+      "apiVersion": "2022-10-01",
+      "name": "[variables('logAnalyticsName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "sku": {
+          "name": "PerGB2018"
+        },
+        "retentionInDays": 30
+      }
+    },
+    {
+      "comments": "Application Insights for AI Hub monitoring",
+      "condition": "[parameters('deployAIFoundry')]",
+      "type": "Microsoft.Insights/components",
+      "apiVersion": "2020-02-02",
+      "name": "[variables('applicationInsightsName')]",
+      "location": "[parameters('location')]",
+      "kind": "web",
+      "dependsOn": [
+        "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsName'))]"
+      ],
+      "properties": {
+        "Application_Type": "web",
+        "WorkspaceResourceId": "[resourceId('Microsoft.OperationalInsights/workspaces', variables('logAnalyticsName'))]"
+      }
+    },
+    {
+      "comments": "Key Vault for AI Hub secrets",
+      "condition": "[parameters('deployAIFoundry')]",
+      "type": "Microsoft.KeyVault/vaults",
+      "apiVersion": "2023-02-01",
+      "name": "[variables('keyVaultName')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "tenantId": "[subscription().tenantId]",
+        "sku": {
+          "family": "A",
+          "name": "standard"
+        },
+        "enableSoftDelete": true,
+        "softDeleteRetentionInDays": 7,
+        "enableRbacAuthorization": true,
+        "accessPolicies": []
+      }
+    },
+    {
+      "comments": "Azure AI Hub for Aurora model hosting",
+      "condition": "[parameters('deployAIFoundry')]",
+      "type": "Microsoft.MachineLearningServices/workspaces",
+      "apiVersion": "2024-04-01",
+      "name": "[variables('aiHubName')]",
+      "location": "[parameters('location')]",
+      "kind": "Hub",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+        "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]",
+        "[resourceId('Microsoft.Insights/components', variables('applicationInsightsName'))]"
+      ],
+      "properties": {
+        "friendlyName": "Hurricane Forecast AI Hub",
+        "description": "AI Hub for Aurora weather model inference",
+        "storageAccount": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]",
+        "keyVault": "[resourceId('Microsoft.KeyVault/vaults', variables('keyVaultName'))]",
+        "applicationInsights": "[resourceId('Microsoft.Insights/components', variables('applicationInsightsName'))]",
+        "publicNetworkAccess": "Enabled"
+      }
+    },
+    {
+      "comments": "Azure AI Project connected to the Hub",
+      "condition": "[parameters('deployAIFoundry')]",
+      "type": "Microsoft.MachineLearningServices/workspaces",
+      "apiVersion": "2024-04-01",
+      "name": "[variables('aiProjectName')]",
+      "location": "[parameters('location')]",
+      "kind": "Project",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.MachineLearningServices/workspaces', variables('aiHubName'))]"
+      ],
+      "properties": {
+        "friendlyName": "Hurricane Forecast AI Project",
+        "description": "AI Project for running Aurora weather model inference",
+        "hubResourceId": "[resourceId('Microsoft.MachineLearningServices/workspaces', variables('aiHubName'))]",
+        "publicNetworkAccess": "Enabled"
+      }
+    },
+    {
+      "comments": "Online endpoint for Aurora weather model (managed compute)",
+      "condition": "[parameters('deployAIFoundry')]",
+      "type": "Microsoft.MachineLearningServices/workspaces/onlineEndpoints",
+      "apiVersion": "2024-04-01",
+      "name": "[concat(variables('aiProjectName'), '/aurora-endpoint')]",
+      "location": "[parameters('location')]",
+      "identity": {
+        "type": "SystemAssigned"
+      },
+      "dependsOn": [
+        "[resourceId('Microsoft.MachineLearningServices/workspaces', variables('aiProjectName'))]"
+      ],
+      "properties": {
+        "authMode": "Key",
+        "publicNetworkAccess": "Enabled"
+      }
+    },
+    {
+      "comments": "Aurora model deployment on managed compute",
+      "condition": "[parameters('deployAIFoundry')]",
+      "type": "Microsoft.MachineLearningServices/workspaces/onlineEndpoints/deployments",
+      "apiVersion": "2024-04-01",
+      "name": "[concat(variables('aiProjectName'), '/aurora-endpoint/aurora-deployment')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.MachineLearningServices/workspaces/onlineEndpoints', variables('aiProjectName'), 'aurora-endpoint')]"
+      ],
+      "sku": {
+        "name": "Default",
+        "capacity": "[parameters('auroraInstanceCount')]"
+      },
+      "properties": {
+        "model": "azureml://registries/azureml/models/Aurora/versions/4",
+        "instanceType": "[parameters('auroraVmSku')]",
+        "endpointComputeType": "Managed"
+      }
+    },
+    {
+      "comments": "Microsoft Planetary Computer Pro GeoCatalog",
+      "condition": "[parameters('deployGeoCatalog')]",
+      "type": "Microsoft.Orbital/geoCatalogs",
+      "apiVersion": "2025-02-11-preview",
+      "name": "[variables('geoCatalogFullName')]",
+      "location": "[parameters('location')]",
+      "properties": {}
+    }
+  ],
+  "outputs": {
+    "storageAccountName": {
+      "type": "string",
+      "value": "[variables('storageAccountName')]"
+    },
+    "storageAccountId": {
+      "type": "string",
+      "value": "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
+    },
+    "blobEndpoint": {
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))).primaryEndpoints.blob]"
+    },
+    "aiHubName": {
+      "condition": "[parameters('deployAIFoundry')]",
+      "type": "string",
+      "value": "[variables('aiHubName')]"
+    },
+    "aiProjectName": {
+      "condition": "[parameters('deployAIFoundry')]",
+      "type": "string",
+      "value": "[variables('aiProjectName')]"
+    },
+    "geoCatalogName": {
+      "condition": "[parameters('deployGeoCatalog')]",
+      "type": "string",
+      "value": "[variables('geoCatalogFullName')]"
+    },
+    "geoCatalogEndpoint": {
+      "condition": "[parameters('deployGeoCatalog')]",
+      "type": "string",
+      "value": "[concat('https://', variables('geoCatalogFullName'), '.spatio.azure.com/api/stac/v1')]"
+    },
+    "auroraEndpointUri": {
+      "condition": "[parameters('deployAIFoundry')]",
+      "type": "string",
+      "value": "[reference(resourceId('Microsoft.MachineLearningServices/workspaces/onlineEndpoints', variables('aiProjectName'), 'aurora-endpoint')).scoringUri]"
+    },
+    "configurationInstructions": {
+      "type": "string",
+      "value": "After deployment, update your .env file with: 1) STAC_CATALOG_URL from geoCatalogEndpoint, 2) Generate a SAS token for AURORA_BLOB_STORAGE_SAS from the storage account, 3) Use auroraEndpointUri for AURORA_FOUNDRY_ENDPOINT and retrieve the key from the portal for AURORA_FOUNDRY_TOKEN"
+    }
+  }
+}
