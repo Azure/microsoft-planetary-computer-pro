@@ -16,7 +16,9 @@ This repository demonstrates an end-to-end workflow for hurricane path predictio
 - ⚡ **Infrastructure Analysis** - Power grid impact assessment using OpenStreetMap
 - 🗺️ **Interactive Visualization** - Storm tracks and affected infrastructure maps
 
-The notebook works with **any historical or active tropical storm** from the IBTrACS database. Hurricane Helene (2024) is pre-selected as the default for a ready-to-run experience.
+The notebook works with **any historical or active tropical storm** from the IBTrACS database. Hurricane Helene (2024) is pre-selected as the default for a ready-to-run experience. You can select a different storm using the interactive widget generated in **Section 2 — Storm Selection** of the notebook:
+
+![Storm Selection Widget](docs/media/Storm-Selection.png)
 
 ## 📋 Workflow Overview
 
