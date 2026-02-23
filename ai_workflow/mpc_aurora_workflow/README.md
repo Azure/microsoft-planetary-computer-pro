@@ -56,10 +56,10 @@ The notebook works with **any historical or active tropical storm** from the IBT
    Copy `.env.example` to `.env` and fill in your credentials:
    ```
    # GeoCatalog STAC API endpoint
-   STAC_CATALOG_URL=https://your-geocatalog.spatio.azure.com/api/stac/v1
+   STAC_CATALOG_URL=https://your-geocatalog.your-region.geocatalog.spatio.azure.com/stac
    
    # Aurora Model Configuration
-   AURORA_FOUNDRY_ENDPOINT=https://your-aurora-endpoint.inference.ai.azure.com
+   AURORA_FOUNDRY_ENDPOINT=https://your-aurora-endpoint.your-region.inference.ml.azure.com/score
    AURORA_FOUNDRY_TOKEN=<your-token>
    
    # Azure Blob Storage
