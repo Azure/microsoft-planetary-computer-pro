@@ -18,9 +18,9 @@
     },
     "projectName": {
       "type": "string",
-      "defaultValue": "hurricaneforecast",
+      "defaultValue": "hfcast",
       "minLength": 3,
-      "maxLength": 20,
+      "maxLength": 9,
       "metadata": {
         "description": "Base name for all resources. Must be lowercase and alphanumeric."
       }
@@ -41,9 +41,9 @@
     },
     "geoCatalogName": {
       "type": "string",
-      "defaultValue": "[concat(parameters('projectName'), 'geocat')]",
+      "defaultValue": "[concat(parameters('projectName'), 'gc')]",
       "minLength": 3,
-      "maxLength": 50,
+      "maxLength": 24,
       "metadata": {
         "description": "Name of the GeoCatalog resource for STAC API."
       }
@@ -80,7 +80,7 @@
   },
   "variables": {
     "uniqueSuffix": "[uniqueString(resourceGroup().id)]",
-    "storageAccountName": "[concat(parameters('projectName'), 'st', variables('uniqueSuffix'))]",
+    "storageAccountName": "[take(concat(parameters('projectName'), 'st', variables('uniqueSuffix')), 24)]",
     "containerNames": [
       "model-outputs",
       "era5-data",
@@ -88,10 +88,11 @@
     ],
     "aiHubName": "[concat(parameters('projectName'), '-aihub-', variables('uniqueSuffix'))]",
     "aiProjectName": "[concat(parameters('projectName'), '-aiproject')]",
-    "keyVaultName": "[concat(parameters('projectName'), 'kv', variables('uniqueSuffix'))]",
+    "keyVaultName": "[take(concat(parameters('projectName'), 'kv', variables('uniqueSuffix')), 24)]",
     "applicationInsightsName": "[concat(parameters('projectName'), '-appins-', variables('uniqueSuffix'))]",
     "logAnalyticsName": "[concat(parameters('projectName'), '-logs-', variables('uniqueSuffix'))]",
-    "geoCatalogFullName": "[concat(parameters('geoCatalogName'), variables('uniqueSuffix'))]"
+    "endpointName": "[concat('aurora-ep-', variables('uniqueSuffix'))]",
+    "geoCatalogFullName": "[take(concat(parameters('geoCatalogName'), variables('uniqueSuffix')), 24)]"
   },
   "resources": [
     {
@@ -228,7 +229,7 @@
       "condition": "[parameters('deployAIFoundry')]",
       "type": "Microsoft.MachineLearningServices/workspaces/onlineEndpoints",
       "apiVersion": "2024-04-01",
-      "name": "[concat(variables('aiProjectName'), '/aurora-endpoint')]",
+      "name": "[concat(variables('aiProjectName'), '/', variables('endpointName'))]",
       "location": "[parameters('location')]",
       "identity": {
         "type": "SystemAssigned"
@@ -246,10 +247,10 @@
       "condition": "[parameters('deployAIFoundry')]",
       "type": "Microsoft.MachineLearningServices/workspaces/onlineEndpoints/deployments",
       "apiVersion": "2024-04-01",
-      "name": "[concat(variables('aiProjectName'), '/aurora-endpoint/aurora-deployment')]",
+      "name": "[concat(variables('aiProjectName'), '/', variables('endpointName'), '/aurora-deployment')]",
       "location": "[parameters('location')]",
       "dependsOn": [
-        "[resourceId('Microsoft.MachineLearningServices/workspaces/onlineEndpoints', variables('aiProjectName'), 'aurora-endpoint')]"
+        "[resourceId('Microsoft.MachineLearningServices/workspaces/onlineEndpoints', variables('aiProjectName'), variables('endpointName'))]"
       ],
       "sku": {
         "name": "Default",
@@ -307,7 +308,7 @@
     "auroraEndpointUri": {
       "condition": "[parameters('deployAIFoundry')]",
       "type": "string",
-      "value": "[reference(resourceId('Microsoft.MachineLearningServices/workspaces/onlineEndpoints', variables('aiProjectName'), 'aurora-endpoint')).scoringUri]"
+      "value": "[reference(resourceId('Microsoft.MachineLearningServices/workspaces/onlineEndpoints', variables('aiProjectName'), variables('endpointName'))).scoringUri]"
     },
     "configurationInstructions": {
       "type": "string",
