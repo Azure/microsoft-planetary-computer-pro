@@ -52,7 +52,7 @@
       "type": "bool",
       "defaultValue": true,
       "metadata": {
-        "description": "Set to true to deploy Azure AI Foundry resources (AI Hub and AI Project)."
+        "description": "Set to true to deploy Microsoft Foundry resources (AI Hub and AI Project)."
       }
     },
     "deployGeoCatalog": {

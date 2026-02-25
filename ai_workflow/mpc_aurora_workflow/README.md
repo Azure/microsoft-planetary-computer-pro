@@ -12,7 +12,7 @@ This repository demonstrates an end-to-end workflow for hurricane path predictio
 **[hurricane_forecast_infra_impact.ipynb](hurricane_forecast_infra_impact.ipynb)** - An interactive workflow that showcases:
 
 - 🌐 **Planetary Computer Pro** - Unified STAC catalog for geospatial data access
-- 🌪️ **Aurora AI Model** - State-of-the-art weather prediction via Azure AI Foundry
+- 🌪️ **Aurora AI Model** - State-of-the-art weather prediction via Microsoft Foundry
 - ⚡ **Infrastructure Analysis** - Power grid impact assessment using OpenStreetMap
 - 🗺️ **Interactive Visualization** - Storm tracks and affected infrastructure maps
 
@@ -28,7 +28,7 @@ The notebook works with **any historical or active tropical storm** from the IBT
 | 2. **Storm Selection** | Choose any storm from IBTrACS or use active storm feeds |
 | 3. **ECMWF Data Download** | Retrieve weather data via Planetary Computer Pro STAC API |
 | 4. **Aurora Batch Preparation** | Format data for model inference |
-| 5. **Aurora Inference** | Run hurricane predictions on Azure AI Foundry |
+| 5. **Aurora Inference** | Run hurricane predictions on Microsoft Foundry |
 | 6. **Track Visualization** | Compare predicted vs observed storm paths |
 | 7. **Infrastructure Analysis** | Identify power grid assets in the storm's path |
 
@@ -36,8 +36,8 @@ The notebook works with **any historical or active tropical storm** from the IBT
 
 - **Python 3.10+**
 - **Azure Subscription** with access to:
-  - Microsoft Planetary Computer Pro (GeoCatalog)
-  - Azure AI Foundry (Aurora model endpoint)
+  - Microsoft Planetary Computer Pro (GeoCatalog) — available in supported regions: `northcentralus`, `eastus`, `canadacentral`, `westeurope`, or `uksouth`
+  - Microsoft Foundry (Aurora model endpoint) — requires GPU compute quota (e.g., `Standard_NC24ads_A100_v4`)
   - Azure Blob Storage
 
 ## 🚀 Quick Start

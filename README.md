@@ -8,7 +8,7 @@ End-to-end workflows that combine Planetary Computer Pro with Azure AI models fo
 
 | Workflow | Description |
 |----------|-------------|
-| [**Aurora Hurricane Forecast & Infrastructure Impact**](ai_workflow/mpc_aurora_workflow/) | Hurricane path prediction using the Aurora AI weather model with power infrastructure impact analysis. Combines ECMWF weather data via Planetary Computer Pro, Aurora inference on Azure AI Foundry, and OpenStreetMap infrastructure data — all visualized through interactive maps and ingested into GeoCatalog. |
+| [**Aurora Hurricane Forecast & Infrastructure Impact**](ai_workflow/mpc_aurora_workflow/) | Hurricane path prediction using the Aurora AI weather model with power infrastructure impact analysis. Combines ECMWF weather data via Planetary Computer Pro, Aurora inference on Microsoft Foundry, and OpenStreetMap infrastructure data — all visualized through interactive maps and ingested into GeoCatalog. |
 
 ## Contributing
 

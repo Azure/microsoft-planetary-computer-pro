@@ -58,7 +58,7 @@
 │          │          │                 │  └─────────────────────────┘    └─────────────┼───────────────┘  │
 │          ▼          │                 │                                               │                  │
 │ ┌─────────────────┐ │                 │  ┌─────────────────────────┐                  │                  │
-│ │  NHC RSS/JSON   │ │                 │  │    Azure AI Foundry     │                  │                  │
+│ │  NHC RSS/JSON   │ │                 │  │   Microsoft Foundry     │                  │                  │
 │ │  (Active)       │ │                 │  │  ┌───────────────────┐  │                  │                  │
 │ └─────────────────┘ │                 │  │  │ Aurora 0.25° Model│  │                  │                  │
 └─────────────────────┘                 │  │  │ + TC Tracker      │  │                  │                  │
@@ -108,7 +108,7 @@
 │   ┌────────────────────────────────────────────────────────────────────────────────────────────────┐     │
 │   │                              MICROSOFT AZURE ECOSYSTEM                                          │     │
 │   │  ┌─────────────────────┐   ┌─────────────────────┐   ┌─────────────────────┐                   │     │
-│   │  │  Planetary Computer │   │   Azure AI Foundry  │   │   Azure Blob        │                   │     │
+│   │  │  Planetary Computer │   │  Microsoft Foundry  │   │   Azure Blob        │                   │     │
 │   │  │  Pro (GeoCatalog)   │   │   (Aurora Model)    │   │   Storage           │                   │     │
 │   │  │                     │   │                     │   │                     │                   │     │
 │   │  │  Auth: AAD Bearer   │   │  Auth: API Token    │   │  Auth: AAD + SAS    │                   │     │
@@ -212,7 +212,7 @@
                          │                              │
                          │                              ▼
                          │     ┌──────────────────────────────────────────────────────────────┐
-                         │     │              AZURE AI FOUNDRY (AURORA MODEL)                 │    ┌────────────────┐
+                         │     │             MICROSOFT FOUNDRY (AURORA MODEL)                 │    ┌────────────────┐
                          │     │                                                              │    │                │
                          │     │   ┌─────────────────────────────────────────────────────┐   │    │  GeoCatalog    │
                          │     │   │  aurora-0.25-finetuned                              │   ├───►│  STAC Ingest   │
@@ -801,7 +801,7 @@
                                                     │
                                                     ▼
     ┌─────────────────────────────────────────────────────────────────────────────────────────────────────┐
-    │  AZURE AI FOUNDRY ENDPOINT                                                                           │
+    │  MICROSOFT FOUNDRY ENDPOINT                                                                           │
     ├─────────────────────────────────────────────────────────────────────────────────────────────────────┤
     │                                                                                                      │
     │   Model: aurora-0.25-finetuned                                                                      │
@@ -1941,7 +1941,7 @@ The **64 kt threshold** (Category 1 hurricane) was chosen empirically based on:
     │  Planetary Computer Pro          │  Azure AD Bearer Token │  DefaultAzureCredential               │
     │  (GeoCatalog STAC)               │                        │  Scope: geocatalog.spatio.azure.com   │
     ├──────────────────────────────────┼────────────────────────┼───────────────────────────────────────┤
-    │  Azure AI Foundry                │  Bearer Token          │  AURORA_FOUNDRY_TOKEN env var         │
+    │  Microsoft Foundry               │  Bearer Token          │  AURORA_FOUNDRY_TOKEN env var         │
     │  (Aurora Model)                  │                        │                                       │
     ├──────────────────────────────────┼────────────────────────┼───────────────────────────────────────┤
     │  Azure Blob Storage              │  Azure AD + SAS        │  DefaultAzureCredential               │
@@ -1971,7 +1971,7 @@ The **64 kt threshold** (Category 1 hurricane) was chosen empirically based on:
     # Microsoft Planetary Computer Pro
     STAC_CATALOG_URL=https://your-geocatalog.spatio.azure.com/stac
 
-    # Azure AI Foundry (Aurora Model)
+    # Microsoft Foundry (Aurora Model)
     AURORA_FOUNDRY_ENDPOINT=https://your-foundry.inference.ai.azure.com
     AURORA_FOUNDRY_TOKEN=your-api-token
 
