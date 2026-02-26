@@ -81,11 +81,7 @@
   "variables": {
     "uniqueSuffix": "[uniqueString(resourceGroup().id)]",
     "storageAccountName": "[take(concat(parameters('projectName'), 'st', variables('uniqueSuffix')), 24)]",
-    "containerNames": [
-      "model-outputs",
-      "era5-data",
-      "forecast-results"
-    ],
+    "containerName": "upload-container",
     "aiHubName": "[concat(parameters('projectName'), '-aihub-', variables('uniqueSuffix'))]",
     "aiProjectName": "[concat(parameters('projectName'), '-aiproject')]",
     "keyVaultName": "[take(concat(parameters('projectName'), 'kv', variables('uniqueSuffix')), 24)]",
@@ -117,17 +113,13 @@
       }
     },
     {
-      "comments": "Blob Containers for data storage",
+      "comments": "Blob container for model data, forecasts, and analysis outputs",
       "type": "Microsoft.Storage/storageAccounts/blobServices/containers",
       "apiVersion": "2023-01-01",
-      "name": "[concat(variables('storageAccountName'), '/default/', variables('containerNames')[copyIndex()])]",
+      "name": "[concat(variables('storageAccountName'), '/default/', variables('containerName'))]",
       "dependsOn": [
         "[resourceId('Microsoft.Storage/storageAccounts', variables('storageAccountName'))]"
-      ],
-      "copy": {
-        "name": "containerCopy",
-        "count": "[length(variables('containerNames'))]"
-      }
+      ]
     },
     {
       "comments": "Log Analytics Workspace for AI Hub",
