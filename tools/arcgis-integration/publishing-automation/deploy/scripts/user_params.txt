@@ -1,0 +1,29 @@
+# =============================================================================
+# User Parameters for Publishing Automation Deployment
+# =============================================================================
+# Copy this file and fill in your values before running deploy.sh
+
+# Azure resource group for the Function App infrastructure
+resource_group=""
+
+# Unique name for this deployment (used to generate resource names)
+deployment_name=""
+
+# Azure region
+location="eastus"
+
+# Function plan type: flex (recommended) or consumption
+app_plan="flex"
+
+# MPC Pro GeoCatalog settings
+geocatalog_endpoint=""       # e.g., https://your-geocatalog.geocatalog.spatio.azure.com
+geocatalog_name=""           # Name of the GeoCatalog resource
+geocatalog_resource_group="" # Resource group containing the GeoCatalog
+geocatalog_subscription_id="" # Subscription ID containing the GeoCatalog (blank = current)
+
+# ArcGIS Enterprise settings
+arcgis_portal_url=""         # e.g., https://your-portal.domain.com/portal
+arcgis_image_server_url=""   # e.g., https://your-server.domain.com/server
+
+# Pipeline schedule (NCRONTAB expression)
+pipeline_schedule="0 0 */6 * * *"  # Every 6 hours

@@ -34,6 +34,9 @@ bld/
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/
+
+# Python virtual environments
+.venv/
 # Uncomment if you have tasks that create the project's static files in wwwroot
 #wwwroot/
 
@@ -405,3 +408,12 @@ FodyWeavers.xsd
 !*.env.example
 config.yaml
 config.yml
+
+# Azure Functions local settings (may contain secrets)
+local.settings.json
+
+# Azure Functions deploy-time copies (created by deploy.sh, not source of truth)
+**/deploy/azure-function/src/
+
+#Remove local testing directory
+.local_test/

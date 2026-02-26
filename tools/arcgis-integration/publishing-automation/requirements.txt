@@ -1,0 +1,14 @@
+# MPC Pro SDK for authenticated STAC queries
+azure-planetarycomputer>=1.0.0b1
+
+# Azure authentication (DefaultAzureCredential, ManagedIdentityCredential, etc.)
+azure-identity>=1.18.0
+
+# ArcGIS API for Python (image collection management, publishing)
+arcgis>=2.2.0
+
+# Configuration
+pyyaml>=6.0
+
+# Logging and output
+rich>=13.0

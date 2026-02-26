@@ -1,0 +1,14 @@
+# Ignore local virtual environment
+.venv/
+
+# Ignore local settings (contains secrets)
+local.settings.json
+
+# Ignore Python caches
+__pycache__/
+*.pyc
+
+# Ignore IDE / editor files
+.vscode/
+.idea/
+*.swp

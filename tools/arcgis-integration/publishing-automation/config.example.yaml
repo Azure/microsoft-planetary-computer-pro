@@ -1,0 +1,98 @@
+# =============================================================================
+# ArcGIS Publishing Automation Configuration
+# =============================================================================
+# Copy this file to config.yaml and fill in your values.
+# Environment variables can be referenced with ${ENV_VAR_NAME} syntax.
+
+# -----------------------------------------------------------------------------
+# MPC Pro GeoCatalog Connection
+# -----------------------------------------------------------------------------
+geocatalog:
+  # The endpoint URL of your MPC Pro GeoCatalog instance
+  endpoint: "https://your-geocatalog.geocatalog.spatio.azure.com"
+  # API version to use (defaults to 2025-04-30-preview)
+  api_version: "2025-04-30-preview"
+
+# -----------------------------------------------------------------------------
+# STAC Query Parameters
+# -----------------------------------------------------------------------------
+# Defines what imagery to search for in the GeoCatalog.
+stac_query:
+  # One or more collection IDs to search
+  collections:
+    - "sentinel-2-l2a"
+  # Bounding box [west, south, east, north] in WGS84 (EPSG:4326)
+  bbox: [-122.5, 37.5, -122.0, 38.0]
+  # Date/time range in RFC 3339 format (single value or "start/end")
+  datetime: "2024-01-01T00:00:00Z/2024-12-31T23:59:59Z"
+  # Optional CQL2-JSON filter for additional query constraints
+  # Example: filter by cloud cover for optical imagery
+  filter:
+    op: "<"
+    args:
+      - property: "eo:cloud_cover"
+      - 20
+  filter_lang: "cql2-json"
+  # Maximum items to return per search request (pagination handled automatically)
+  limit: 100
+
+# -----------------------------------------------------------------------------
+# Image Collection Configuration
+# -----------------------------------------------------------------------------
+# Defines the target ArcGIS Image Collection for the imagery.
+image_collection:
+  # Name of the image collection in ArcGIS Enterprise
+  name: "sentinel2_imagery"
+  # Human-readable description
+  description: "Sentinel-2 L2A imagery from MPC Pro GeoCatalog"
+  # Spatial reference (EPSG code)
+  coordinate_system: 4326
+  # Raster type for ingestion (e.g., "Raster Dataset" for COGs)
+  raster_type_name: "Raster Dataset"
+  # Create the image collection if it doesn't exist
+  create_if_missing: true
+  # Which STAC asset key to use as the raster source (e.g., "visual", "B04", "data")
+  source_asset_key: "visual"
+
+# -----------------------------------------------------------------------------
+# ArcGIS Enterprise Connection
+# -----------------------------------------------------------------------------
+arcgis_enterprise:
+  # Portal URL
+  portal_url: "https://your-portal.domain.com/portal"
+  # ArcGIS Image Server URL
+  image_server_url: "https://your-server.domain.com/server"
+  # Authentication method: "username_password", "oauth", "pki", "windows"
+  auth_method: "username_password"
+  # Credentials (use environment variable references for secrets)
+  username: "${ARCGIS_USERNAME}"
+  password: "${ARCGIS_PASSWORD}"
+  # For OAuth authentication:
+  # client_id: "${ARCGIS_CLIENT_ID}"
+  # client_secret: "${ARCGIS_CLIENT_SECRET}"
+  # Set to false for self-signed certificates (not recommended for production)
+  # verify_cert: true
+
+# -----------------------------------------------------------------------------
+# Cloud Data Store
+# -----------------------------------------------------------------------------
+# The Azure Blob Storage container must be registered as a cloud data store
+# in ArcGIS Enterprise so Image Server can access COGs directly.
+cloud_store:
+  # Name of the registered cloud data store in ArcGIS Enterprise
+  store_name: "mpc_imagery_store"
+  # Azure Storage account name (used to map STAC hrefs to cloud store paths)
+  storage_account: "your_storage_account"
+  # Blob container name
+  container: "your_container"
+
+# -----------------------------------------------------------------------------
+# Deployment Settings
+# -----------------------------------------------------------------------------
+deployment:
+  # Azure Functions: cron expression for the timer trigger
+  schedule_cron: "0 0 */6 * * *"  # Every 6 hours
+  # VM Scheduled Task: interval in hours
+  schedule_interval_hours: 6
+  # Logging level: DEBUG, INFO, WARNING, ERROR
+  log_level: "INFO"
