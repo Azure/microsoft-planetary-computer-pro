@@ -68,7 +68,6 @@ The notebook works with **any historical or active tropical storm** from the IBT
    AURORA_BLOB_STORAGE_SAS=https://youraccount.blob.core.windows.net/container?your_sas_token
    UPLOAD_CONTAINER_NAME=model-outputs
    STORAGE_ACCOUNT_KEY=<your-storage-key>
-   OUTPUT_BLOB_CONTAINER_URL=https://youraccount.blob.core.windows.net/model-outputs
    ```
 
 4. **Run the notebook**

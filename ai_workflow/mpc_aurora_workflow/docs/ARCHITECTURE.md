@@ -1977,7 +1977,6 @@ The **64 kt threshold** (Category 1 hurricane) was chosen empirically based on:
 
     # Azure Blob Storage
     AURORA_BLOB_STORAGE_SAS=https://your-storage.blob.core.windows.net/?sv=...
-    OUTPUT_BLOB_CONTAINER_URL=https://your-storage.blob.core.windows.net/container
     STORAGE_ACCOUNT_KEY=your-storage-key
 ```
 
