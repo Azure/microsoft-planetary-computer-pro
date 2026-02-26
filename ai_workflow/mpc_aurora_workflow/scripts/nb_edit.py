@@ -18,7 +18,7 @@ Usage Examples:
     python nb_edit.py read 7 --lines 100-150
 
     # Search for text across all cells
-    python nb_edit.py search "STAC_CATALOG_URL"
+    python nb_edit.py search "GEOCATALOG_URI"
 
     # Replace text in a specific cell
     python nb_edit.py replace 70 --old "old_text" --new "new_text"

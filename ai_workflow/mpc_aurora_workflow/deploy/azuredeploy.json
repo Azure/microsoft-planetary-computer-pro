@@ -312,7 +312,7 @@
     },
     "configurationInstructions": {
       "type": "string",
-      "value": "After deployment, update your .env file with: 1) STAC_CATALOG_URL from geoCatalogEndpoint, 2) Generate a SAS token for AURORA_BLOB_STORAGE_SAS from the storage account, 3) Use auroraEndpointUri for AURORA_FOUNDRY_ENDPOINT and retrieve the key from the portal for AURORA_FOUNDRY_TOKEN"
+      "value": "After deployment, update your .env file with: 1) GEOCATALOG_URI from geoCatalogEndpoint, 2) Generate a SAS token for AURORA_BLOB_STORAGE_SAS from the storage account, 3) Use auroraEndpointUri for AURORA_FOUNDRY_ENDPOINT and retrieve the key from the portal for AURORA_FOUNDRY_TOKEN"
     }
   }
 }

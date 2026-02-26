@@ -1969,7 +1969,7 @@ The **64 kt threshold** (Category 1 hurricane) was chosen empirically based on:
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
     # Microsoft Planetary Computer Pro
-    STAC_CATALOG_URL=https://your-geocatalog.spatio.azure.com/stac
+    GEOCATALOG_URI=https://your-geocatalog.spatio.azure.com
 
     # Microsoft Foundry (Aurora Model)
     AURORA_FOUNDRY_ENDPOINT=https://your-foundry.inference.ai.azure.com
