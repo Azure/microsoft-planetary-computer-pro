@@ -34,7 +34,7 @@ The notebook works with **any historical or active tropical storm** from the IBT
 
 ## 🛠️ Prerequisites
 
-- **Python 3.10+**
+- **Python 3.10 – 3.13**
 - **Azure Subscription** with access to:
   - Microsoft Planetary Computer Pro (GeoCatalog) — available in supported regions: `northcentralus`, `eastus`, `canadacentral`, `westeurope`, or `uksouth`
   - Microsoft Foundry (Aurora model endpoint) — requires GPU compute quota (e.g., `Standard_NC24ads_A100_v4`)
@@ -45,7 +45,7 @@ The notebook works with **any historical or active tropical storm** from the IBT
 1. **Clone the repository**
    ```bash
    git clone https://github.com/Azure/microsoft-planetary-computer-pro.git
-   cd microsoft-planetary-computer-pro/ai_workflow/mpc_aurora_workflow
+   cd microsoft-planetary-computer-pro/applications/storm_impact_assessment
    ```
 
 2. **Install dependencies**

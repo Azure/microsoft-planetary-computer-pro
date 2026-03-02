@@ -2,60 +2,60 @@
 
 ## Critical: Large Notebook Handling
 
-The main notebook `ai_workflow/mpc_aurora_workflow/hurricane_forecast_infra_impact.ipynb` is **1.57 MB / 19K JSON lines / 71 cells** with 1.07 MB of embedded outputs. This exceeds VS Code's diff editor limits and causes Copilot edit tools (`edit_notebook_file`, `replace_string_in_file`) to fail silently or produce corrupt edits.
+The main notebook `applications/storm_impact_assessment/hurricane_forecast_infra_impact.ipynb` is **1.57 MB / 19K JSON lines / 71 cells** with 1.07 MB of embedded outputs. This exceeds VS Code's diff editor limits and causes Copilot edit tools (`edit_notebook_file`, `replace_string_in_file`) to fail silently or produce corrupt edits.
 
 ### Rules for Editing the Notebook
 
-1. **NEVER use VS Code's built-in notebook edit tools** (`edit_notebook_file`, `replace_string_in_file`) on `ai_workflow/mpc_aurora_workflow/hurricane_forecast_infra_impact.ipynb`. They will fail due to file size.
+1. **NEVER use VS Code's built-in notebook edit tools** (`edit_notebook_file`, `replace_string_in_file`) on `applications/storm_impact_assessment/hurricane_forecast_infra_impact.ipynb`. They will fail due to file size.
 
-2. **ALWAYS use `python ai_workflow/mpc_aurora_workflow/scripts/nb_edit.py` commands in the terminal** (from the repo root) to read and modify the notebook. The script operates directly on the `.ipynb` JSON and auto-creates backups.
+2. **ALWAYS use `python applications/storm_impact_assessment/scripts/nb_edit.py` commands in the terminal** (from the repo root) to read and modify the notebook. The script operates directly on the `.ipynb` JSON and auto-creates backups.
 
 3. **For reading cell content:**
    ```bash
-   python ai_workflow/mpc_aurora_workflow/scripts/nb_edit.py read <cell_index>                # full cell
-   python ai_workflow/mpc_aurora_workflow/scripts/nb_edit.py read <cell_index> --lines 50-80  # specific lines
+   python applications/storm_impact_assessment/scripts/nb_edit.py read <cell_index>                # full cell
+   python applications/storm_impact_assessment/scripts/nb_edit.py read <cell_index> --lines 50-80  # specific lines
    ```
 
 4. **For searching across all cells:**
    ```bash
-   python ai_workflow/mpc_aurora_workflow/scripts/nb_edit.py search "function_name"
+   python applications/storm_impact_assessment/scripts/nb_edit.py search "function_name"
    ```
 
 5. **For replacing text in a cell:**
    ```bash
    # Simple inline replacement
-   python ai_workflow/mpc_aurora_workflow/scripts/nb_edit.py replace <cell_index> --old "old_text" --new "new_text"
+   python applications/storm_impact_assessment/scripts/nb_edit.py replace <cell_index> --old "old_text" --new "new_text"
 
    # Multiline replacement using temp files
    # Step 1: Write old text to a temp file
    # Step 2: Write new text to a temp file
    # Step 3: Run replacement
-   python ai_workflow/mpc_aurora_workflow/scripts/nb_edit.py replace <cell_index> --old-file old.txt --new-file new.txt
+   python applications/storm_impact_assessment/scripts/nb_edit.py replace <cell_index> --old-file old.txt --new-file new.txt
    ```
 
 6. **For replacing a range of lines in a cell:**
    ```bash
    # First read the lines to verify
-   python ai_workflow/mpc_aurora_workflow/scripts/nb_edit.py read <cell_index> --lines 100-120
+   python applications/storm_impact_assessment/scripts/nb_edit.py read <cell_index> --lines 100-120
    # Write new content to a file, then replace
-   python ai_workflow/mpc_aurora_workflow/scripts/nb_edit.py replace-lines <cell_index> --lines 100-120 --file new_content.py
+   python applications/storm_impact_assessment/scripts/nb_edit.py replace-lines <cell_index> --lines 100-120 --file new_content.py
    ```
 
 7. **For inserting or deleting cells:**
    ```bash
-   python ai_workflow/mpc_aurora_workflow/scripts/nb_edit.py insert <after_index> --type code --file content.py
-   python ai_workflow/mpc_aurora_workflow/scripts/nb_edit.py delete <cell_index>
+   python applications/storm_impact_assessment/scripts/nb_edit.py insert <after_index> --type code --file content.py
+   python applications/storm_impact_assessment/scripts/nb_edit.py delete <cell_index>
    ```
 
 8. **For listing all cells:**
    ```bash
-   python ai_workflow/mpc_aurora_workflow/scripts/nb_edit.py list
+   python applications/storm_impact_assessment/scripts/nb_edit.py list
    ```
 
 9. **For reducing file size (clear outputs):**
    ```bash
-   python ai_workflow/mpc_aurora_workflow/scripts/nb_edit.py clear-outputs          # all cells
-   python ai_workflow/mpc_aurora_workflow/scripts/nb_edit.py clear-outputs --cell 21  # specific cell
+   python applications/storm_impact_assessment/scripts/nb_edit.py clear-outputs          # all cells
+   python applications/storm_impact_assessment/scripts/nb_edit.py clear-outputs --cell 21  # specific cell
    ```
 
 ### Workflow for Multi-line Edits
@@ -64,16 +64,16 @@ When making complex edits with multiline old/new text:
 
 ```bash
 # 1. Read the target area
-python ai_workflow/mpc_aurora_workflow/scripts/nb_edit.py read <cell> --lines <start>-<end>
+python applications/storm_impact_assessment/scripts/nb_edit.py read <cell> --lines <start>-<end>
 
 # 2. Create temp files with the old and new content
 #    (use create_file tool to write old.txt and new.txt)
 
 # 3. Apply the replacement
-python ai_workflow/mpc_aurora_workflow/scripts/nb_edit.py replace <cell> --old-file old.txt --new-file new.txt
+python applications/storm_impact_assessment/scripts/nb_edit.py replace <cell> --old-file old.txt --new-file new.txt
 
 # 4. Verify the edit
-python ai_workflow/mpc_aurora_workflow/scripts/nb_edit.py read <cell> --lines <start>-<end>
+python applications/storm_impact_assessment/scripts/nb_edit.py read <cell> --lines <start>-<end>
 
 # 5. Clean up temp files
 ```

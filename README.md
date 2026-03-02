@@ -2,13 +2,13 @@
 
 This repository contains code and tools to help users of the [Microsoft Planetary Computer Pro](https://azure.microsoft.com/en-us/products/planetary-computer-pro) get started with their journey with the service. 
 
-## AI Workflows
+## Applications
 
 End-to-end workflows that combine Planetary Computer Pro with Azure AI models for geospatial analysis.
 
-| Workflow | Description |
-|----------|-------------|
-| [**Aurora Hurricane Forecast & Infrastructure Impact**](ai_workflow/mpc_aurora_workflow/) | Hurricane path prediction using the Aurora AI weather model with power infrastructure impact analysis. Combines ECMWF weather data via Planetary Computer Pro, Aurora inference on Microsoft Foundry, and OpenStreetMap infrastructure data — all visualized through interactive maps and ingested into GeoCatalog. |
+| Application | Description |
+|-------------|-------------|
+| [**Aurora Hurricane Forecast & Infrastructure Impact**](applications/storm_impact_assessment/) | Hurricane path prediction using the Aurora AI weather model with power infrastructure impact analysis. Combines ECMWF weather data via Planetary Computer Pro, Aurora inference on Microsoft Foundry, and OpenStreetMap infrastructure data — all visualized through interactive maps and ingested into GeoCatalog. |
 
 ## Contributing
 
