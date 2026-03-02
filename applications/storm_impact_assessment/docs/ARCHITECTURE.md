@@ -30,7 +30,7 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                                    HURRICANE FORECAST & INFRASTRUCTURE IMPACT SYSTEM                         │
+│                                    HURRICANE FORECAST & INFRASTRUCTURE IMPACT SYSTEM                        │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
                                            ┌─────────────────────┐
@@ -43,28 +43,28 @@
           ▼                                           ▼                                           ▼
 ┌─────────────────────┐                 ┌───────────────────────────────────────────────────────────────────┐
 │  STORM DATA LAYER   │                 │                     MICROSOFT AZURE PLATFORM                      │
-│  (External Sources) │                 │  ┌─────────────────────────┐    ┌─────────────────────────────┐  │
-│                     │                 │  │   WEATHER DATA LAYER    │    │      OUTPUT LAYER           │  │
-│ ┌─────────────────┐ │                 │  │                         │    │                             │  │
-│ │   Tropycal      │ │                 │  │ ┌─────────────────────┐ │    │ ┌─────────────────────────┐ │  │
-│ │   Library       │ │                 │  │ │  Planetary Computer │ │    │ │  GeoCatalog Pro         │ │  │
-│ └────────┬────────┘ │                 │  │ │  STAC Catalog       │ │    │ │  STAC API               │ │  │
-│          │          │                 │  │ └──────────┬──────────┘ │    │ └───────────┬─────────────┘ │  │
-│          ▼          │                 │  │            │            │    │             │               │  │
-│ ┌─────────────────┐ │                 │  │ ┌──────────▼──────────┐ │    │ ┌───────────▼─────────────┐ │  │
-│ │  IBTrACS NCEI   │ │                 │  │ │  ECMWF Blob Storage │ │    │ │  Azure Blob Storage     │ │  │
-│ │  Direct CSV     │ │                 │  │ │  (OPER + SCDA)      │ │    │ │  (Hurricane Data)       │ │  │
-│ └────────┬────────┘ │                 │  │ └─────────────────────┘ │    │ └───────────┬─────────────┘ │  │
-│          │          │                 │  └─────────────────────────┘    └─────────────┼───────────────┘  │
-│          ▼          │                 │                                               │                  │
-│ ┌─────────────────┐ │                 │  ┌─────────────────────────┐                  │                  │
-│ │  NHC RSS/JSON   │ │                 │  │   Microsoft Foundry     │                  │                  │
-│ │  (Active)       │ │                 │  │  ┌───────────────────┐  │                  │                  │
-│ └─────────────────┘ │                 │  │  │ Aurora 0.25° Model│  │                  │                  │
-└─────────────────────┘                 │  │  │ + TC Tracker      │  │                  │                  │
-          │                             │  │  └───────────────────┘  │                  │                  │
-          │                             │  └─────────────────────────┘                  │                  │
-          │                             └───────────────────────────────────────────────┼──────────────────┘
+│  (External Sources) │                 │  ┌─────────────────────────┐    ┌─────────────────────────────┐   │
+│                     │                 │  │   WEATHER DATA LAYER    │    │      OUTPUT LAYER           │   │
+│ ┌─────────────────┐ │                 │  │                         │    │                             │   │
+│ │   Tropycal      │ │                 │  │ ┌─────────────────────┐ │    │ ┌─────────────────────────┐ │   │
+│ │   Library       │ │                 │  │ │  Planetary Computer │ │    │ │  GeoCatalog Pro         │ │   │
+│ └────────┬────────┘ │                 │  │ │  STAC Catalog       │ │    │ │  STAC API               │ │   │
+│          │          │                 │  │ └──────────┬──────────┘ │    │ └───────────┬─────────────┘ │   │
+│          ▼          │                 │  │            │            │    │             │               │   │
+│ ┌─────────────────┐ │                 │  │ ┌──────────▼──────────┐ │    │ ┌───────────▼─────────────┐ │   │
+│ │  IBTrACS NCEI   │ │                 │  │ │  ECMWF Blob Storage │ │    │ │  Azure Blob Storage     │ │   │
+│ │  Direct CSV     │ │                 │  │ │  (OPER + SCDA)      │ │    │ │  (Hurricane Data)       │ │   │
+│ └────────┬────────┘ │                 │  │ └─────────────────────┘ │    │ └───────────┬─────────────┘ │   │
+│          │          │                 │  └─────────────────────────┘    └─────────────┼───────────────┘   │
+│          ▼          │                 │                                               │                   │
+│ ┌─────────────────┐ │                 │  ┌─────────────────────────┐                  │                   │
+│ │  NHC RSS/JSON   │ │                 │  │   Microsoft Foundry     │                  │                   │
+│ │  (Active)       │ │                 │  │  ┌───────────────────┐  │                  │                   │
+│ └─────────────────┘ │                 │  │  │ Aurora 0.25° Model│  │                  │                   │
+└─────────────────────┘                 │  │  │ + TC Tracker      │  │                  │                   │
+          │                             │  │  └───────────────────┘  │                  │                   │
+          │                             │  └─────────────────────────┘                  │                   │
+          │                             └───────────────────────────────────────────────┼───────────────────┘
           │                                           │                                 │
           │                                           │                                 │
           └───────────────────────┬───────────────────┘                                 │
@@ -74,7 +74,7 @@
                     │      DATA PREPARATION       │                                     │
                     │  ┌───────────────────────┐  │                                     │
                     │  │ • GRIB2 → xarray      │  │                                     │
-                    │  │ • Lon [-180,180]→[0,360]│ │                                     │
+                    │  │ • Lon -180,180 → 0,360│  │                                     │
                     │  │ • Pressure level sort │  │                                     │
                     │  │ • Aurora Batch format │  │                                     │
                     │  └───────────────────────┘  │                                     │
@@ -102,16 +102,16 @@
 
 ```
 ┌──────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                                        EXTERNAL SYSTEM INTERFACES                                         │
+│                                        EXTERNAL SYSTEM INTERFACES                                        │
 ├──────────────────────────────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                                          │
 │   ┌────────────────────────────────────────────────────────────────────────────────────────────────┐     │
-│   │                              MICROSOFT AZURE ECOSYSTEM                                          │     │
+│   │                              MICROSOFT AZURE ECOSYSTEM                                         │     │
 │   │  ┌─────────────────────┐   ┌─────────────────────┐   ┌─────────────────────┐                   │     │
 │   │  │  Planetary Computer │   │  Microsoft Foundry  │   │   Azure Blob        │                   │     │
 │   │  │  Pro (GeoCatalog)   │   │   (Aurora Model)    │   │   Storage           │                   │     │
 │   │  │                     │   │                     │   │                     │                   │     │
-│   │  │  Auth: AAD Bearer   │   │  Auth: API Token    │   │  Auth: AAD + SAS    │                   │     │
+│   │  │  Auth: AAD Bearer   │   │  Auth: API Token    │   │  Auth: Key + SAS    │                   │     │
 │   │  │  Protocol: STAC API │   │  Protocol: REST     │   │  Protocol: Blob API │                   │     │
 │   │  └─────────────────────┘   └─────────────────────┘   └─────────────────────┘                   │     │
 │   │                                                                                                │     │
@@ -125,7 +125,7 @@
 │   └────────────────────────────────────────────────────────────────────────────────────────────────┘     │
 │                                                                                                          │
 │   ┌────────────────────────────────────────────────────────────────────────────────────────────────┐     │
-│   │                              TROPICAL CYCLONE DATA SOURCES                                      │     │
+│   │                              TROPICAL CYCLONE DATA SOURCES                                     │     │
 │   │  ┌─────────────────────┐   ┌─────────────────────┐   ┌─────────────────────┐                   │     │
 │   │  │  IBTrACS (NCEI)     │   │   HURDAT2 (NHC)     │   │   NHC Active Storms │                   │     │
 │   │  │                     │   │                     │   │                     │                   │     │
@@ -136,15 +136,15 @@
 │   └────────────────────────────────────────────────────────────────────────────────────────────────┘     │
 │                                                                                                          │
 │   ┌────────────────────────────────────────────────────────────────────────────────────────────────┐     │
-│   │                              INFRASTRUCTURE DATA (OpenStreetMap)                                │     │
+│   │                              INFRASTRUCTURE DATA (OpenStreetMap)                               │     │
 │   │  ┌───────────────────────────────────────────────────────────────────────────────────────┐     │     │
 │   │  │  Overpass API Servers (with automatic failover)                                       │     │     │
 │   │  │                                                                                       │     │     │
-│   │  │  Primary:   overpass-api.de/api/interpreter                                          │     │     │
-│   │  │  Fallback:  overpass.kumi.systems/api/interpreter                                    │     │     │
-│   │  │  Fallback:  maps.mail.ru/osm/tools/overpass/api/interpreter                          │     │     │
+│   │  │  Primary:   overpass-api.de/api/interpreter                                           │     │     │
+│   │  │  Fallback:  overpass.kumi.systems/api/interpreter                                     │     │     │
+│   │  │  Fallback:  maps.mail.ru/osm/tools/overpass/api/interpreter                           │     │     │
 │   │  │                                                                                       │     │     │
-│   │  │  Data: power=substation, power=plant, power=line                                     │     │     │
+│   │  │  Data: power=substation, power=plant, power=line                                      │     │     │
 │   │  └───────────────────────────────────────────────────────────────────────────────────────┘     │     │
 │   └────────────────────────────────────────────────────────────────────────────────────────────────┘     │
 │                                                                                                          │
@@ -157,7 +157,7 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                                           DATA FLOW DIAGRAM                                              │
+│                                           DATA FLOW DIAGRAM                                             │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
     USER INPUT                           PROCESSING                              OUTPUT
@@ -171,17 +171,17 @@
                          │     ┌──────────────────────────────────────────────────────────────┐
                          ├────►│                    STORM DATA ACQUISITION                    │
                          │     │                                                              │
-                         │     │   Tropycal ──► IBTrACS CSV ──► NHC JSON ──► IBTrACS Active  │
+                         │     │   Tropycal ──► IBTrACS CSV ──► NHC JSON ──► IBTrACS Active   │
                          │     │      │              │              │              │          │
                          │     │      └──────────────┴──────────────┴──────────────┘          │
                          │     │                         │                                    │
                          │     │                         ▼                                    │
-                         │     │              ┌───────────────────┐                           │
+                         │     │              ┌────────────────────┐                          │
                          │     │              │ Optimal Init Finder│                          │
                          │     │              │ • Wind scoring     │                          │
                          │     │              │ • Pressure bonus   │                          │
                          │     │              │ • Genesis penalty  │                          │
-                         │     │              └─────────┬─────────┘                           │
+                         │     │              └─────────┬──────────┘                          │
                          │     └────────────────────────┼─────────────────────────────────────┘
                          │                              │
                          │                              ▼
@@ -190,36 +190,36 @@
                          │     │                                                              │
                          │     │   Init Time Hour?                                            │
                          │     │        │                                                     │
-                         │     │        ├── 00Z/12Z ──► OPER Stream (PC STAC API)            │
+                         │     │        ├── 00Z/12Z ──► OPER Stream (PC STAC API)             │
                          │     │        │                                                     │
-                         │     │        └── 06Z/18Z ──► SCDA Stream (Blob Storage)           │
+                         │     │        └── 06Z/18Z ──► SCDA Stream (Blob Storage)            │
                          │     │                                                              │
-                         │     │   Both T-6h and T0 timesteps downloaded                     │
+                         │     │   Both T-6h and T0 timesteps downloaded                      │
                          │     └────────────────────────┬─────────────────────────────────────┘
                          │                              │
                          │                              ▼
                          │     ┌──────────────────────────────────────────────────────────────┐
                          │     │                   AURORA BATCH CREATION                      │
                          │     │                                                              │
-                         │     │   ┌─────────────┐  ┌─────────────┐  ┌─────────────┐         │
-                         │     │   │ surf_vars   │  │ atmos_vars  │  │ static_vars │         │
-                         │     │   │ [1,2,H,W]   │  │ [1,2,L,H,W] │  │ [H,W]       │         │
-                         │     │   └─────────────┘  └─────────────┘  └─────────────┘         │
+                         │     │   ┌─────────────┐  ┌─────────────┐  ┌─────────────┐          │
+                         │     │   │ surf_vars   │  │ atmos_vars  │  │ static_vars │          │
+                         │     │   │ [1,2,H,W]   │  │ [1,2,L,H,W] │  │ [H,W]       │          │
+                         │     │   └─────────────┘  └─────────────┘  └─────────────┘          │
                          │     │                                                              │
-                         │     │   Coordinate Transform: [-180,180] ──► [0,360]              │
-                         │     │   Pressure Levels: Sort ascending (50 ──► 1000 hPa)         │
+                         │     │   Coordinate Transform: [-180,180] ──► [0,360]               │
+                         │     │   Pressure Levels: Sort ascending (50 ──► 1000 hPa)          │
                          │     └────────────────────────┬─────────────────────────────────────┘
                          │                              │
                          │                              ▼
                          │     ┌──────────────────────────────────────────────────────────────┐
                          │     │             MICROSOFT FOUNDRY (AURORA MODEL)                 │    ┌────────────────┐
                          │     │                                                              │    │                │
-                         │     │   ┌─────────────────────────────────────────────────────┐   │    │  GeoCatalog    │
-                         │     │   │  aurora-0.25-finetuned                              │   ├───►│  STAC Ingest   │
-                         │     │   │  • 6-hourly forecast steps                          │   │    │                │
-                         │     │   │  • TC Tracker extracts storm center                 │   │    │  • Collection  │
-                         │     │   │  • Returns: lat, lon, msl, wind per step            │   │    │  • Items       │
-                         │     │   └─────────────────────────────────────────────────────┘   │    │  • Render Opts │
+                         │     │   ┌─────────────────────────────────────────────────────┐    │    │  GeoCatalog    │
+                         │     │   │  aurora-0.25-finetuned                              │   ├───► │  STAC Ingest   │
+                         │     │   │  • 6-hourly forecast steps                          │    │    │                │
+                         │     │   │  • TC Tracker extracts storm center                 │    │    │  • Collection  │
+                         │     │   │  • Returns: lat, lon, msl, wind per step            │    │    │  • Items       │
+                         │     │   └─────────────────────────────────────────────────────┘    │    │  • Render Opts │
                          │     └────────────────────────┬─────────────────────────────────────┘    └────────────────┘
                          │                              │
                          │                              ▼
@@ -237,8 +237,8 @@
                          │     │              INFRASTRUCTURE IMPACT ANALYSIS                  │    ┌────────────────┐
                          │     │                                                              │    │                │
                          │     │   Overpass API Query:                                        │───►│  Interactive   │
-                         │     │   • Tiled requests (5°×5° facilities, 3°×3° lines)          │    │  Folium HTML   │
-                         │     │   • Filter to cone polygon (Shapely intersection)           │    │                │
+                         │     │   • Tiled requests (5°×5° facilities, 3°×3° lines)           │    │  Folium HTML   │
+                         │     │   • Filter to cone polygon (Shapely intersection)            │    │                │
                          │     │   • Categorize by voltage level                              │    │  + Animation   │
                          │     └──────────────────────────────────────────────────────────────┘    └────────────────┘
 ```
@@ -249,7 +249,7 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                              STORM DATA MULTI-SOURCE FALLBACK STRATEGY                                   │
+│                              STORM DATA MULTI-SOURCE FALLBACK STRATEGY                                  │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
                                     ┌─────────────────────────┐
@@ -325,16 +325,16 @@
 
 
     ┌─────────────────────────────────────────────────────────────────────────────────────────────────────┐
-    │  CACHING STRATEGY                                                                                    │
+    │  CACHING STRATEGY                                                                                   │
     ├─────────────────────────────────────────────────────────────────────────────────────────────────────┤
-    │                                                                                                      │
+    │                                                                                                     │
     │   Location:  ./cache/storm_data/storms_{basin}_{year}.json                                          │
-    │                                                                                                      │
+    │                                                                                                     │
     │   Policy:    Past Years ──► Cache forever (historical data is immutable)                            │
     │              Current Year ──► Re-fetch if cache_date ≠ today (storms still developing)              │
-    │                                                                                                      │
+    │                                                                                                     │
     │   Contents:  { cache_date, basin_id, year, storms: { id: { name, track, vmax, mslp, ... } } }       │
-    │                                                                                                      │
+    │                                                                                                     │
     └─────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -344,7 +344,7 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                       ACTIVE STORM TRACK DATA ACQUISITION (COMPLETE HISTORICAL + FORECAST)               │
+│                       ACTIVE STORM TRACK DATA ACQUISITION (COMPLETE HISTORICAL + FORECAST)              │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
    For active/current storms, we need COMPLETE track data including:
@@ -363,7 +363,7 @@
    │   ──────────────────  ────────────────────    ─────────────────────────    ────────────   │
    │   Tropycal Realtime   ATL, EPAC, Global       Complete best track          API            │
    │   NHC RSS + Best Track ATL, EPAC              Current pos + historical     JSON + ATCF    │
-   │   JTWC RSS + TCW + BT  WPAC, NIO, SIO, SPAC   Current + forecast + hist   RSS + ATCF     │
+   │   JTWC RSS + TCW + BT  WPAC, NIO, SIO, SPAC   Current + forecast + hist   RSS + ATCF      │
    │                                                                                           │
    └───────────────────────────────────────────────────────────────────────────────────────────┘
 
@@ -381,33 +381,33 @@
    ┌──────────────────────────────────────────────────────────────────────────────────┐
    │  PARALLEL DATA FETCH                                                             │
    │                                                                                  │
-   │  ┌───────────────────────┐          ┌───────────────────────────────────┐       │
-   │  │  TCW Forecast File    │          │  ATCF Best Track File             │       │
-   │  │  (T+0 to T+120)       │          │  (Genesis to Present)             │       │
-   │  │                       │          │                                   │       │
-   │  │  URL: metoc.navy.mil/ │          │  URL: metoc.navy.mil/jtwc/        │       │
-   │  │  jtwc/products/       │          │  products/b{basin}{num}{year}.dat │       │
-   │  │  {storm_id}.tcw       │          │                                   │       │
-   │  │                       │          │  Parse ATCF format:               │       │
-   │  │  Parse T000-T120:     │          │  SH, 19, 2026012700, , BEST, ...  │       │
-   │  │  T000 155S 0430E 080  │          │                                   │       │
-   │  │  T012 161S 0445E 090  │          │                                   │       │
-   │  └───────────┬───────────┘          └─────────────────┬─────────────────┘       │
-   │              │                                        │                         │
-   │              └────────────────┬───────────────────────┘                         │
-   │                               │                                                 │
-   │                               ▼                                                 │
-   │              ┌───────────────────────────────────┐                              │
-   │              │     merge_track_data()            │                              │
-   │              │                                   │                              │
-   │              │  • Combine by timestamp           │                              │
-   │              │  • Historical overwrites forecast │                              │
-   │              │    for past times                 │                              │
-   │              │  • Forecast fills future times    │                              │
-   │              │  • Sort chronologically           │                              │
-   │              └─────────────────┬─────────────────┘                              │
-   │                                │                                                │
-   └────────────────────────────────┼────────────────────────────────────────────────┘
+   │  ┌───────────────────────┐          ┌───────────────────────────────────┐        │
+   │  │  TCW Forecast File    │          │  ATCF Best Track File             │        │
+   │  │  (T+0 to T+120)       │          │  (Genesis to Present)             │        │
+   │  │                       │          │                                   │        │
+   │  │  URL: metoc.navy.mil/ │          │  URL: metoc.navy.mil/jtwc/        │        │
+   │  │  jtwc/products/       │          │  products/b{basin}{num}{year}.dat │        │
+   │  │  {storm_id}.tcw       │          │                                   │        │
+   │  │                       │          │  Parse ATCF format:               │        │
+   │  │  Parse T000-T120:     │          │  SH, 19, 2026012700, , BEST, ...  │        │
+   │  │  T000 155S 0430E 080  │          │                                   │        │
+   │  │  T012 161S 0445E 090  │          │                                   │        │
+   │  └───────────┬───────────┘          └─────────────────┬─────────────────┘        │
+   │              │                                        │                          │
+   │              └────────────────┬───────────────────────┘                          │
+   │                               │                                                  │
+   │                               ▼                                                  │
+   │              ┌───────────────────────────────────┐                               │
+   │              │     merge_track_data()            │                               │
+   │              │                                   │                               │
+   │              │  • Combine by timestamp           │                               │
+   │              │  • Historical overwrites forecast │                               │
+   │              │    for past times                 │                               │
+   │              │  • Forecast fills future times    │                               │
+   │              │  • Sort chronologically           │                               │
+   │              └─────────────────┬─────────────────┘                               │
+   │                                │                                                 │
+   └────────────────────────────────┼─────────────────────────────────────────────────┘
                                     │
                                     ▼
                      ┌───────────────────────────────────┐
@@ -439,26 +439,26 @@
    │  ┌───────────────────────────────────────────────────────────────────────┐       │
    │  │  NHC ATCF Best Track File                                             │       │
    │  │                                                                       │       │
-   │  │  URL: ftp.nhc.noaa.gov/atcf/btk/b{basin}{num}{year}.dat              │       │
+   │  │  URL: ftp.nhc.noaa.gov/atcf/btk/b{basin}{num}{year}.dat               │       │
    │  │  Example: bal012024.dat (Atlantic storm 01 of 2024)                   │       │
    │  │                                                                       │       │
-   │  │  Archive fallback: ftp.nhc.noaa.gov/atcf/archive/{year}/...          │       │
+   │  │  Archive fallback: ftp.nhc.noaa.gov/atcf/archive/{year}/...           │       │
    │  │                                                                       │       │
    │  │  Parse ATCF format:                                                   │       │
-   │  │  AL, 01, 2024062500, , BEST, 0, 165N, 325W, 30, 1008, ...            │       │
+   │  │  AL, 01, 2024062500, , BEST, 0, 165N, 325W, 30, 1008, ...             │       │
    │  └───────────────────────────────────────────────────────────────────────┘       │
    │                                                                                  │
    │                                    │                                             │
    │                                    ▼                                             │
-   │              ┌───────────────────────────────────┐                              │
-   │              │     merge_track_data()            │                              │
-   │              │                                   │                              │
-   │              │  • Best track = historical        │                              │
-   │              │  • RSS current pos = forecast T+0 │                              │
-   │              │  • Combine and deduplicate        │                              │
-   │              └─────────────────┬─────────────────┘                              │
-   │                                │                                                │
-   └────────────────────────────────┼────────────────────────────────────────────────┘
+   │              ┌───────────────────────────────────┐                               │
+   │              │     merge_track_data()            │                               │
+   │              │                                   │                               │
+   │              │  • Best track = historical        │                               │
+   │              │  • RSS current pos = forecast T+0 │                               │
+   │              │  • Combine and deduplicate        │                               │
+   │              └─────────────────┬─────────────────┘                               │
+   │                                │                                                 │
+   └────────────────────────────────┼─────────────────────────────────────────────────┘
                                     │
                                     ▼
                      ┌───────────────────────────────────┐
@@ -474,15 +474,15 @@
    │                    DATA AVAILABILITY BY SOURCE                                            │
    ├───────────────────────────────────────────────────────────────────────────────────────────┤
    │                                                                                           │
-   │   SOURCE               HISTORICAL    CURRENT    FORECAST    TIME SHIFT SUPPORT           │
-   │   ────────────────     ──────────    ───────    ────────    ─────────────────            │
-   │   Tropycal Realtime    ✅ Yes        ✅ Yes     ❌ No       ✅ Full support               │
-   │   NHC RSS + Best Track ✅ Yes        ✅ Yes     ❌ No       ✅ Full support               │
-   │   JTWC RSS + TCW + BT  ✅ Yes        ✅ Yes     ✅ Yes      ✅ Full support               │
-   │   NHC RSS only         ❌ No         ✅ Yes     ❌ No       ⚠️ Current position only      │
-   │   JTWC RSS + TCW only  ❌ No         ✅ Yes     ✅ Yes      ⚠️ Current position only      │
+   │   SOURCE               HISTORICAL    CURRENT    FORECAST    TIME SHIFT SUPPORT            │
+   │   ────────────────     ──────────    ───────    ────────    ─────────────────             │
+   │   Tropycal Realtime    ✅ Yes        ✅ Yes     ❌ No       ✅ Full support             │
+   │   NHC RSS + Best Track ✅ Yes        ✅ Yes     ❌ No       ✅ Full support             │
+   │   JTWC RSS + TCW + BT  ✅ Yes        ✅ Yes     ✅ Yes      ✅ Full support             │
+   │   NHC RSS only         ❌ No         ✅ Yes     ❌ No       ⚠️ Current position only    │
+   │   JTWC RSS + TCW only  ❌ No         ✅ Yes     ✅ Yes      ⚠️ Current position only    │
    │                                                                                           │
-   │   Note: "Time Shift Support" means we can look up historical lat/lon when ECMWF data     │
+   │   Note: "Time Shift Support" means we can look up historical lat/lon when ECMWF data      │
    │         availability requires shifting T0 backwards in time.                              │
    └───────────────────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -493,7 +493,7 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                  ECMWF DATA AVAILABILITY CHECK & AUTOMATIC TIME ADJUSTMENT                               │
+│                  ECMWF DATA AVAILABILITY CHECK & AUTOMATIC TIME ADJUSTMENT                              │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
    PROBLEM: ECMWF HRES data has a publication delay (~6-12 hours for public access).
@@ -507,15 +507,15 @@
    │  DATA AVAILABILITY CHECK LOGIC                                                            │
    ├───────────────────────────────────────────────────────────────────────────────────────────┤
    │                                                                                           │
-   │  check_ecmwf_data_exists(datetime, catalog):                                             │
+   │  check_ecmwf_data_exists(datetime, catalog):                                              │
    │                                                                                           │
-   │    IF hour in [0, 12]:  # OPER stream                                                    │
-   │       → Query STAC catalog for ecmwf-hres collection                                     │
-   │       → Return True if items found                                                       │
+   │    IF hour in [0, 12]:  # OPER stream                                                     │
+   │       → Query STAC catalog for ecmwf-hres collection                                      │
+   │       → Return True if items found                                                        │
    │                                                                                           │
-   │    IF hour in [6, 18]:  # SCDA stream                                                    │
-   │       → Check if time is > 6 hours old (typical SCDA availability window)                │
-   │       → Return True if older than 6 hours                                                │
+   │    IF hour in [6, 18]:  # SCDA stream                                                     │
+   │       → Check if time is > 6 hours old (typical SCDA availability window)                 │
+   │       → Return True if older than 6 hours                                                 │
    │                                                                                           │
    └───────────────────────────────────────────────────────────────────────────────────────────┘
 
@@ -524,14 +524,14 @@
    ═════════════════════════════════════════════
 
    ┌─────────────────────────────────────────────────────────────────────────────────────────┐
-   │  find_available_ecmwf_time(start_time, catalog, storm_df, max_lookback=48h)            │
+   │  find_available_ecmwf_time(start_time, catalog, storm_df, max_lookback=48h)             │
    └─────────────────────────────────────────────────────────────────────────────────────────┘
               │
               ▼
    ┌───────────────────────────────────────────────────────────────────────────────┐
    │  Is ECMWF data available at start_time?                                       │
    │                                                                               │
-   │  check_ecmwf_data_exists(start_time, catalog)                                │
+   │  check_ecmwf_data_exists(start_time, catalog)                                 │
    └───────────────────────┬───────────────────────┬───────────────────────────────┘
                           YES                      NO
                            │                        │
@@ -543,7 +543,7 @@
               │    False           │   │  Loop until found or max_lookback      │
               │  • No position     │   │                                        │
               │    adjustment      │   │  When found:                           │
-              └────────────────────┘   │  • Look up lat/lon in storm_df        │
+              └────────────────────┘   │  • Look up lat/lon in storm_df         │
                                        │  • Find closest track point (< 3h)     │
                                        │  • Return adjusted time AND position   │
                                        └────────────────────────────────────────┘
@@ -554,27 +554,27 @@
 
    ┌────────────────────────────────────────────────────────────────────────────────────────┐
    │  Input:                                                                                │
-   │    • storm_init_time = 2026-02-03 12:00 UTC (today's 12Z)                             │
-   │    • storm_init_lat = -15.5°, storm_init_lon = 43.0° (current position from TCW)      │
+   │    • storm_init_time = 2026-02-03 12:00 UTC (today's 12Z)                              │
+   │    • storm_init_lat = -15.5°, storm_init_lon = 43.0° (current position from TCW)       │
    │                                                                                        │
    │  ECMWF Check:                                                                          │
-   │    • 12:00 UTC → OPER stream → STAC query → No items found (data not published yet)   │
-   │    • 06:00 UTC → SCDA stream → Check hours_ago < 6 → Still too recent                 │
-   │    • 00:00 UTC → OPER stream → STAC query → ✅ Items found!                           │
+   │    • 12:00 UTC → OPER stream → STAC query → No items found (data not published yet)    │
+   │    • 06:00 UTC → SCDA stream → Check hours_ago < 6 → Still too recent                  │
+   │    • 00:00 UTC → OPER stream → STAC query → ✅ Items found!                            │
    │                                                                                        │
-   │  Position Lookup (from storm_df with merged historical + forecast data):              │
-   │    • Target time: 2026-02-03 00:00 UTC                                                │
-   │    • Closest track point: 2026-02-02 23:30 UTC (0.5h away < 3h threshold)             │
-   │    • Historical position: lat=-14.8°, lon=42.5°                                       │
+   │  Position Lookup (from storm_df with merged historical + forecast data):               │
+   │    • Target time: 2026-02-03 00:00 UTC                                                 │
+   │    • Closest track point: 2026-02-02 23:30 UTC (0.5h away < 3h threshold)              │
+   │    • Historical position: lat=-14.8°, lon=42.5°                                        │
    │                                                                                        │
    │  Output:                                                                               │
-   │    • storm_init_time = 2026-02-03 00:00 UTC (shifted back 12h)                        │
-   │    • storm_init_lat = -14.8°, storm_init_lon = 42.5° (historical position)            │
+   │    • storm_init_time = 2026-02-03 00:00 UTC (shifted back 12h)                         │
+   │    • storm_init_lat = -14.8°, storm_init_lon = 42.5° (historical position)             │
    │                                                                                        │
    │  User Message:                                                                         │
-   │    "⚠️ Data availability: ECMWF data not available at 2026-02-03 12:00 UTC.           │
+   │    "⚠️ Data availability: ECMWF data not available at 2026-02-03 12:00 UTC.            │
    │     Shifted back 12h to 2026-02-03 00:00 UTC.                                          │
-   │     📍 Storm position adjusted to historical track: -14.8°, 42.5°"                    │
+   │     📍 Storm position adjusted to historical track: -14.8°, 42.5°"                     │
    └────────────────────────────────────────────────────────────────────────────────────────┘
 
 
@@ -582,19 +582,19 @@
    │  GLOBAL VARIABLE UPDATES AFTER TIME SHIFT                                                 │
    ├───────────────────────────────────────────────────────────────────────────────────────────┤
    │                                                                                           │
-   │  The following global variables are updated when ECMWF data requires a time shift:       │
+   │  The following global variables are updated when ECMWF data requires a time shift:        │
    │                                                                                           │
-   │  Variable             │ Before Shift         │ After Shift                               │
-   │  ─────────────────────┼──────────────────────┼───────────────────────────────────────    │
-   │  storm_init_time      │ 2026-02-03 12:00     │ 2026-02-03 00:00                          │
-   │  storm_init_lat       │ -15.5° (current)     │ -14.8° (historical)                       │
-   │  storm_init_lon       │ 43.0° (current)      │ 42.5° (historical)                        │
-   │  time_t0              │ 2026-02-03 12:00     │ 2026-02-03 00:00                          │
-   │  time_t_minus_6       │ 2026-02-03 06:00     │ 2026-02-02 18:00                          │
+   │  Variable             │ Before Shift         │ After Shift                                │
+   │  ─────────────────────┼──────────────────────┼───────────────────────────────────────     │
+   │  storm_init_time      │ 2026-02-03 12:00     │ 2026-02-03 00:00                           │
+   │  storm_init_lat       │ -15.5° (current)     │ -14.8° (historical)                        │
+   │  storm_init_lon       │ 43.0° (current)      │ 42.5° (historical)                         │
+   │  time_t0              │ 2026-02-03 12:00     │ 2026-02-03 00:00                           │
+   │  time_t_minus_6       │ 2026-02-03 06:00     │ 2026-02-02 18:00                           │
    │                                                                                           │
-   │  This ensures Aurora initializes with:                                                   │
-   │  • Atmospheric data from the correct (available) time                                    │
-   │  • Storm position matching that atmospheric data time                                    │
+   │  This ensures Aurora initializes with:                                                    │
+   │  • Atmospheric data from the correct (available) time                                     │
+   │  • Storm position matching that atmospheric data time                                     │
    │                                                                                           │
    └───────────────────────────────────────────────────────────────────────────────────────────┘
 ```
@@ -605,7 +605,7 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                              STORM SELECTION & ACTIVE/HISTORICAL CLASSIFICATION                          │
+│                              STORM SELECTION & ACTIVE/HISTORICAL CLASSIFICATION                         │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
    The system classifies storms into two categories that determine forecast behavior:
@@ -618,10 +618,10 @@
    │   ─────────────────────────                  ──────────────────────                       │
    │                                                                                           │
    │   Sources:                                   Sources:                                     │
-   │   • source == 'realtime'                     • All other sources                         │
-   │   • source == 'ibtracs_active'               • Tropycal historical data                  │
-   │   • source == 'jtwc_rss'                     • Past year IBTrACS records                 │
-   │   • cache_entry['is_active'] == True                                                     │
+   │   • source == 'realtime'                     • All other sources                          │
+   │   • source == 'ibtracs_active'               • Tropycal historical data                   │
+   │   • source == 'jtwc_rss'                     • Past year IBTrACS records                  │
+   │   • cache_entry['is_active'] == True                                                      │
    │                                                                                           │
    │   Characteristics:                           Characteristics:                             │
    │   • Storm is still ongoing                   • Storm has completed lifecycle              │
@@ -648,13 +648,13 @@
    ┌──────────────────────────────────────────────────────────────────┐
    │  confirm_selection() Function                                    │
    │                                                                  │
-   │  1. Retrieve cache_entry for selected storm                     │
-   │  2. Determine source type (realtime, ibtracs_active, etc.)      │
+   │  1. Retrieve cache_entry for selected storm                      │
+   │  2. Determine source type (realtime, ibtracs_active, etc.)       │
    │  3. Set global variables:                                        │
-   │     • storm_id, storm_name, storm_year, storm_basin             │
-   │     • storm_init_time, storm_end_time                           │
-   │     • storm_init_lat, storm_init_lon                            │
-   │     • is_active_storm ◄─── KEY CLASSIFICATION FLAG              │
+   │     • storm_id, storm_name, storm_year, storm_basin              │
+   │     • storm_init_time, storm_end_time                            │
+   │     • storm_init_lat, storm_init_lon                             │
+   │     • is_active_storm ◄─── KEY CLASSIFICATION FLAG               │
    │                                                                  │
    └──────────┬───────────────────────────────────────────────────────┘
               │
@@ -662,9 +662,9 @@
    ┌───────────────────────────────────────────────────────────────────┐
    │  Classification Logic:                                            │
    │                                                                   │
-   │  is_active_storm = (                                             │
-   │      cache_entry.get('is_active', False) OR                      │
-   │      source in ['realtime', 'ibtracs_active', 'jtwc_rss']        │
+   │  is_active_storm = (                                              │
+   │      cache_entry.get('is_active', False) OR                       │
+   │      source in ['realtime', 'ibtracs_active', 'jtwc_rss']         │
    │  )                                                                │
    │                                                                   │
    └──────────┬────────────────────────────────────────────────────────┘
@@ -693,9 +693,9 @@
 
    │ Storm Option                                          │ Meaning                    │
    ├───────────────────────────────────────────────────────┼────────────────────────────┤
-   │ 🔴 STORM_NAME (2026) [BASIN] C#/TS - Active          │ Currently active storm     │
-   │ 🟢 STORM_NAME (2026) [BASIN] C#/TS - Cat #           │ Current year, completed    │
-   │ ⚪ STORM_NAME (2024) [BASIN] C#/TS - Cat #           │ Past year (historical)     │
+   │ 🔴 STORM_NAME (2026) [BASIN] C#/TS - Active           │ Currently active storm     │
+   │ 🟢 STORM_NAME (2026) [BASIN] C#/TS - Cat #            │ Current year, completed    │
+   │ ⚪ STORM_NAME (2024) [BASIN] C#/TS - Cat #            │ Past year (historical)     │
    │ 🏠 (suffix)                                           │ Made landfall (recommended)│
    │ ⭐ DEFAULT                                            │ Default selection          │
 
@@ -707,7 +707,7 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                              ECMWF HRES DUAL-STREAM DATA ACQUISITION                                     │
+│                              ECMWF HRES DUAL-STREAM DATA ACQUISITION                                    │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
     Aurora requires TWO timesteps (T-6h and T0) for initialization.
@@ -715,13 +715,13 @@
 
     ┌───────────────────────────────────────────────────────────────────────────────────────────┐
     │                                                                                           │
-    │      00Z ────────► 06Z ────────► 12Z ────────► 18Z ────────► 00Z                         │
+    │      00Z ────────► 06Z ────────► 12Z ────────► 18Z ────────► 00Z                          │
     │       │             │             │             │             │                           │
     │       ▼             ▼             ▼             ▼             ▼                           │
-    │    ┌──────┐      ┌──────┐      ┌──────┐      ┌──────┐      ┌──────┐                      │
-    │    │ OPER │      │ SCDA │      │ OPER │      │ SCDA │      │ OPER │                      │
-    │    │ STAC │      │ BLOB │      │ STAC │      │ BLOB │      │ STAC │                      │
-    │    └──────┘      └──────┘      └──────┘      └──────┘      └──────┘                      │
+    │    ┌──────┐      ┌──────┐      ┌──────┐      ┌──────┐      ┌──────┐                       │
+    │    │ OPER │      │ SCDA │      │ OPER │      │ SCDA │      │ OPER │                       │
+    │    │ STAC │      │ BLOB │      │ STAC │      │ BLOB │      │ STAC │                       │
+    │    └──────┘      └──────┘      └──────┘      └──────┘      └──────┘                       │
     │                                                                                           │
     └───────────────────────────────────────────────────────────────────────────────────────────┘
 
@@ -730,20 +730,20 @@
     │  STREAM ROUTING LOGIC                                                                     │
     ├───────────────────────────────────────────────────────────────────────────────────────────┤
     │                                                                                           │
-    │  def get_stream_for_time(hour):                                                          │
-    │      if hour in [0, 12]:   return ("OPER", "STAC API")    # Planetary Computer catalog   │
-    │      if hour in [6, 18]:   return ("SCDA", "Blob Storage") # Direct blob download        │
+    │  def get_stream_for_time(hour):                                                           │
+    │      if hour in [0, 12]:   return ("OPER", "STAC API")    # Planetary Computer catalog    │
+    │      if hour in [6, 18]:   return ("SCDA", "Blob Storage") # Direct blob download         │
     │                                                                                           │
-    │  Example: Storm init at 06Z                                                              │
-    │  ─────────────────────────                                                               │
-    │  T0 (06Z)   ──► SCDA stream ──► Blob Storage download                                    │
-    │  T-6h (00Z) ──► OPER stream ──► STAC API query + signed URL                              │
+    │  Example: Storm init at 06Z                                                               │
+    │  ─────────────────────────                                                                │
+    │  T0 (06Z)   ──► SCDA stream ──► Blob Storage download                                     │
+    │  T-6h (00Z) ──► OPER stream ──► STAC API query + signed URL                               │
     │                                                                                           │
     └───────────────────────────────────────────────────────────────────────────────────────────┘
 
 
     ┌────────────────────────────────────────────┐        ┌────────────────────────────────────────────┐
-    │  OPER STREAM (STAC API)                    │        │  SCDA STREAM (Blob Storage)               │
+    │  OPER STREAM (STAC API)                    │        │  SCDA STREAM (Blob Storage)                │
     ├────────────────────────────────────────────┤        ├────────────────────────────────────────────┤
     │                                            │        │                                            │
     │  Endpoint:                                 │        │  Endpoint:                                 │
@@ -769,14 +769,14 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                                   AURORA AI MODEL INTEGRATION                                            │
+│                                   AURORA AI MODEL INTEGRATION                                           │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
 
     ┌─────────────────────────────────────────────────────────────────────────────────────────────────────┐
-    │  INPUT: AURORA BATCH OBJECT                                                                          │
+    │  INPUT: AURORA BATCH OBJECT                                                                         │
     ├─────────────────────────────────────────────────────────────────────────────────────────────────────┤
-    │                                                                                                      │
+    │                                                                                                     │
     │   ┌───────────────────────┐   ┌───────────────────────┐   ┌───────────────────────┐                 │
     │   │     SURFACE VARS      │   │   ATMOSPHERIC VARS    │   │     STATIC VARS       │                 │
     │   │   [batch, 2, H, W]    │   │  [batch, 2, L, H, W]  │   │       [H, W]          │                 │
@@ -790,54 +790,54 @@
     │   │                       │   │   13 pressure levels  │   │                       │                 │
     │   │                       │   │   50→1000 hPa         │   │                       │                 │
     │   └───────────────────────┘   └───────────────────────┘   └───────────────────────┘                 │
-    │                                                                                                      │
+    │                                                                                                     │
     │   ┌───────────────────────────────────────────────────────────────────────────────────────────┐     │
-    │   │  METADATA                                                                                  │     │
+    │   │  METADATA                                                                                 │    │
     │   │  • lat: [721] tensor    • lon: [1440] tensor (0-360°)    • time: (datetime,)              │     │
     │   │  • atmos_levels: (50, 100, 150, 200, 250, 300, 400, 500, 600, 700, 850, 925, 1000)        │     │
     │   └───────────────────────────────────────────────────────────────────────────────────────────┘     │
-    │                                                                                                      │
+    │                                                                                                     │
     └─────────────────────────────────────────────────────────────────────────────────────────────────────┘
                                                     │
                                                     ▼
     ┌─────────────────────────────────────────────────────────────────────────────────────────────────────┐
-    │  MICROSOFT FOUNDRY ENDPOINT                                                                           │
+    │  MICROSOFT FOUNDRY ENDPOINT                                                                         │
     ├─────────────────────────────────────────────────────────────────────────────────────────────────────┤
-    │                                                                                                      │
+    │                                                                                                     │
     │   Model: aurora-0.25-finetuned                                                                      │
     │   Resolution: 0.25° (~28km at equator)                                                              │
     │   Forecast Step: 6 hours                                                                            │
-    │                                                                                                      │
+    │                                                                                                     │
     │   ┌─────────────────────────────────────────────────────────────────────────────────────────┐       │
     │   │  INFERENCE LOOP                                                                         │       │
     │   │                                                                                         │       │
-    │   │  foundry_client = FoundryClient(endpoint, token)                                       │       │
-    │   │  channel = BlobStorageChannel(sas_url)  # Data transfer via blob                       │       │
-    │   │  tracker = Tracker(init_lat, init_lon, init_time)  # TC tracking                       │       │
+    │   │  foundry_client = FoundryClient(endpoint, token)                                        │       │
+    │   │  channel = BlobStorageChannel(sas_url)  # Data transfer via blob                        │       │
+    │   │  tracker = Tracker(init_lat, init_lon, init_time)  # TC tracking                        │       │
     │   │                                                                                         │       │
-    │   │  for pred in submit(batch, model_name, num_steps, foundry_client, channel):            │       │
-    │   │      tracker.step(pred)  # Extract storm center from each forecast                     │       │
-    │   │      preds.append(pred)                                                                │       │
+    │   │  for pred in submit(batch, model_name, num_steps, foundry_client, channel):             │       │
+    │   │      tracker.step(pred)  # Extract storm center from each forecast                      │       │
+    │   │      preds.append(pred)                                                                 │       │
     │   │                                                                                         │       │
-    │   │  track_df = tracker.results()  # DataFrame: time, lat, lon, msl, wind                  │       │
+    │   │  track_df = tracker.results()  # DataFrame: time, lat, lon, msl, wind                   │       │
     │   └─────────────────────────────────────────────────────────────────────────────────────────┘       │
-    │                                                                                                      │
+    │                                                                                                     │
     └─────────────────────────────────────────────────────────────────────────────────────────────────────┘
                                                     │
                                                     ▼
     ┌─────────────────────────────────────────────────────────────────────────────────────────────────────┐
-    │  OUTPUT: TROPICAL CYCLONE TRACK                                                                      │
+    │  OUTPUT: TROPICAL CYCLONE TRACK                                                                     │
     ├─────────────────────────────────────────────────────────────────────────────────────────────────────┤
-    │                                                                                                      │
+    │                                                                                                     │
     │   │ time                │ lat    │ lon      │ lon_converted │ msl      │ wind   │                   │
     │   ├─────────────────────┼────────┼──────────┼───────────────┼──────────┼────────┤                   │
     │   │ 2024-09-25 06:00:00 │ 22.45  │ 275.32   │ -84.68        │ 99234.5  │ 42.3   │                   │
     │   │ 2024-09-25 12:00:00 │ 24.12  │ 277.89   │ -82.11        │ 98156.2  │ 51.8   │                   │
     │   │ 2024-09-25 18:00:00 │ 26.34  │ 280.45   │ -79.55        │ 96823.1  │ 63.2   │                   │
     │   │ ...                 │ ...    │ ...      │ ...           │ ...      │ ...    │                   │
-    │                                                                                                      │
+    │                                                                                                     │
     │   Note: lon_converted transforms from Aurora's [0,360] back to [-180,180] for visualization         │
-    │                                                                                                      │
+    │                                                                                                     │
     └─────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -847,8 +847,8 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                     INTELLIGENT FORECAST TERMINATION FOR ACTIVE STORMS                                   │
-│                                                                                                          │
+│                     INTELLIGENT FORECAST TERMINATION FOR ACTIVE STORMS                                  │
+│                                                                                                         │
 │   Applied ONLY to current/active storms (is_active_storm == True)                                       │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
@@ -859,18 +859,18 @@
    │  PROBLEM: Fixed Forecast Duration for Active Storms                                       │
    ├───────────────────────────────────────────────────────────────────────────────────────────┤
    │                                                                                           │
-   │  • Historical storms: We know the complete lifecycle → forecast to known endpoint        │
-   │  • Active storms: No known endpoint → we use DEFAULT_FORECAST_HOURS (120h = 5 days)      │
+   │  • Historical storms: We know the complete lifecycle → forecast to known endpoint         │
+   │  • Active storms: No known endpoint → we use DEFAULT_FORECAST_HOURS (120h = 5 days)       │
    │                                                                                           │
-   │  Issue: Many storms dissipate BEFORE the 5-day forecast window ends:                     │
+   │  Issue: Many storms dissipate BEFORE the 5-day forecast window ends:                      │
    │                                                                                           │
-   │    Example: Tropical Cyclone Luana (2026)                                                │
-   │    ─────────────────────────────────────                                                 │
-   │    Actual lifespan: ~2.5 days (Jan 22-25, 2026)                                         │
-   │    Fixed forecast: 5 days                                                                │
-   │    Result: Predictions extend ~2.5 days beyond actual storm dissipation                 │
+   │    Example: Tropical Cyclone Luana (2026)                                                 │
+   │    ─────────────────────────────────────                                                  │
+   │    Actual lifespan: ~2.5 days (Jan 22-25, 2026)                                           │
+   │    Fixed forecast: 5 days                                                                 │
+   │    Result: Predictions extend ~2.5 days beyond actual storm dissipation                   │
    │                                                                                           │
-   │  This wastes compute and produces meaningless forecasts for dissipated storms.          │
+   │  This wastes compute and produces meaningless forecasts for dissipated storms.            │
    └───────────────────────────────────────────────────────────────────────────────────────────┘
 
 
@@ -883,20 +883,20 @@
    │                              TERMINATION THRESHOLD                                        │
    ├───────────────────────────────────────────────────────────────────────────────────────────┤
    │                                                                                           │
-   │  PRESSURE THRESHOLD                                                                      │
-   │  ──────────────────                                                                      │
-   │  Threshold: PRESSURE_THRESHOLD_MB = 1008.0 mb                                            │
-   │  Consecutive steps required: 2                                                           │
+   │  PRESSURE THRESHOLD                                                                       │
+   │  ──────────────────                                                                       │
+   │  Threshold: PRESSURE_THRESHOLD_MB = 1008.0 mb                                             │
+   │  Consecutive steps required: 2                                                            │
    │                                                                                           │
-   │  Rationale: 1008 mb is a typical threshold for a weakening tropical system.              │
-   │  When MSLP rises above this for 2 consecutive steps (12 hours), the                      │
-   │  system is losing organization and intensity - it has either:                            │
-   │    • Dissipated over water                                                               │
-   │    • Weakened after landfall                                                             │
-   │    • Undergone extratropical transition                                                  │
+   │  Rationale: 1008 mb is a typical threshold for a weakening tropical system.               │
+   │  When MSLP rises above this for 2 consecutive steps (12 hours), the                       │
+   │  system is losing organization and intensity - it has either:                             │
+   │    • Dissipated over water                                                                │
+   │    • Weakened after landfall                                                              │
+   │    • Undergone extratropical transition                                                   │
    │                                                                                           │
-   │  Note: Pressure-based termination is used because Aurora's TC Tracker provides           │
-   │  reliable MSLP values directly, while wind speed requires additional conversion.         │
+   │  Note: Pressure-based termination is used because Aurora's TC Tracker provides            │
+   │  reliable MSLP values directly, while wind speed requires additional conversion.          │
    │                                                                                           │
    └───────────────────────────────────────────────────────────────────────────────────────────┘
 
@@ -910,31 +910,31 @@
    │  consecutive_weak_pressure_steps = 0                                                    │
    │  early_termination_reason = None                                                        │
    │                                                                                         │
-   │  for pred in submit(batch, model_name, num_steps, ...):                                │
+   │  for pred in submit(batch, model_name, num_steps, ...):                                 │
    │      tracker.step(pred)                                                                 │
    │      preds.append(pred)                                                                 │
    │                                                                                         │
    │      # Get current intensity                                                            │
    │      current_track = tracker.results()                                                  │
-   │      latest_mslp = current_track.iloc[-1]['msl'] / 100 # Convert Pa → mb               │
+   │      latest_mslp = current_track.iloc[-1]['msl'] / 100 # Convert Pa → mb                │
    │                                                                                         │
    │      # EARLY TERMINATION CHECK (Active Storms Only)                                     │
    │      if is_active_storm and latest_mslp is not None:                                    │
-   │          ┌─────────────────────────────────────────────────────────────────────┐       │
-   │          │  # Pressure threshold (consecutive steps)                           │       │
-   │          │  if latest_mslp > 1008.0:                                           │       │
-   │          │      consecutive_weak_pressure_steps += 1                           │       │
-   │          │      if consecutive_weak_pressure_steps >= 2:                       │       │
-   │          │          print("⚠️ MSLP above 1008 mb for 2 steps - dissipating")  │       │
-   │          │          break  ◄── TERMINATE                                       │       │
-   │          │  else:                                                              │       │
-   │          │      consecutive_weak_pressure_steps = 0  # Reset counter           │       │
-   │          └─────────────────────────────────────────────────────────────────────┘       │
+   │          ┌─────────────────────────────────────────────────────────────────────┐        │
+   │          │  # Pressure threshold (consecutive steps)                           │        │
+   │          │  if latest_mslp > 1008.0:                                           │        │
+   │          │      consecutive_weak_pressure_steps += 1                           │        │
+   │          │      if consecutive_weak_pressure_steps >= 2:                       │        │
+   │          │          print("⚠️ MSLP above 1008 mb for 2 steps - dissipating")   │        │
+   │          │          break  ◄── TERMINATE                                       │        │
+   │          │  else:                                                              │        │
+   │          │      consecutive_weak_pressure_steps = 0  # Reset counter           │        │
+   │          └─────────────────────────────────────────────────────────────────────┘        │
    │                                                                                         │
    │  # Final output includes termination info                                               │
-   │  print(f"Actual steps: {step_count}/{NUM_SIX_HOUR_STEPS}")                             │
+   │  print(f"Actual steps: {step_count}/{NUM_SIX_HOUR_STEPS}")                              │
    │  if early_termination_reason:                                                           │
-   │      print(f"⚠️ Early termination: {early_termination_reason}")                        │
+   │      print(f"⚠️ Early termination: {early_termination_reason}")                         │
    │                                                                                         │
    └─────────────────────────────────────────────────────────────────────────────────────────┘
 
@@ -948,7 +948,7 @@
                                         │
                                         ▼
                            ┌──────────────────────────┐
-                           │  is_active_storm == True? │
+                           │  is_active_storm == True?│
                            └────────────┬─────────────┘
                                         │
                           ┌─────────────┴─────────────┐
@@ -1017,10 +1017,10 @@
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                               CONE OF UNCERTAINTY METHODOLOGY                                            │
-│                                                                                                          │
+│                               CONE OF UNCERTAINTY METHODOLOGY                                           │
+│                                                                                                         │
 │   The cone of uncertainty represents the possible range of storm positions as forecast error grows      │
-│   with time. The implementation uses a geometric expansion along the predicted track path.               │
+│   with time. The implementation uses a geometric expansion along the predicted track path.              │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
 
@@ -1033,18 +1033,18 @@
    │  PARAMETERS                                                                               │
    ├───────────────────────────────────────────────────────────────────────────────────────────┤
    │                                                                                           │
-   │  Parameter          │  Value       │  Description                                        │
-   │  ───────────────────┼──────────────┼───────────────────────────────────────────────────  │
-   │  base_radius        │  0.3°        │  Initial radius at T+0 (forecast start)             │
-   │  growth_rate        │  0.12°/step  │  Radius increase per 6-hour forecast step          │
-   │  end_multiplier     │  1.5×        │  Extra expansion at final track points (umbrella)  │
-   │  buffer_resolution  │  32          │  Points per circle for smooth geometry             │
+   │  Parameter          │  Value       │  Description                                         │
+   │  ───────────────────┼──────────────┼───────────────────────────────────────────────────   │
+   │  base_radius        │  0.3°        │  Initial radius at T+0 (forecast start)              │
+   │  growth_rate        │  0.12°/step  │  Radius increase per 6-hour forecast step            │
+   │  end_multiplier     │  1.5×        │  Extra expansion at final track points (umbrella)    │
+   │  buffer_resolution  │  32          │  Points per circle for smooth geometry               │
    │                                                                                           │
    │  Example radius progression:                                                              │
-   │    T+0:   0.3° (~33 km)                                                                  │
-   │    T+24:  0.3 + (4 × 0.12) = 0.78° (~87 km)                                             │
-   │    T+48:  0.3 + (8 × 0.12) = 1.26° (~140 km)                                            │
-   │    T+120: 0.3 + (20 × 0.12) = 2.7° (~300 km) with 1.5× multiplier = ~4.05° (~450 km)   │
+   │    T+0:   0.3° (~33 km)                                                                   │
+   │    T+24:  0.3 + (4 × 0.12) = 0.78° (~87 km)                                               │
+   │    T+48:  0.3 + (8 × 0.12) = 1.26° (~140 km)                                              │
+   │    T+120: 0.3 + (20 × 0.12) = 2.7° (~300 km) with 1.5× multiplier = ~4.05° (~450 km)      │
    │                                                                                           │
    └───────────────────────────────────────────────────────────────────────────────────────────┘
 
@@ -1076,8 +1076,8 @@
    │      radius_end = base_radius + ((i + 1) * growth_rate)                                 │
    │      avg_radius = (radius_start + radius_end) / 2                                       │
    │                                                                                         │
-   │      segment = LineString([(lons[i], lats[i]), (lons[i+1], lats[i+1])])                │
-   │      buffered_segment = segment.buffer(avg_radius, cap_style=2)  # flat caps           │
+   │      segment = LineString([(lons[i], lats[i]), (lons[i+1], lats[i+1])])                 │
+   │      buffered_segment = segment.buffer(avg_radius, cap_style=2)  # flat caps            │
    │      circles.append(buffered_segment)                                                   │
    └─────────────────────────────────────────────────────────────────────────────────────────┘
 
@@ -1126,14 +1126,14 @@
    │  MATPLOTLIB / CARTOPY                                                                     │
    ├───────────────────────────────────────────────────────────────────────────────────────────┤
    │                                                                                           │
-   │  cone_polygon = plt.Polygon(                                                             │
+   │  cone_polygon = plt.Polygon(                                                              │
    │      cone_coords,                                                                         │
-   │      facecolor='orange',     # Fill color                                                │
-   │      edgecolor='darkorange', # Border color                                              │
+   │      facecolor='orange',     # Fill color                                                 │
+   │      edgecolor='darkorange', # Border color                                               │
    │      linewidth=1.5,                                                                       │
-   │      alpha=0.3,              # Semi-transparent                                          │
+   │      alpha=0.3,              # Semi-transparent                                           │
    │      transform=ccrs.PlateCarree(),                                                        │
-   │      zorder=0                # Behind track lines                                        │
+   │      zorder=0                # Behind track lines                                         │
    │  )                                                                                        │
    │  ax.add_patch(cone_polygon)                                                               │
    │                                                                                           │
@@ -1144,7 +1144,7 @@
    ├───────────────────────────────────────────────────────────────────────────────────────────┤
    │                                                                                           │
    │  folium.Polygon(                                                                          │
-   │      locations=[[lat, lon] for lat, lon in zip(cone_lats, cone_lons)],                   │
+   │      locations=[[lat, lon] for lat, lon in zip(cone_lats, cone_lons)],                    │
    │      color='darkorange',                                                                  │
    │      weight=2,                                                                            │
    │      fill=True,                                                                           │
@@ -1153,8 +1153,8 @@
    │      popup='Cone of Uncertainty'                                                          │
    │  )                                                                                        │
    │                                                                                           │
-   │  Note: The cone polygon is also used for infrastructure intersection analysis            │
-   │  to identify power grid assets within the potential storm impact area.                   │
+   │  Note: The cone polygon is also used for infrastructure intersection analysis             │
+   │  to identify power grid assets within the potential storm impact area.                    │
    │                                                                                           │
    └───────────────────────────────────────────────────────────────────────────────────────────┘
 
@@ -1169,19 +1169,19 @@
    2. SPATIAL FILTERING: Identifies infrastructure at risk
 
       ┌─────────────────────────────────────────────────────────────────────────────────────┐
-      │  # Create Shapely polygon from cone coordinates                                      │
+      │  # Create Shapely polygon from cone coordinates                                     │
       │  cone_polygon = Polygon(list(zip(cone_lons, cone_lats)))                            │
-      │                                                                                      │
-      │  # Filter infrastructure to items within the cone                                    │
-      │  for infra_item in all_infrastructure:                                               │
+      │                                                                                     │
+      │  # Filter infrastructure to items within the cone                                   │
+      │  for infra_item in all_infrastructure:                                              │
       │      point = Point(infra_item['lon'], infra_item['lat'])                            │
-      │      if cone_polygon.contains(point):                                                │
-      │          at_risk_infrastructure.append(infra_item)                                   │
-      │                                                                                      │
-      │  # For transmission lines (LineStrings)                                              │
-      │  line = LineString(line_coords)                                                      │
-      │  if cone_polygon.intersects(line):                                                   │
-      │      at_risk_lines.append(line)                                                      │
+      │      if cone_polygon.contains(point):                                               │
+      │          at_risk_infrastructure.append(infra_item)                                  │
+      │                                                                                     │
+      │  # For transmission lines (LineStrings)                                             │
+      │  line = LineString(line_coords)                                                     │
+      │  if cone_polygon.intersects(line):                                                  │
+      │      at_risk_lines.append(line)                                                     │
       └─────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -1196,9 +1196,9 @@ The impact swath visualization produces a **single static matplotlib/Cartopy fig
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                     ASYMMETRIC IMPACT SWATH & COASTAL IMPACT ZONES                                       │
-│                                                                                                          │
-│   3-layer visualization system that models realistic hurricane hazard footprints                         │
+│                     ASYMMETRIC IMPACT SWATH & COASTAL IMPACT ZONES                                      │
+│                                                                                                         │
+│   3-layer visualization system that models realistic hurricane hazard footprints                        │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
 
@@ -1206,19 +1206,19 @@ The impact swath visualization produces a **single static matplotlib/Cartopy fig
    ════════════════════════════════════════════
 
    ┌─────────────────────────────────────────────────────────────────────────────────────────┐
-   │  Z │  Layer                          │ Description                                     │
-   ├────┼─────────────────────────────────┼─────────────────────────────────────────────────┤
-   │  0 │  Base map (ocean, land fills)   │  Natural Earth 50m coastlines                   │
-   │  1 │  Coastal impact tiers           │  Flood → Surge → Core (outermost first)        │
-   │  2 │  Swath tiers                    │  Outer → Mid → Inner (outermost first)          │
-   │  3 │  Observed track                 │  Black solid line + dots                        │
-   │  4 │  Forecast track                 │  Blue dashed line                               │
-   │  5 │  Position markers               │  Colored by SS category (Knaff-Zehr)            │
-   │  6 │  Start marker                   │  Lime star                                      │
-   │  7 │  24h time labels + landfall ▲   │  +24h, +48h, … annotations                     │
-   │  8 │  Coastlines, borders, states    │  Drawn on top for clarity                       │
-   │  9 │  Landfall annotation boxes      │  MSLP, Vmax, SS category                        │
-   └────┴─────────────────────────────────┴─────────────────────────────────────────────────┘
+   │  Z │  Layer                          │ Description                                      │
+   ├────┼─────────────────────────────────┼──────────────────────────────────────────────────┤
+   │  0 │  Base map (ocean, land fills)   │  Natural Earth 50m coastlines                    │
+   │  1 │  Coastal impact tiers           │  Flood → Surge → Core (outermost first)          │
+   │  2 │  Swath tiers                    │  Outer → Mid → Inner (outermost first)           │
+   │  3 │  Observed track                 │  Black solid line + dots                         │
+   │  4 │  Forecast track                 │  Blue dashed line                                │
+   │  5 │  Position markers               │  Colored by SS category (Knaff-Zehr)             │
+   │  6 │  Start marker                   │  Lime star                                       │
+   │  7 │  24h time labels + landfall ▲   │  +24h, +48h, … annotations                       │
+   │  8 │  Coastlines, borders, states    │  Drawn on top for clarity                        │
+   │  9 │  Landfall annotation boxes      │  MSLP, Vmax, SS category                         │
+   └────┴─────────────────────────────────┴──────────────────────────────────────────────────┘
 ```
 
 ### Part 1 — Asymmetric Intensity-Modulated Impact Swath
@@ -1227,7 +1227,7 @@ The swath models the **total hazard footprint** along the forecast track. Its wi
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                            IMPACT SWATH WIDTH CALCULATION                                                │
+│                            IMPACT SWATH WIDTH CALCULATION                                               │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
    At each forecast position i:
@@ -1237,8 +1237,8 @@ The swath models the **total hazard footprint** along the forecast track. Its wi
    │     base_half_km = max(nhc_radius_km(lead_hours), 40 km)     │
    │                                                              │
    │     NHC Official Radii:                                      │
-   │     Lead(h): 0   6   12   24   36   48   72   96   120      │
-   │     Rad(km): 0   40  65   100  140  175  240  325  410      │
+   │     Lead(h): 0   6   12   24   36   48   72   96   120       │
+   │     Rad(km): 0   40  65   100  140  175  240  325  410       │
    │                                                              │
    │     Linearly interpolated for any lead time.                 │
    │     Minimum floor: 40 km                                     │
@@ -1247,13 +1247,13 @@ The swath models the **total hazard footprint** along the forecast track. Its wi
    ┌──────────────────────────────────────────────────────────────┐
    │  2. Pressure-Derived Wind-Extent Buffer                      │
    │     dp = max(1013 − MSLP, 0)                                 │
-   │     wind_extent_km = 40 + 2 × min(dp, 70)                   │
+   │     wind_extent_km = 40 + 2 × min(dp, 70)                    │
    │                                                              │
    │     Empirical fit to Knaff et al. (2013) R34/ROCI:           │
-   │     dp=0  → 40 km   (minimal / TD)                          │
-   │     dp=30 → 100 km  (Cat 1)                                 │
-   │     dp=50 → 140 km  (Cat 3)                                 │
-   │     dp=70 → 180 km  (Cat 4-5, capped)                       │
+   │     dp=0  → 40 km   (minimal / TD)                           │
+   │     dp=30 → 100 km  (Cat 1)                                  │
+   │     dp=50 → 140 km  (Cat 3)                                  │
+   │     dp=70 → 180 km  (Cat 4-5, capped)                        │
    └──────────────────────────────────────────────────────────────┘
                               =
    ┌──────────────────────────────────────────────────────────────┐
@@ -1309,7 +1309,7 @@ A storm doesn't need to make landfall to cause surge and flooding — passing ne
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                           COASTAL IMPACT ZONE ALGORITHM                                                  │
+│                           COASTAL IMPACT ZONE ALGORITHM                                                 │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
    THREE IMPACT TIERS
@@ -1360,12 +1360,12 @@ A storm doesn't need to make landfall to cause surge and flooding — passing ne
    ┌────────────────────────────────────────────────────────────────────────┐
    │  COASTLINE INTERSECTION                                                │
    │                                                                        │
-   │  1. Load Natural Earth 50m land polygons (clipped to ±12° AOI bbox)   │
+   │  1. Load Natural Earth 50m land polygons (clipped to ±12° AOI bbox)    │
    │  2. Intersect tier polygon with land_union.boundary (coastline)        │
    │  3. Buffer resulting lines into drawable strips:                       │
-   │       Core: 0.18°  |  Surge: 0.14°  |  Flood: 0.10°                  │
+   │       Core: 0.18°  |  Surge: 0.14°  |  Flood: 0.10°                    │
    │                                                                        │
-   │  Uses shapely.prepared.prep() for fast contains() checks              │
+   │  Uses shapely.prepared.prep() for fast contains() checks               │
    └────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -1375,7 +1375,7 @@ Landfall is detected as an **ocean→land transition** along the forecast track:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                             LANDFALL DETECTION                                                           │
+│                             LANDFALL DETECTION                                                          │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
    ALGORITHM
@@ -1397,7 +1397,7 @@ Landfall is detected as an **ocean→land transition** along the forecast track:
 
      ┌──────────────────────────────┐
      │  LANDFALL  +{lead_hours}h    │
-     │  {MSLP} mb  |  {Vmax} kt    │
+     │  {MSLP} mb  |  {Vmax} kt     │
      │  {SS Category}               │
      └──────────────────────────────┘
 
@@ -1413,13 +1413,13 @@ Landfall is detected as an **ocean→land transition** along the forecast track:
    ┌──────────┬─────────────┬──────────────────┐
    │ Category │ Vmax (kt)   │ Color            │
    ├──────────┼─────────────┼──────────────────┤
-   │ Cat 5    │ ≥ 137       │ #7030A0 (purple) │
-   │ Cat 4    │ ≥ 113       │ #C00000 (dk red) │
-   │ Cat 3    │ ≥ 96        │ #FF0000 (red)    │
-   │ Cat 2    │ ≥ 83        │ #FFC000 (amber)  │
-   │ Cat 1    │ ≥ 64        │ #FFFF00 (yellow) │
-   │ TS       │ ≥ 34        │ #00B050 (green)  │
-   │ TD       │ < 34        │ #5B9BD5 (blue)   │
+   │ Cat 5    │ ≥ 137       │ #7030A0(purple)│
+   │ Cat 4    │ ≥ 113       │ #C00000(dk red)│
+   │ Cat 3    │ ≥ 96        │ #FF0000(red)   │
+   │ Cat 2    │ ≥ 83        │ #FFC000(amber) │
+   │ Cat 1    │ ≥ 64        │ #FFFF00(yellow)│
+   │ TS       │ ≥ 34        │ #00B050(green) │
+   │ TD       │ < 34        │ #5B9BD5(blue)  │
    └──────────┴─────────────┴──────────────────┘
 
    These colors are used for:
@@ -1454,8 +1454,8 @@ Understanding its internal mechanics explains why we need careful initialization
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                           AURORA TRACKER INTERNAL MECHANICS                                              │
-│                      (from microsoft/aurora GitHub repository)                                           │
+│                           AURORA TRACKER INTERNAL MECHANICS                                             │
+│                      (from microsoft/aurora GitHub repository)                                          │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
    CORE ALGORITHM: get_closest_min()
@@ -1477,7 +1477,7 @@ Understanding its internal mechanics explains why we need careful initialization
    │                                                                                      │
    │  # In get_closest_min():                                                             │
    │  if local_minima.sum() == 0:                                                         │
-   │      raise NoEyeException()  ◄── No detectable pressure minimum in search box       │
+   │      raise NoEyeException()  ◄── No detectable pressure minimum in search box        │
    │                                                                                      │
    │  # At first step:                                                                    │
    │  raise NoEyeException("Completely failed at the first step.")                        │
@@ -1497,7 +1497,7 @@ Understanding its internal mechanics explains why we need careful initialization
             ▼
    ┌─────────────────┐     ┌─────────────────┐
    │  Try MSL first  │────►│  NoEyeException │──┐
-   │  (boxes: 5°→1.5°)     │  (no minimum)   │  │
+   │  (box: 5°→1.5°) │     │  (no minimum)   │  │
    └────────┬────────┘     └─────────────────┘  │
             │ Success                           │
             ▼                                   ▼
@@ -1574,10 +1574,10 @@ The **64 kt threshold** (Category 1 hurricane) was chosen empirically based on:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────┐
-│                        OPTIMAL INITIALIZATION POINT SELECTION                            │
-│                                                                                          │
+│                        OPTIMAL INITIALIZATION POINT SELECTION                           │
+│                                                                                         │
 │   Goal: Find the "Goldilocks" point - not too early, not too late, just right           │
-│                                                                                          │
+│                                                                                         │
 │   CRITICAL CONSTRAINT: Init time MUST align with ECMWF synoptic hours (00/06/12/18 UTC) │
 └─────────────────────────────────────────────────────────────────────────────────────────┘
 
@@ -1586,18 +1586,18 @@ The **64 kt threshold** (Category 1 hurricane) was chosen empirically based on:
    ═══════════════════════════════════
 
    ┌───────────────────────────────────────────────────────────────────────────────────────────┐
-   │  CRITICAL: ECMWF HRES data is ONLY available at synoptic hours:                          │
+   │  CRITICAL: ECMWF HRES data is ONLY available at synoptic hours:                           │
    │                                                                                           │
-   │      00Z ──────── 06Z ──────── 12Z ──────── 18Z ──────── 00Z                             │
-   │       ✓            ✓            ✓            ✓            ✓                              │
+   │      00Z ──────── 06Z ──────── 12Z ──────── 18Z ──────── 00Z                              │
+   │       ✓            ✓            ✓            ✓            ✓                               │
    │                                                                                           │
-   │  Track points at other hours (e.g., 03Z, 09Z, 15Z, 21Z) CANNOT be used for              │
-   │  Aurora initialization because no weather data exists for those times.                   │
+   │  Track points at other hours (e.g., 03Z, 09Z, 15Z, 21Z) CANNOT be used for                │
+   │  Aurora initialization because no weather data exists for those times.                    │
    │                                                                                           │
-   │  The algorithm:                                                                          │
-   │  1. ONLY considers track points where hour ∈ {0, 6, 12, 18}                             │
-   │  2. Skips all other points (even if they have better intensity scores)                   │
-   │  3. If NO synoptic-hour points exist, snaps to nearest valid hour as fallback           │
+   │  The algorithm:                                                                           │
+   │  1. ONLY considers track points where hour ∈ {0, 6, 12, 18}                               │
+   │  2. Skips all other points (even if they have better intensity scores)                    │
+   │  3. If NO synoptic-hour points exist, snaps to nearest valid hour as fallback             │
    └───────────────────────────────────────────────────────────────────────────────────────────┘
 
 
@@ -1611,7 +1611,7 @@ The **64 kt threshold** (Category 1 hurricane) was chosen empirically based on:
               │
               ▼
    ┌───────────────────────────────────────────┐
-   │  Is track_time.hour in {0, 6, 12, 18}?   │
+   │  Is track_time.hour in {0, 6, 12, 18}?    │
    └─────────────────┬─────────────────────────┘
                      │
           ┌──────────┴──────────┐
@@ -1635,20 +1635,20 @@ The **64 kt threshold** (Category 1 hurricane) was chosen empirically based on:
 
    ┌─────────────────────────────────────────────────────────────────────────────────────────┐
    │                                                                                         │
-   │  Example: Track only has points at 03Z, 09Z, 15Z, 21Z                                  │
+   │  Example: Track only has points at 03Z, 09Z, 15Z, 21Z                                   │
    │                                                                                         │
    │  Fallback algorithm:                                                                    │
-   │  1. Find first point with valid wind data                                              │
-   │  2. Round to nearest synoptic hour:                                                    │
+   │  1. Find first point with valid wind data                                               │
+   │  2. Round to nearest synoptic hour:                                                     │
    │                                                                                         │
-   │     03Z ──► 06Z (round up)                                                             │
-   │     09Z ──► 12Z (round up)                                                             │
-   │     15Z ──► 18Z (round up)                                                             │
-   │     21Z ──► 00Z next day (round up)                                                    │
-   │     22Z ──► 00Z next day (round up, closer to 00 than 18)                              │
+   │     03Z ──► 06Z (round up)                                                              │
+   │     09Z ──► 12Z (round up)                                                              │
+   │     15Z ──► 18Z (round up)                                                              │
+   │     21Z ──► 00Z next day (round up)                                                     │
+   │     22Z ──► 00Z next day (round up, closer to 00 than 18)                               │
    │                                                                                         │
-   │  ⚠️ WARNING: Snapped times have slightly offset storm positions                        │
-   │     (storm moves during the hour gap between observation and data)                     │
+   │  ⚠️ WARNING: Snapped times have slightly offset storm positions                         │
+   │     (storm moves during the hour gap between observation and data)                      │
    │                                                                                         │
    └─────────────────────────────────────────────────────────────────────────────────────────┘
 
@@ -1777,43 +1777,43 @@ The **64 kt threshold** (Category 1 hurricane) was chosen empirically based on:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                           MICROSOFT PLANETARY COMPUTER PRO - GEOCATALOG INTEGRATION                      │
+│                           MICROSOFT PLANETARY COMPUTER PRO - GEOCATALOG INTEGRATION                     │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
 
     ┌─────────────────────────────────────────────────────────────────────────────────────────────────────┐
-    │  UPLOAD PIPELINE                                                                                     │
+    │  UPLOAD PIPELINE                                                                                    │
     ├─────────────────────────────────────────────────────────────────────────────────────────────────────┤
-    │                                                                                                      │
+    │                                                                                                     │
     │   1. SAVE TO NETCDF                           2. UPLOAD TO BLOB                                     │
-    │   ───────────────────                         ────────────────────                                   │
+    │   ───────────────────                         ────────────────────                                  │
     │   • Surface variables only (2D)               • DefaultAzureCredential                              │
-    │   • One file per timestamp                    • Container: hurricane-data                            │
+    │   • One file per timestamp                    • Container: hurricane-data                           │
     │   • Pattern: hurricane_{name}_{date}_{time}   • Generate SAS for access                             │
     │     _{suffix}_t{idx}.nc                                                                             │
-    │                                                                                                      │
+    │                                                                                                     │
     │   3. CREATE STAC COLLECTION                   4. INGEST STAC ITEMS                                  │
-    │   ──────────────────────────                  ────────────────────────                               │
+    │   ──────────────────────────                  ────────────────────────                              │
     │   • ID: hurricane-{name}-{year}-Input-Data    • One item per timestamp                              │
     │   • API: 2025-04-30-preview                   • datacube + raster extensions                        │
     │   • item_assets definition                    • cube:dimensions, cube:variables                     │
-    │                                                                                                      │
+    │                                                                                                     │
     │   5. CONFIGURE RENDER OPTIONS                 6. CONFIGURE MOSAICS                                  │
-    │   ────────────────────────────                ──────────────────────                                 │
+    │   ────────────────────────────                ──────────────────────                                │
     │   SDK: PlanetaryComputerProClient             • "most-recent" mosaic                                │
     │   Variables rendered:                         • Empty CQL for all items                             │
     │   • msl: rdylbu_r, 95000-105000                                                                     │
     │   • t2m: plasma, 270-310                                                                            │
     │   • u10/v10: coolwarm, -50 to 50                                                                    │
     │   minZoom: 0 (global view support)                                                                  │
-    │                                                                                                      │
+    │                                                                                                     │
     └─────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
 
     ┌─────────────────────────────────────────────────────────────────────────────────────────────────────┐
-    │  AUTHENTICATION FLOW                                                                                 │
+    │  AUTHENTICATION FLOW                                                                                │
     ├─────────────────────────────────────────────────────────────────────────────────────────────────────┤
-    │                                                                                                      │
+    │                                                                                                     │
     │   ┌──────────────────┐      ┌──────────────────┐      ┌──────────────────┐                          │
     │   │ DefaultAzure     │      │   Token Request  │      │  Bearer Token    │                          │
     │   │ Credential       │─────►│   Scope:         │─────►│  Header:         │                          │
@@ -1824,7 +1824,7 @@ The **64 kt threshold** (Category 1 hurricane) was chosen empirically based on:
     │   │ • Azure CLI      │      │                  │      │                  │                          │
     │   │ • VS Code        │      │                  │      │                  │                          │
     │   └──────────────────┘      └──────────────────┘      └──────────────────┘                          │
-    │                                                                                                      │
+    │                                                                                                     │
     └─────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -1834,60 +1834,60 @@ The **64 kt threshold** (Category 1 hurricane) was chosen empirically based on:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                               OPENSTREETMAP INFRASTRUCTURE QUERY STRATEGY                                │
+│                               OPENSTREETMAP INFRASTRUCTURE QUERY STRATEGY                               │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
 
     ┌─────────────────────────────────────────────────────────────────────────────────────────────────────┐
-    │  OVERPASS API - MULTI-SERVER FAILOVER                                                                │
+    │  OVERPASS API - MULTI-SERVER FAILOVER                                                               │
     ├─────────────────────────────────────────────────────────────────────────────────────────────────────┤
-    │                                                                                                      │
-    │                              ┌──────────────────────────────┐                                        │
-    │                              │      Query Request           │                                        │
-    │                              └──────────────┬───────────────┘                                        │
-    │                                             │                                                        │
-    │                                             ▼                                                        │
-    │                              ┌──────────────────────────────┐                                        │
-    │                              │  overpass-api.de             │◄──── Primary (Germany)                 │
-    │                              └──────────────┬───────────────┘                                        │
-    │                                    │        │                                                        │
-    │                               Success?      │                                                        │
-    │                                    │        │                                                        │
-    │                             ┌──────┴──────┐ │ Timeout/429/Error                                      │
-    │                             │             │ │                                                        │
-    │                            YES            NO│                                                        │
-    │                             │              ▼                                                         │
-    │                             │   ┌──────────────────────────────┐                                     │
-    │                             │   │  overpass.kumi.systems       │◄──── Fallback 1                     │
-    │                             │   └──────────────┬───────────────┘                                     │
-    │                             │          │       │                                                     │
-    │                             │     Success?     │                                                     │
-    │                             │          │       │                                                     │
-    │                             │   ┌──────┴──────┐│ Timeout/Error                                       │
-    │                             │   │             ││                                                     │
-    │                             │  YES           NO│                                                     │
-    │                             │   │             ▼                                                      │
-    │                             │   │  ┌──────────────────────────────┐                                  │
-    │                             │   │  │  maps.mail.ru/.../overpass   │◄──── Fallback 2 (Russia)         │
-    │                             │   │  └──────────────────────────────┘                                  │
-    │                             │   │                                                                    │
-    │                             ▼   ▼                                                                    │
-    │                        ┌─────────────┐                                                               │
-    │                        │   Return    │                                                               │
-    │                        │   Results   │                                                               │
-    │                        └─────────────┘                                                               │
-    │                                                                                                      │
+    │                                                                                                     │
+    │                              ┌──────────────────────────────┐                                       │
+    │                              │      Query Request           │                                       │
+    │                              └──────────────┬───────────────┘                                       │
+    │                                             │                                                       │
+    │                                             ▼                                                       │
+    │                              ┌──────────────────────────────┐                                       │
+    │                              │  overpass-api.de             │◄──── Primary (Germany)                │
+    │                              └──────────────┬───────────────┘                                       │
+    │                                    │        │                                                       │
+    │                               Success?      │                                                       │
+    │                                    │        │                                                       │
+    │                             ┌──────┴──────┐ │ Timeout/429/Error                                     │
+    │                             │             │ │                                                       │
+    │                            YES            NO│                                                       │
+    │                             │              ▼                                                        │
+    │                             │   ┌──────────────────────────────┐                                    │
+    │                             │   │  overpass.kumi.systems       │◄──── Fallback 1                    │
+    │                             │   └──────────────┬───────────────┘                                    │
+    │                             │          │       │                                                    │
+    │                             │     Success?     │                                                    │
+    │                             │          │       │                                                    │
+    │                             │   ┌──────┴──────┐│ Timeout/Error                                      │
+    │                             │   │             ││                                                    │
+    │                             │  YES           NO│                                                    │
+    │                             │   │             ▼                                                     │
+    │                             │   │  ┌──────────────────────────────┐                                 │
+    │                             │   │  │  maps.mail.ru/.../overpass   │◄──── Fallback 2 (Russia)        │
+    │                             │   │  └──────────────────────────────┘                                 │
+    │                             │   │                                                                   │
+    │                             ▼   ▼                                                                   │
+    │                        ┌─────────────┐                                                              │
+    │                        │   Return    │                                                              │
+    │                        │   Results   │                                                              │
+    │                        └─────────────┘                                                              │
+    │                                                                                                     │
     └─────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
 
     ┌─────────────────────────────────────────────────────────────────────────────────────────────────────┐
-    │  TILED QUERY STRATEGY (Avoids API Timeouts)                                                          │
+    │  TILED QUERY STRATEGY (Avoids API Timeouts)                                                         │
     ├─────────────────────────────────────────────────────────────────────────────────────────────────────┤
-    │                                                                                                      │
+    │                                                                                                     │
     │   Large query areas are split into smaller tiles to avoid Overpass API timeouts:                    │
-    │                                                                                                      │
+    │                                                                                                     │
     │   ┌─────────────────────────────────────────────────────────────────────────────────────────────┐   │
-    │   │                              CONE OF UNCERTAINTY BOUNDING BOX                                │   │
+    │   │                              CONE OF UNCERTAINTY BOUNDING BOX                               │  │
     │   │  ┌─────┬─────┬─────┬─────┬─────┬─────┬─────┬─────┐                                          │   │
     │   │  │     │     │     │     │     │     │     │     │  Substations/Plants: 5° × 5° tiles       │   │
     │   │  │ T1  │ T2  │ T3  │ T4  │ T5  │ T6  │ T7  │ T8  │  (Fewer features, larger area OK)        │   │
@@ -1901,20 +1901,20 @@ The **64 kt threshold** (Category 1 hurricane) was chosen empirically based on:
     │   │  │ T17 │ T18 │ T19 │ T20 │ T21 │ T22 │ T23 │ T24 │  Rate limiting: 1-2 sec between tiles    │   │
     │   │  │     │     │     │     │     │     │     │     │                                          │   │
     │   │  └─────┴─────┴─────┴─────┴─────┴─────┴─────┴─────┘                                          │   │
-    │   │                                                                                              │   │
+    │   │                                                                                             │  │
     │   └─────────────────────────────────────────────────────────────────────────────────────────────┘   │
-    │                                                                                                      │
+    │                                                                                                     │
     │   DEDUPLICATION: Track seen_ids across tile boundaries to avoid duplicate features                  │
-    │                                                                                                      │
+    │                                                                                                     │
     │   SPATIAL FILTER: After download, filter to cone polygon using Shapely intersection                 │
-    │                                                                                                      │
+    │                                                                                                     │
     └─────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
 
     ┌─────────────────────────────────────────────────────────────────────────────────────────────────────┐
-    │  VOLTAGE CLASSIFICATION                                                                              │
+    │  VOLTAGE CLASSIFICATION                                                                             │
     ├─────────────────────────────────────────────────────────────────────────────────────────────────────┤
-    │                                                                                                      │
+    │                                                                                                     │
     │   Category        Voltage Range      Color         Line Weight    Default Visibility                │
     │   ──────────────────────────────────────────────────────────────────────────────────                │
     │   High            ≥ 345 kV           Red           4px            ✓ Shown                           │
@@ -1922,7 +1922,7 @@ The **64 kt threshold** (Category 1 hurricane) was chosen empirically based on:
     │   Medium          ≥ 69 kV            Amber         2px            Hidden (toggle)                   │
     │   Low             < 69 kV            Yellow        2px            Hidden (toggle)                   │
     │   Unknown         N/A                Gray          2px            Hidden (toggle)                   │
-    │                                                                                                      │
+    │                                                                                                     │
     └─────────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
@@ -1932,7 +1932,7 @@ The **64 kt threshold** (Category 1 hurricane) was chosen empirically based on:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                                      AUTHENTICATION METHODS BY SERVICE                                   │
+│                                      AUTHENTICATION METHODS BY SERVICE                                  │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
     ┌──────────────────────────────────┬────────────────────────┬───────────────────────────────────────┐
@@ -1965,7 +1965,7 @@ The **64 kt threshold** (Category 1 hurricane) was chosen empirically based on:
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────────────┐
-│                                      REQUIRED ENVIRONMENT VARIABLES                                      │
+│                                      REQUIRED ENVIRONMENT VARIABLES                                     │
 └─────────────────────────────────────────────────────────────────────────────────────────────────────────┘
 
     # Microsoft Planetary Computer Pro

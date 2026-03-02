@@ -295,7 +295,7 @@
     "geoCatalogEndpoint": {
       "condition": "[parameters('deployGeoCatalog')]",
       "type": "string",
-      "value": "[concat('https://', variables('geoCatalogFullName'), '.spatio.azure.com/api/stac/v1')]"
+      "value": "Navigate to your GeoCatalog resource in the Azure Portal to find the endpoint URL (format: https://{name}.{hash}.{region}.geocatalog.spatio.azure.com)"
     },
     "auroraEndpointUri": {
       "condition": "[parameters('deployAIFoundry')]",
@@ -304,7 +304,7 @@
     },
     "configurationInstructions": {
       "type": "string",
-      "value": "After deployment, update your .env file with: 1) GEOCATALOG_URI from geoCatalogEndpoint, 2) Generate a SAS token for AURORA_BLOB_STORAGE_SAS from the storage account, 3) Use auroraEndpointUri for AURORA_FOUNDRY_ENDPOINT and retrieve the key from the portal for AURORA_FOUNDRY_TOKEN"
+      "value": "After deployment, update your .env file with: 1) GEOCATALOG_URI from Azure Portal (format: https://{name}.{hash}.{region}.geocatalog.spatio.azure.com), 2) Generate a SAS token for AURORA_BLOB_STORAGE_SAS from the storage account, 3) Use auroraEndpointUri for AURORA_FOUNDRY_ENDPOINT and retrieve the key from the portal for AURORA_FOUNDRY_TOKEN"
     }
   }
 }

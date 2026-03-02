@@ -4,6 +4,9 @@ This repository demonstrates an end-to-end workflow for hurricane path predictio
 
 ## 🎬 Demo
 
+## Sample Output
+Running the notebook in this project produces an interactive map that allows users to explore the results of the  storm forecast locally. Download a prerendered, sample of this interactive map, produced for Atlantic hurricane Helene from 2024 here:
+
 ![Hurricane Helene Infrastructure Analysis](docs/media/Hurricane-Helene-Infra-Analysis.gif)
 📥 [Download the interactive map](outputs/hurricane_helene_2024_infrastructure_impact.html) to explore the results locally.
 
@@ -16,7 +19,7 @@ This repository demonstrates an end-to-end workflow for hurricane path predictio
 - ⚡ **Infrastructure Analysis** - Power grid impact assessment using OpenStreetMap
 - 🗺️ **Interactive Visualization** - Storm tracks and affected infrastructure maps
 
-The notebook works with **any historical or active tropical storm** from the IBTrACS database. Hurricane Helene (2024) is pre-selected as the default for a ready-to-run experience. You can select a different storm using the interactive widget generated in **Section 2 — Storm Selection** of the notebook:
+The notebook works with **both historical or active tropical storm** from the IBTrACS database. Hurricane Helene (2024) is pre-selected as the default for a ready-to-run experience. You can select a different storm using the interactive widget generated in **Section 2 — Storm Selection** of the notebook:
 
 ![Storm Selection Widget](docs/media/Storm-Selection.png)
 
