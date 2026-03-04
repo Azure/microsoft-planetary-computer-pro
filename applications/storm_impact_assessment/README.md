@@ -8,7 +8,7 @@ This repository demonstrates an end-to-end workflow for hurricane path predictio
 Running the notebook in this project produces an interactive map that allows users to explore the results of the  storm forecast locally. Download a prerendered, sample of this interactive map, produced for Atlantic hurricane Helene from 2024 here:
 
 ![Hurricane Helene Infrastructure Analysis](docs/media/Hurricane-Helene-Infra-Analysis.gif)
-📥 [Download the interactive map](outputs/hurricane_helene_2024_infrastructure_impact.html) to explore the results locally.
+📥 [Download the interactive map](https://github.com/Azure/microsoft-planetary-computer-pro/releases/tag/storm_impact_assessment) to explore the results locally.
 
 ## 🎯 Main Notebook
 
