@@ -1,6 +1,4 @@
-# Microsoft Planetary Computer MCP Tools
-
-![Microsoft Planetary Computer](media/image001.png)
+# <img height="36" width="36" src="media/logo.png" alt="Microsoft Planetary Computer" /> Microsoft Planetary Computer MCP Tools
 
 A Model Context Protocol (MCP) server that enables GitHub Copilot to interact with Microsoft Planetary Computer Pro.
 
@@ -36,7 +34,7 @@ Key Capabilities:
 Compatible with both the [Stable](https://code.visualstudio.com/download) and [Insiders](https://code.visualstudio.com/insiders) builds of VS Code.
 
 1. Install the [GitHub Copilot Chat](https://marketplace.visualstudio.com/items?itemName=GitHub.copilot-chat) extension.
-2. Install the [Microsoft Planetary Computer Pro MCP Tools](https://marketplace.visualstudio.com/items?itemName=microsoft-planetary-computer-pro.mpc-pro-tools) extension.
+2. Install the **Microsoft Planetary Computer Pro MCP Tools** extension.
 
 - Start (or Auto-Start) the MCP Server
 
