@@ -8,9 +8,10 @@ A Model Context Protocol (MCP) server that enables GitHub Copilot to interact wi
 - [Installation](#installation)
   - [VS Code](#vs-code)
 - [User Guide](#user-guide)
-  - [Prerequisite](#prerequisite)
+  - [Prerequisites](#prerequisites)
   - [Getting Started](#getting-started)
-  - [Toolsets](#toolsets)
+  - [List of Tools](#list-of-tools)
+  - [End-to-End Example](#end-to-end-example)
 - [Reference](#reference)
   - [Documentation](#documentation)
   - [Security](#security)
@@ -18,11 +19,11 @@ A Model Context Protocol (MCP) server that enables GitHub Copilot to interact wi
 
 ## Overview
 
-**Microsoft Planetary Computer MCP Tools** is an MCP Server-compatible service that exposes a set of tools for working with geospatial data on [Microsoft Planetary Computer Pro](https://aka.ms/planetarycomputerpro). It provides capabilities for Spatio Temporal Asset Catalog ([STAC](https://learn.microsoft.com/en-us/azure/planetary-computer/stac-overview)) search and discovery, format conversion, and interactive map-based data selection. Delivered as a VS Code extension, the MCP Server allows users to interact with Planetary Computer Pro entirely through natural language queries via GitHub Copilot, eliminating the need to navigate traditional UI workflows and significantly accelerating geospatial analysis and MPC Pro workflows.
+**Microsoft Planetary Computer MCP Tools** is an MCP Server-compatible service that exposes a set of tools for working with geospatial data on [Microsoft Planetary Computer Pro](https://aka.ms/planetarycomputerpro). It provides capabilities for Spatio Temporal Asset Catalog ([STAC](https://learn.microsoft.com/en-us/azure/planetary-computer/stac-overview)) search and discovery, format conversion, and interactive map-based data selection. Delivered as a VS Code extension, the MCP Server allows users to interact with Planetary Computer Pro entirely through natural language queries via GitHub Copilot, eliminating the need to navigate traditional UI workflows and significantly accelerating geospatial analysis and Microsoft Planetary Computer (MPC) Pro workflows.
 
 Key Capabilities:
 
-- **STAC Search & Discovery**: Browse and search for public datasets from Microsoft Planetary Computer and your private data with Microsoft Planetary Computer Pro GeoCatalog collections by location, time, and metadata
+- **STAC Search & Discovery**: Browse and search for public datasets from [Microsoft Planetary Computer](https://aka.ms/planetarycomputer) and your private data with Microsoft Planetary Computer Pro GeoCatalog collections by location, time, and metadata
 - **Collection Management**: Create, configure, and clone STAC collections—including render options, mosaic definitions, and thumbnails
 - **Data Ingestion**: Ingest individual items, batch import, or bulk ingest from Microsoft Planetary Computer APIs into your GeoCatalog
 - **Natural Language Interface**: Interact with Planetary Computer Pro entirely through conversational prompts via GitHub Copilot
@@ -61,25 +62,27 @@ Installation is complete! Microsoft Planetary Computer MCP Tools is now ready to
 
 ## User Guide
 
-### Prerequisite
+### Prerequisites
 
-The Azure CLI client and an existing Microsoft Planetary Computer Pro GeoCatalog instance must be configured prior to use. Instructions on how to install the Azure CLI are included in this [link](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest).
-
-GitHub Copilot Individual/Pro plan required. Agent mode not available in Free mode.
+- [Azure CLI](https://learn.microsoft.com/en-us/cli/azure/install-azure-cli?view=azure-cli-latest) installed and configured
+- An existing Microsoft Planetary Computer Pro GeoCatalog instance
+- GitHub Copilot Individual or Pro plan (Agent mode is not available in Free mode)
+- **Microsoft Planetary Computer Pro MCP Tools** VS Code extension installed
 
 ### Getting Started
 
 1. In a PowerShell terminal run `az login` to log in and select the Azure subscription where your GeoCatalog was provisioned.
-2. Open GitHub Copilot in [VS Code](https://code.visualstudio.com/docs/copilot/chat/chat-agent-mode) and switch to Agent mode.
-3. Click `refresh` on the tools list
-   - You should see the "Microsoft Planetary Computer MCP Tools" in the list of tools
-4. Try a prompt that uses Planetary Computer context, such as `How many collections are in the Geocatalog <url>`
-   - The agent should be able to use the Planetary Computer MCP Tools to complete your query
-5. Reference the [Microsoft Planetary Computer MS Learns](https://learn.microsoft.com/en-us/azure/planetary-computer/) page for information on MPC Pro
+1. Open GitHub Copilot in [VS Code](https://code.visualstudio.com/docs/copilot/chat/chat-agent-mode) and switch to Agent mode.
+1. Click `refresh` on the tools list. 
+1. Confirm that you see the "Microsoft Planetary Computer MCP Tools" in the list of tools and that the tool is enabled. 
+1. Try a prompt to verify that the MCP server is correclty using Microsoft Planetary Computer Pro context:
+   - `How many collections are in the Geocatalog <geocatalog-url>`
+   - See [List of Tools](#list-of-tools) below for more sample prompts.
+
 
 ### List of Tools
 
-✨ Microsoft Planetary Computer MCP Tools function as an assistant layer that augments Microsoft Planetary Computer Pro workflow, helping users to discover, access, and operate geospatial data and services more efficiently. Below is a list of tools, their descriptions, and example prompts to get started:
+Microsoft Planetary Computer MCP Tools function as an assistant layer that augments Microsoft Planetary Computer Pro workflow, helping users to discover, access, and interact with geospatial data and services more efficiently. Below is list of currently support MCP tools, their descriptions, and example prompts to get started:
 
 #### Discovery & Browsing
 
@@ -338,7 +341,7 @@ Ran `configure_collection_mosaic_definitions`
 
 ### Documentation
 
-Visit [Microsoft Planetary Computer Pro MS Learn](https://learn.microsoft.com/en-us/azure/planetary-computer/) for information on the Microsoft Planetary Computer Pro platform.
+Visit [Microsoft Planetary Computer Pro MS Learn](https://aka.ms/geocatalogdocs) for information on the Microsoft Planetary Computer Pro platform.
 
 ### Security
 
