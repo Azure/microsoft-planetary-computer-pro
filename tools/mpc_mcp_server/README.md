@@ -71,18 +71,18 @@ Installation is complete! Microsoft Planetary Computer MCP Tools is now ready to
 
 ### Getting Started
 
-1. In a PowerShell terminal run `az login` to log in and select the Azure subscription where your GeoCatalog was provisioned.
+1. In a PowerShell terminal, run `az login` to log in and select the Azure subscription where your GeoCatalog was provisioned.
 1. Open GitHub Copilot in [VS Code](https://code.visualstudio.com/docs/copilot/chat/chat-agent-mode) and switch to Agent mode.
 1. Click `refresh` on the tools list. 
 1. Confirm that you see the "Microsoft Planetary Computer MCP Tools" in the list of tools and that the tool is enabled. 
-1. Try a prompt to verify that the MCP server is correclty using Microsoft Planetary Computer Pro context:
+1. Try a prompt to verify that the MCP server is correctly using Microsoft Planetary Computer Pro context:
    - `How many collections are in the Geocatalog <geocatalog-url>`
    - See [List of Tools](#list-of-tools) below for more sample prompts.
 
 
 ### List of Tools
 
-Microsoft Planetary Computer MCP Tools function as an assistant layer that augments Microsoft Planetary Computer Pro workflow, helping users to discover, access, and interact with geospatial data and services more efficiently. Below is list of currently support MCP tools, their descriptions, and example prompts to get started:
+Microsoft Planetary Computer MCP Tools function as an assistant layer that augments Microsoft Planetary Computer Pro workflow, helping users to discover, access, and interact with geospatial data and services more efficiently. Below is a list of currently supported MCP tools, their descriptions, and example prompts to get started:
 
 #### Discovery & Browsing
 
