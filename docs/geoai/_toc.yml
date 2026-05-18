@@ -1,0 +1,12 @@
+format: jb-book
+root: intro
+parts:
+  - caption: Getting Started
+    chapters:
+      - file: overview
+  - caption: Models
+    chapters:
+      - file: models/placeholder
+  - caption: Examples
+    chapters:
+      - file: examples/placeholder
