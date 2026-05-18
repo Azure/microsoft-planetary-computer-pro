@@ -4,8 +4,10 @@ on:
   push:
     branches:
       - main
+      - aloverro/feature/geoai-sdk-documentation  # TODO: remove after testing
     paths:
       - "docs/geoai/**"
+      - ".github/workflows/build_geoai_docs.yml"
   workflow_dispatch:
 
 concurrency:
