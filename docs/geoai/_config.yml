@@ -1,8 +1,8 @@
 # Book settings
-title: "GeoAI Documentation"
+title: "GeoAI with Microsoft Planetary Computer Pro"
 author: Microsoft Corporation
-copyright: "2025"
-logo: logo.png
+copyright: "2026"
+logo: media\planetary-computer-pro-ai.svg
 
 # Force re-execution of notebooks on each build.
 execute:
