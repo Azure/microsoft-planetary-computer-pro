@@ -1,0 +1,45 @@
+# Book settings
+title: "GeoAI with Microsoft Planetary Computer Pro"
+author: Microsoft Corporation
+copyright: "2026"
+logo: media/planetary-computer-pro-ai.svg
+
+# Force re-execution of notebooks on each build.
+execute:
+  execute_notebooks: "off"
+
+# Parse settings
+parse:
+  myst_enable_extensions:
+    - deflist
+    - colon_fence
+
+# Sphinx configuration
+sphinx:
+  extra_extensions:
+    - "sphinx.ext.autodoc"
+    - "sphinx.ext.napoleon"
+    - "sphinx.ext.viewcode"
+  recursive_update: true
+  config:
+    html_context:
+      default_mode: light
+
+# Information about where the book exists on the web
+repository:
+  url: https://github.com/Azure/microsoft-planetary-computer-pro
+  path_to_book: docs/geoai
+  branch: main
+
+# Add GitHub buttons to your book
+html:
+  use_issues_button: true
+  use_repository_button: true
+  baseurl: https://azure.github.io/microsoft-planetary-computer-pro/geoai/
+
+# Exclude patterns (keeps README and venv out of the build)
+exclude_patterns:
+  - "README.md"
+  - "_build"
+  - "**.ipynb_checkpoints"
+  - ".venv"
