@@ -46,8 +46,6 @@ docs/geoai/
        - file: models/placeholder
    ```
 
-4. Commit and push to `main`. The site rebuilds automatically.
-
 ### Add a Jupyter Notebook
 
 1. Place the `.ipynb` file in the relevant folder (e.g., `docs/geoai/examples/my_notebook.ipynb`).
