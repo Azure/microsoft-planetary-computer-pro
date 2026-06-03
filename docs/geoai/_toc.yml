@@ -15,9 +15,9 @@ parts:
           - file: api/constraints
           - file: api/models
           - file: api/validation
-  - caption: Models
-    chapters:
-      - file: models/placeholder
+  # - caption: Models
+  #   chapters:
+  #     - file: models/placeholder
   - caption: Examples
     chapters:
       - file: examples/eoos_object_detection
