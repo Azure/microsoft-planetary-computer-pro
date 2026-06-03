@@ -1,4 +1,4 @@
-# GeoAI Documentation
+# GeoAI
 
 Welcome to the GeoAI documentation for Microsoft Planetary Computer Pro.
 

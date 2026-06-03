@@ -1,0 +1,1448 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>MARS Map Generation &#8212; GeoAI with Microsoft Planetary Computer Pro</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'examples/mars_map_generation';</script>
+    <link rel="canonical" href="https://azure.github.io/microsoft-planetary-computer-pro/geoai/examples/mars_map_generation.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="EO-OS Object Detection" href="eoos_object_detection.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/planetary-computer-pro-ai.svg" class="logo__image only-light" alt="GeoAI with Microsoft Planetary Computer Pro - Home"/>
+    <script>document.write(`<img src="../_static/planetary-computer-pro-ai.svg" class="logo__image only-dark" alt="GeoAI with Microsoft Planetary Computer Pro - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    GeoAI
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">GeoAI SDK</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../geoai-sdk/README.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sdk-index.html">Documentation</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../api/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
+<li class="toctree-l2"><a class="reference internal" href="../api/input.html">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/output.html">Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/constraints.html">Constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/models.html">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../api/validation.html">Validation</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../models/placeholder.html">Models</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="eoos_object_detection.html">EO-OS Object Detection</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">MARS Map Generation</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/Azure/microsoft-planetary-computer-pro" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/Azure/microsoft-planetary-computer-pro/issues/new?title=Issue%20on%20page%20%2Fexamples/mars_map_generation.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/examples/mars_map_generation.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>MARS Map Generation</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-this-does">What This Does:</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-capabilities">Key Capabilities:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-overview">Workflow Overview:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-and-imports">1. Setup and Imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#azure-authentication">2. Azure Authentication</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#discover-available-models-optional">3. Discover Available Models (Optional)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-input-source">4. Define Input Source</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-areas-of-interest-multi-aoi">5. Define Areas of Interest (Multi-AOI)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-advanced-custom-stac-search-optional">5a. Advanced: Custom STAC Search (Optional)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configure-output-destination">6. Configure Output Destination</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initialize-mars-model">7. Initialize MARS Model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configure-detection-parameters">8. Configure Detection Parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-validate-input-optional-but-recommended">8a. Validate Input (Optional but Recommended)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimate-job-scope-optional-but-recommended">9. Estimate Job Scope (Optional but Recommended)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-mars-map-generation">10. Run MARS Map Generation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#view-results">11. View Results</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">12. Next Steps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-resources">📚 Additional Resources</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="mars-map-generation">
+<h1>MARS Map Generation<a class="headerlink" href="#mars-map-generation" title="Permalink to this heading">#</a></h1>
+<p>This notebook demonstrates <strong>automated map generation from satellite imagery</strong> using the MARS model to extract infrastructure features at scale.</p>
+<section id="what-this-does">
+<h2>What This Does:<a class="headerlink" href="#what-this-does" title="Permalink to this heading">#</a></h2>
+<p><strong>MARS</strong> automatically analyzes high-resolution aerial imagery to create structured geospatial datasets of buildings, roads, and railways.</p>
+<section id="key-capabilities">
+<h3>Key Capabilities:<a class="headerlink" href="#key-capabilities" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p>🏗️ <strong>Building Extraction</strong>: Detects building footprints as polygon geometries</p></li>
+<li><p>🛣️ <strong>Road Network Mapping</strong>: Identifies road networks as line geometries</p></li>
+<li><p>🚂 <strong>Railway Detection</strong>: Maps railway infrastructure as line geometries</p></li>
+<li><p>🌍 <strong>Multi-Location Processing</strong>: Process multiple areas of interest concurrently</p></li>
+<li><p>📤 <strong>GeoCatalog Publishing</strong>: Results published as STAC items with full metadata</p></li>
+</ul>
+</section>
+<section id="workflow-overview">
+<h3>Workflow Overview:<a class="headerlink" href="#workflow-overview" title="Permalink to this heading">#</a></h3>
+<ol class="arabic simple">
+<li><p>Define your areas of interest (AOI) - neighborhoods, cities, or regions</p></li>
+<li><p>SDK queries STAC catalogs for available high-resolution imagery</p></li>
+<li><p>MARS model analyzes imagery to detect and vectorize infrastructure</p></li>
+<li><p>Results published to your GeoCatalog as searchable, reusable geospatial data</p></li>
+</ol>
+</section>
+</section>
+<section id="prerequisites">
+<h2>Prerequisites:<a class="headerlink" href="#prerequisites" title="Permalink to this heading">#</a></h2>
+<p><strong>Before running this notebook:</strong></p>
+<ol class="arabic">
+<li><p><strong>Create virtual environment and install SDK</strong>: Navigate to the SDK directory and run:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create and activate virtual environment</span>
+python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>venv
+venv<span class="se">\S</span>cripts<span class="se">\a</span>ctivate<span class="w">  </span><span class="c1"># Windows</span>
+<span class="c1"># source venv/bin/activate  # macOS/Linux</span>
+
+<span class="c1"># Install SDK (includes ipykernel)</span>
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+
+<span class="c1"># Register Jupyter kernel</span>
+python<span class="w"> </span>-m<span class="w"> </span>ipykernel<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--name<span class="o">=</span>geoai-sdk
+</pre></div>
+</div>
+</li>
+<li><p><strong>Azure Authentication</strong>: Configure Azure CLI</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>az<span class="w"> </span>login
+</pre></div>
+</div>
+</li>
+<li><p><strong>Select Kernel</strong>: Choose “Python 3.12 (geoai-sdk)” as the notebook kernel</p></li>
+<li><p><strong>Configure Settings</strong>: Update cells with your model endpoint and output storage details</p></li>
+</ol>
+</section>
+<section id="setup-and-imports">
+<h2>1. Setup and Imports<a class="headerlink" href="#setup-and-imports" title="Permalink to this heading">#</a></h2>
+<p>The SDK automatically configures clean, production-ready logging (INFO level by default).</p>
+<p><strong>Logging Modes:</strong></p>
+<ul class="simple">
+<li><p><strong>INFO (default)</strong>: High-level progress only - clean logs for production</p></li>
+<li><p><strong>DEBUG</strong>: Detailed per-chip processing logs - useful for troubleshooting</p></li>
+</ul>
+<p><strong>To enable debug mode:</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s1">&#39;GEOAI_LOG_LEVEL&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="s1">&#39;DEBUG&#39;</span>  <span class="c1"># Before importing geoai</span>
+</pre></div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">azure.identity</span><span class="w"> </span><span class="kn">import</span> <span class="n">DefaultAzureCredential</span>
+
+<span class="c1"># Optional: Enable DEBUG logging for troubleshooting</span>
+<span class="c1"># Uncomment to see detailed per-chip processing logs</span>
+<span class="c1"># os.environ[&#39;GEOAI_LOG_LEVEL&#39;] = &#39;DEBUG&#39;</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">geoai</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ SDK loaded successfully!&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Log level: </span><span class="si">{</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s1">&#39;GEOAI_LOG_LEVEL&#39;</span><span class="p">,</span><span class="w"> </span><span class="s1">&#39;INFO&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="azure-authentication">
+<h2>2. Azure Authentication<a class="headerlink" href="#azure-authentication" title="Permalink to this heading">#</a></h2>
+<p><strong>When you need Azure authentication:</strong></p>
+<ul class="simple">
+<li><p>📤 Publishing results to GeoCatalog (includes blob storage for assets)</p></li>
+<li><p>🔒 Using private GeoCatalog as input</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize Azure credential</span>
+<span class="n">credential</span> <span class="o">=</span> <span class="n">DefaultAzureCredential</span><span class="p">()</span>
+
+<span class="c1"># Optional: Load storage account key from environment</span>
+<span class="n">storage_account_key</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;STORAGE_ACCOUNT_KEY&quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">storage_account_key</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🔑 Using storage account key for SAS generation&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🔐 Using Azure AD authentication (recommended)&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   Ensure you have &#39;Storage Blob Delegator&#39; role&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="discover-available-models-optional">
+<h2>3. Discover Available Models (Optional)<a class="headerlink" href="#discover-available-models-optional" title="Permalink to this heading">#</a></h2>
+<p>Check which models are available and what collections they support.</p>
+<p><strong>About Collections:</strong></p>
+<ul class="simple">
+<li><p><strong>Planetary Computer</strong>: Pre-defined datasets like NAIP, Landsat, Sentinel-2</p>
+<ul>
+<li><p>EOOS/MARS support: <strong>NAIP only</strong> (high-resolution imagery)</p></li>
+</ul>
+</li>
+<li><p><strong>Private GeoCatalog</strong>: Your own ingested high-resolution imagery</p>
+<ul>
+<li><p>Use any collection name you want</p></li>
+</ul>
+</li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># List all available models</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;📚 Available Models:</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">model_info</span> <span class="ow">in</span> <span class="n">geoai</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">list</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;  🤖 </span><span class="si">{</span><span class="n">model_info</span><span class="p">[</span><span class="s1">&#39;model_name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> (</span><span class="si">{</span><span class="n">model_info</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">)&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;     Collections: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model_info</span><span class="p">[</span><span class="s1">&#39;supported_collections&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;     Bands: </span><span class="si">{</span><span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">model_info</span><span class="p">[</span><span class="s1">&#39;required_bands&#39;</span><span class="p">])</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;     Resolution: </span><span class="si">{</span><span class="n">model_info</span><span class="p">[</span><span class="s1">&#39;preferred_resolution_meters&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">m&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">()</span>
+
+<span class="c1"># Get detailed information about MARS</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🔍 MARS Model Details:&quot;</span><span class="p">)</span>
+<span class="n">mars_info</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;mars&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Supported collections: </span><span class="si">{</span><span class="n">mars_info</span><span class="p">[</span><span class="s1">&#39;data_requirements&#39;</span><span class="p">][</span><span class="s1">&#39;supported_collections&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Required bands: </span><span class="si">{</span><span class="n">mars_info</span><span class="p">[</span><span class="s1">&#39;data_requirements&#39;</span><span class="p">][</span><span class="s1">&#39;required_bands&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Detects: Building, Road, Railway&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="define-input-source">
+<h2>4. Define Input Source<a class="headerlink" href="#define-input-source" title="Permalink to this heading">#</a></h2>
+<p>Configure where to get satellite imagery.</p>
+<p><strong>Option 1: Public Planetary Computer</strong> (default - easiest!)</p>
+<ul class="simple">
+<li><p>Just specify collection: <code class="docutils literal notranslate"><span class="pre">naip</span></code></p></li>
+<li><p>No authentication needed</p></li>
+<li><p>NAIP: High-resolution aerial imagery (0.6m, USA)</p></li>
+</ul>
+<p><strong>Option 2: Private GeoCatalog</strong> (for your own data)</p>
+<ul class="simple">
+<li><p>Ingest your high-resolution imagery as STAC items</p></li>
+<li><p>Specify your GeoCatalog URI and collection name</p></li>
+<li><p>Requires Azure authentication</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Option 1: Public Planetary Computer (default)</span>
+<span class="n">input_source</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">collection</span><span class="o">=</span><span class="s2">&quot;naip&quot;</span><span class="p">)</span>  <span class="c1"># Public collection from Microsoft Planetary Computer</span>
+
+<span class="c1"># Option 2: Private GeoCatalog (uncomment and configure)</span>
+<span class="c1"># input_source = geoai.Input(</span>
+<span class="c1">#     collection=&quot;your-high-res-imagery&quot;,  # Your custom collection name</span>
+<span class="c1">#     geocatalog_uri=&quot;https://your-company.geocatalog.com/stac&quot;,</span>
+<span class="c1">#     credential=credential  # Azure credential required</span>
+<span class="c1"># )</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;📥 Input configured: </span><span class="si">{</span><span class="n">input_source</span><span class="o">.</span><span class="n">collection</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Source: </span><span class="si">{</span><span class="n">input_source</span><span class="o">.</span><span class="n">geocatalog_uri</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="define-areas-of-interest-multi-aoi">
+<h2>5. Define Areas of Interest (Multi-AOI)<a class="headerlink" href="#define-areas-of-interest-multi-aoi" title="Permalink to this heading">#</a></h2>
+<p>This example processes <strong>multiple locations</strong> simultaneously to demonstrate multi-AOI capabilities.</p>
+<p><strong>Example File: <code class="docutils literal notranslate"><span class="pre">test_miami_mars.geoparquet</span></code></strong></p>
+<ul class="simple">
+<li><p>Contains <strong>2 AOIs</strong> in Miami Beach area for demonstration:</p>
+<ul>
+<li><p><strong>miami_beach_1</strong> - Miami Beach Coastal area</p></li>
+<li><p><strong>miami_beach_2</strong> - Miami Beach Inland area</p></li>
+</ul>
+</li>
+<li><p>Each AOI covers urban areas with buildings, roads, and infrastructure</p></li>
+<li><p>Shows programmatic GeoDataFrame creation (alternative to loading from file)</p></li>
+</ul>
+<p><strong>Multi-AOI Benefits:</strong></p>
+<ul class="simple">
+<li><p>🌍 Process many locations in one run</p></li>
+<li><p>📊 Efficient STAC search (SDK handles optimization)</p></li>
+<li><p>📤 All results published to single collection</p></li>
+<li><p>⚡ Concurrent chip processing across all AOIs</p></li>
+</ul>
+<p><strong>NAIP Update Cycle:</strong></p>
+<ul class="simple">
+<li><p>NAIP imagery is collected approximately every <strong>3 years</strong></p></li>
+<li><p>For best data availability, use datetime ranges <strong>3+ years apart</strong> (e.g., “2017-01-01/2020-12-31” or “2020-01-01/2023-12-31”)</p></li>
+<li><p>Narrow date ranges may result in no imagery coverage for some AOIs</p></li>
+</ul>
+<p><strong>Tips:</strong></p>
+<ul class="simple">
+<li><p>Use https://geojson.io to draw custom AOIs</p></li>
+<li><p>Can use GeoDataFrame, GeoParquet file, or GeoJSON</p></li>
+<li><p>Each AOI processed independently (failures don’t affect others)</p></li>
+<li><p>Best for: Multiple buildings, neighborhoods, or districts</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create multi-AOI constraint using GeoDataFrame</span>
+<span class="c1"># This demonstrates direct GeoDataFrame usage (alternative: load test_miami_mars.geoparquet)</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">shapely.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">box</span>
+
+<span class="c1"># Define multiple AOIs in Miami Beach area (matches test_miami_mars.geoparquet)</span>
+<span class="n">aois_data</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;miami_beach_1&#39;</span><span class="p">,</span> <span class="s1">&#39;miami_beach_2&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Miami Beach - Coastal&#39;</span><span class="p">,</span> <span class="s1">&#39;Miami Beach - Inland&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;geometry&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="n">box</span><span class="p">(</span><span class="o">-</span><span class="mf">80.13773083243422</span><span class="p">,</span> <span class="mf">25.78740094399644</span><span class="p">,</span> <span class="o">-</span><span class="mf">80.1352643098228</span><span class="p">,</span> <span class="mf">25.790009223060604</span><span class="p">),</span>
+        <span class="n">box</span><span class="p">(</span><span class="o">-</span><span class="mf">80.13187961358523</span><span class="p">,</span> <span class="mf">25.807251402127395</span><span class="p">,</span> <span class="o">-</span><span class="mf">80.12776159322529</span><span class="p">,</span> <span class="mf">25.811404605351793</span><span class="p">)</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+
+<span class="c1"># Create GeoDataFrame with WGS84 CRS</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">(</span><span class="n">aois_data</span><span class="p">,</span> <span class="n">crs</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">)</span>
+
+<span class="c1"># Create constraint with GeoDataFrame</span>
+<span class="n">constraint</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span>
+    <span class="n">aois</span><span class="o">=</span><span class="n">gdf</span><span class="p">,</span>  <span class="c1"># Pass GeoDataFrame directly</span>
+    <span class="n">datetime</span><span class="o">=</span><span class="s2">&quot;2020-01-01/2024-12-31&quot;</span>  <span class="c1"># NAIP updates ~every 3 years - use 3+ year range for best coverage</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;⚙️  Constraint configured:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Mode: </span><span class="si">{</span><span class="n">constraint</span><span class="o">.</span><span class="n">mode</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>  <span class="c1"># Should show &quot;multi&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   AOIs: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="nb">list</span><span class="p">(</span><span class="n">constraint</span><span class="o">.</span><span class="n">iter_aois</span><span class="p">()))</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Datetime: </span><span class="si">{</span><span class="n">constraint</span><span class="o">.</span><span class="n">datetime</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Preview AOIs</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">📍 Processing </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">gdf</span><span class="p">)</span><span class="si">}</span><span class="s2"> AOIs:&quot;</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">idx</span><span class="p">,</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">gdf</span><span class="o">.</span><span class="n">iterrows</span><span class="p">():</span>
+    <span class="n">area_km2</span> <span class="o">=</span> <span class="n">row</span><span class="o">.</span><span class="n">geometry</span><span class="o">.</span><span class="n">area</span> <span class="o">*</span> <span class="mi">111</span> <span class="o">*</span> <span class="mi">111</span>  <span class="c1"># Rough conversion</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">row</span><span class="p">[</span><span class="s1">&#39;name&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2"> (~</span><span class="si">{</span><span class="n">area_km2</span><span class="si">:</span><span class="s2">.3f</span><span class="si">}</span><span class="s2"> km²)&quot;</span><span class="p">)</span>
+
+<span class="c1"># Alternative: Load from GeoParquet file (same AOIs as above)</span>
+<span class="c1"># constraint = geoai.Constraint(</span>
+<span class="c1">#     aois=&quot;test_miami_mars.geoparquet&quot;,</span>
+<span class="c1">#     datetime=&quot;2020-01-01/2024-12-31&quot;  # NAIP: Use 3+ year range</span>
+<span class="c1"># )</span>
+
+<span class="c1"># Alternative: Single AOI from bbox (uncomment to use instead)</span>
+<span class="c1"># constraint = geoai.Constraint(</span>
+<span class="c1">#     bbox=[-80.1353305066925, 25.782802504890395, -80.13279975500333, 25.785420545651412],</span>
+<span class="c1">#     datetime=&quot;2020-01-01/2024-12-31&quot;  # NAIP: Use 3+ year range</span>
+<span class="c1"># )</span>
+
+<span class="c1"># Optional: Filter by imagery resolution (GSD - Ground Sample Distance)</span>
+<span class="c1"># NAIP example - find high-resolution imagery only:</span>
+<span class="c1"># constraint = geoai.Constraint(</span>
+<span class="c1">#     bbox=[-80.1353305066925, 25.782802504890395, -80.13279975500333, 25.785420545651412],</span>
+<span class="c1">#     datetime=&quot;2020-01-01/2023-12-31&quot;,</span>
+<span class="c1">#     filter={&quot;gsd&quot;: {&quot;lte&quot;: 0.5}}  # Only imagery 0.5m/pixel or better</span>
+<span class="c1"># )</span>
+
+<span class="c1"># Note: Cloud cover filters only work with satellite imagery (Sentinel, Landsat)</span>
+<span class="c1"># NAIP is aerial imagery without cloud metadata, so cloud filters are not applicable</span>
+<span class="c1"># For satellite imagery, combine GSD and cloud cover:</span>
+<span class="c1"># filter={&quot;gsd&quot;: {&quot;lte&quot;: 10}, &quot;eo:cloud_cover&quot;: {&quot;lt&quot;: 5}}  # Sentinel/Landsat only</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="a-advanced-custom-stac-search-optional">
+<h2>5a. Advanced: Custom STAC Search (Optional)<a class="headerlink" href="#a-advanced-custom-stac-search-optional" title="Permalink to this heading">#</a></h2>
+<p><strong>Skip this section if you’re using the simple constraint above.</strong></p>
+<p>For power users who need full control over imagery selection (sorting, limiting, complex filters), you can build a custom STAC search and pass it directly to the SDK.</p>
+<p><strong>When to use:</strong></p>
+<ul class="simple">
+<li><p>🎯 Sort by date (latest first) or cloud cover (lowest first)</p></li>
+<li><p>📊 Limit to N best items (testing, cost control)</p></li>
+<li><p>🔍 Multi-AOI efficiency (one search for many locations)</p></li>
+<li><p>⚙️ Complex CQL2 filter expressions</p></li>
+</ul>
+<p><strong>How it works:</strong></p>
+<ul class="simple">
+<li><p>You build the search with <code class="docutils literal notranslate"><span class="pre">pystac_client</span></code></p></li>
+<li><p>SDK uses your search results for all AOIs</p></li>
+<li><p>AOIs without imagery in search results are skipped with warning</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># OPTIONAL: Build custom STAC search for advanced control</span>
+<span class="c1"># Uncomment to use this instead of the simple constraint above</span>
+
+<span class="c1"># import pystac_client</span>
+<span class="c1"># </span>
+<span class="c1"># # Build custom search with advanced options</span>
+<span class="c1"># client = pystac_client.Client.open(&quot;https://planetarycomputer.microsoft.com/api/stac/v1&quot;)</span>
+<span class="c1"># </span>
+<span class="c1"># custom_search = client.search(</span>
+<span class="c1">#     collections=[&quot;naip&quot;],</span>
+<span class="c1">#     bbox=[-80.1353305066925, 25.782802504890395, -80.13279975500333, 25.785420545651412],</span>
+<span class="c1">#     datetime=&quot;2020-01-01/2024-12-31&quot;,</span>
+<span class="c1">#     </span>
+<span class="c1">#     # Advanced options:</span>
+<span class="c1">#     query={&quot;eo:cloud_cover&quot;: {&quot;lt&quot;: 5}},  # Very low cloud cover (satellite only)</span>
+<span class="c1">#     sortby=[{&quot;field&quot;: &quot;properties.datetime&quot;, &quot;direction&quot;: &quot;desc&quot;}],  # Latest first</span>
+<span class="c1">#     limit=10  # Only top 10 items</span>
+<span class="c1"># )</span>
+<span class="c1"># </span>
+<span class="c1"># # Replace simple constraint with advanced version</span>
+<span class="c1"># constraint = geoai.Constraint(</span>
+<span class="c1">#     bbox=[-80.1353305066925, 25.782802504890395, -80.13279975500333, 25.785420545651412],</span>
+<span class="c1">#     stac_search=custom_search  # SDK will use your custom search</span>
+<span class="c1"># )</span>
+<span class="c1"># </span>
+<span class="c1"># print(f&quot;📍 Advanced constraint configured&quot;)</span>
+<span class="c1"># print(f&quot;   Using custom STAC search with sorting/limiting&quot;)</span>
+
+<span class="c1"># For multi-AOI: Search large area once, process many AOIs efficiently!</span>
+<span class="c1"># search = client.search(bbox=[-80.35, 25.75, -80.10, 25.85], limit=50)  # All of Miami Beach</span>
+<span class="c1"># constraint = geoai.Constraint(aois=gdf, stac_search=search)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="configure-output-destination">
+<h2>6. Configure Output Destination<a class="headerlink" href="#configure-output-destination" title="Permalink to this heading">#</a></h2>
+<p>All results are published to GeoCatalog with assets stored in Azure Blob Storage.</p>
+<p><strong>Required Setup:</strong></p>
+<ol class="arabic">
+<li><p><strong>GeoCatalog</strong>: Your GeoCatalog endpoint URL and collection name</p></li>
+<li><p><strong>Azure Blob Storage</strong>: Storage account and container for chip imagery and STAC item assets</p>
+<ul class="simple">
+<li><p>Create a storage account</p></li>
+<li><p>Create a container (e.g., “sdk-results”)</p></li>
+</ul>
+</li>
+<li><p><strong>Authentication</strong> (choose one):</p>
+<ul>
+<li><p><strong>Recommended</strong>: Azure RBAC roles (no key needed)</p>
+<ul class="simple">
+<li><p>Storage Blob Data Contributor</p></li>
+<li><p>Storage Blob Delegator</p></li>
+</ul>
+</li>
+<li><p><strong>Alternative</strong>: Set <code class="docutils literal notranslate"><span class="pre">STORAGE_ACCOUNT_KEY</span></code> environment variable</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="nb">export</span><span class="w"> </span><span class="nv">STORAGE_ACCOUNT_KEY</span><span class="o">=</span><span class="s2">&quot;your_key_here&quot;</span>
+</pre></div>
+</div>
+</li>
+</ul>
+</li>
+</ol>
+<p><strong>Optional</strong>: Enable <code class="docutils literal notranslate"><span class="pre">save_local=True</span></code> to save GeoJSON files locally for debugging.</p>
+<p><strong>Update the values below with your settings:</strong></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Configure output destination (GeoCatalog + Blob Storage)</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">Output</span><span class="p">(</span>
+    <span class="c1"># GeoCatalog endpoint (required)</span>
+    <span class="n">geocatalog_uri</span><span class="o">=</span><span class="s2">&quot;https://cerademo.gsa0gkcaf5c9e6dv.uksouth.geocatalog.spatio.azure.com/&quot;</span><span class="p">,</span>
+    <span class="n">collection_name</span><span class="o">=</span><span class="s2">&quot;mars-infer-01&quot;</span><span class="p">,</span>
+    <span class="n">credential</span><span class="o">=</span><span class="n">credential</span><span class="p">,</span>
+    
+    <span class="c1"># Blob storage for chip imagery and STAC assets (required)</span>
+    <span class="n">storage_url</span><span class="o">=</span><span class="s2">&quot;https://planetarycomputeremo.blob.core.windows.net&quot;</span><span class="p">,</span>
+    <span class="n">blob_container</span><span class="o">=</span><span class="s2">&quot;sdk-results&quot;</span><span class="p">,</span>
+    <span class="n">storage_account_key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;STORAGE_ACCOUNT_KEY&quot;</span><span class="p">),</span>  <span class="c1"># Optional: use Azure AD if not provided</span>
+    
+    <span class="c1"># Run identifier (optional - auto-generates UUID if not provided)</span>
+    <span class="n">run_id</span><span class="o">=</span><span class="s2">&quot;mars-infer-01&quot;</span><span class="p">,</span>
+    
+    <span class="c1"># Local file saving (optional - for debugging only)</span>
+    <span class="n">save_local</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># Set to True to save GeoJSON files locally</span>
+    <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;./output&quot;</span>  <span class="c1"># Only used if save_local=True</span>
+<span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;📤 Output configured:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   GeoCatalog: </span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">geocatalog_uri</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Collection: </span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">collection_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Blob container: </span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">blob_container</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Run ID: </span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">run_id</span><span class="w"> </span><span class="ow">or</span><span class="w"> </span><span class="s1">&#39;auto-generate&#39;</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="n">output</span><span class="o">.</span><span class="n">save_local</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Local output: </span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">output_dir</span><span class="si">}</span><span class="s2">/&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="initialize-mars-model">
+<h2>7. Initialize MARS Model<a class="headerlink" href="#initialize-mars-model" title="Permalink to this heading">#</a></h2>
+<p>Configure the model endpoint. Supports both <strong>Azure ML</strong> and <strong>Azure AI Foundry</strong> deployments.</p>
+<p><strong>Authentication Options:</strong></p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Method</p></th>
+<th class="head"><p>Use Case</p></th>
+<th class="head"><p>Setup</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><strong>API Key/Token</strong></p></td>
+<td><p>Simple, works everywhere</p></td>
+<td><p>Get from Azure ML Studio or AI Foundry portal</p></td>
+</tr>
+<tr class="row-odd"><td><p><strong>Azure AD</strong> ⭐</p></td>
+<td><p>Production, no secrets in code</p></td>
+<td><p>Requires role assignment (see below)</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Required Azure Roles for Azure AD:</strong></p>
+<ul class="simple">
+<li><p><strong>Azure ML</strong>: <code class="docutils literal notranslate"><span class="pre">AzureML</span> <span class="pre">Data</span> <span class="pre">Scientist</span></code> role on workspace</p></li>
+<li><p><strong>AI Foundry</strong>: <code class="docutils literal notranslate"><span class="pre">Azure</span> <span class="pre">AI</span> <span class="pre">Developer</span></code> or <code class="docutils literal notranslate"><span class="pre">Cognitive</span> <span class="pre">Services</span> <span class="pre">User</span></code> role on project</p></li>
+</ul>
+<p><strong>Assign roles:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Azure ML</span>
+az<span class="w"> </span>role<span class="w"> </span>assignment<span class="w"> </span>create<span class="w"> </span>--assignee<span class="w"> </span>user@contoso.com<span class="w"> </span>--role<span class="w"> </span><span class="s2">&quot;AzureML Data Scientist&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--scope<span class="w"> </span>/subscriptions/<span class="o">{</span>sub-id<span class="o">}</span>/resourceGroups/<span class="o">{</span>rg<span class="o">}</span>/providers/Microsoft.MachineLearningServices/workspaces/<span class="o">{</span>workspace<span class="o">}</span>
+
+<span class="c1"># AI Foundry</span>
+az<span class="w"> </span>role<span class="w"> </span>assignment<span class="w"> </span>create<span class="w"> </span>--assignee<span class="w"> </span>user@contoso.com<span class="w"> </span>--role<span class="w"> </span><span class="s2">&quot;Azure AI Developer&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--scope<span class="w"> </span>/subscriptions/<span class="o">{</span>sub-id<span class="o">}</span>/resourceGroups/<span class="o">{</span>rg<span class="o">}</span>/providers/Microsoft.CognitiveServices/accounts/<span class="o">{</span>ai-service<span class="o">}</span>
+</pre></div>
+</div>
+<p><strong>Note:</strong> SDK automatically detects endpoint type and uses the correct OAuth scope.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ============================================================================</span>
+<span class="c1"># Choose ONE authentication method below:</span>
+<span class="c1"># ============================================================================</span>
+
+<span class="c1"># ------------------------------</span>
+<span class="c1"># Option 1: API Key / JWT Token</span>
+<span class="c1"># ------------------------------</span>
+<span class="c1"># Simplest method - works with both Azure ML and AI Foundry</span>
+<span class="c1"># Get key from Azure ML Studio or AI Foundry portal</span>
+
+<span class="c1"># Example for Azure ML (JWT token from &quot;Consume&quot; tab)</span>
+<span class="n">model</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">MARS</span><span class="p">(</span>
+    <span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;https://mars-map-autoregressive-endpoint.eastus.inference.ml.azure.com/score&quot;</span><span class="p">,</span>
+    <span class="n">credential</span><span class="o">=</span><span class="s2">&quot;api-key&quot;</span>  <span class="c1"># Replace with actual key from Azure ML &quot;Consume&quot; tab</span>
+<span class="p">)</span>
+
+<span class="c1"># Example for AI Foundry (API key from portal)</span>
+<span class="c1"># model = geoai.models.MARS(</span>
+<span class="c1">#     endpoint=&quot;https://your-model.eastus.inference.ai.azure.com/score&quot;,</span>
+<span class="c1">#     credential=os.getenv(&quot;MARS_API_KEY&quot;, &quot;your-api-key-here&quot;)</span>
+<span class="c1"># )</span>
+
+<span class="c1"># ------------------------------</span>
+<span class="c1"># Option 2: Azure AD (Recommended for Production)</span>
+<span class="c1"># ------------------------------</span>
+<span class="c1"># Uses DefaultAzureCredential - no secrets in code!</span>
+<span class="c1"># Requires role assignment (see Cell 14 for details)</span>
+
+<span class="c1"># model = geoai.models.MARS(</span>
+<span class="c1">#     endpoint=&quot;https://your-model.eastus.inference.ai.azure.com/score&quot;,</span>
+<span class="c1">#     credential=credential  # DefaultAzureCredential from Cell 2</span>
+<span class="c1"># )</span>
+<span class="c1">#</span>
+<span class="c1"># Required roles:</span>
+<span class="c1">#   - Azure ML: &quot;AzureML Data Scientist&quot;</span>
+<span class="c1">#   - AI Foundry: &quot;Azure AI Developer&quot; or &quot;Cognitive Services User&quot;</span>
+
+<span class="c1"># ============================================================================</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🤖 MARS model initialized&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Endpoint: </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">endpoint</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">credential</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Auth: API Key/Token (length: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">credential</span><span class="p">)</span><span class="si">}</span><span class="s2"> chars)&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Auth: Azure AD (DefaultAzureCredential)&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   ℹ️  Scope auto-detected based on endpoint URL&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="configure-detection-parameters">
+<h2>8. Configure Detection Parameters<a class="headerlink" href="#configure-detection-parameters" title="Permalink to this heading">#</a></h2>
+<p>Set model-specific parameters for MARS processing.</p>
+<p><strong>Parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">chip_size</span></code>: Size of image chips in <strong>pixels</strong> (default: 1024, max: 2048) - SDK-internal parameter</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">stride</span></code>: Overlap between chips in <strong>pixels</strong> (default: 800) - SDK-internal parameter</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">categories</span></code>: Optional filter for specific features (default: all 3 categories) - sent to model endpoint</p></li>
+</ul>
+<p><strong>Note:</strong> MARS endpoint doesn’t support threshold parameter. Detection confidence is managed by the model internally.</p>
+<p><strong>💡 Recommended:</strong> Default parameters are pre-optimized for accuracy and speed.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Detection parameters for MARS</span>
+<span class="n">params</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s2">&quot;chip_size&quot;</span><span class="p">:</span> <span class="mi">1024</span><span class="p">,</span>        <span class="c1"># pixels (common: 2048, 1024)</span>
+    <span class="s2">&quot;stride&quot;</span><span class="p">:</span> <span class="mi">800</span><span class="p">,</span>           <span class="c1"># pixels (no overlap when stride = chip_size)</span>
+    <span class="c1"># &quot;categories&quot;: [&quot;Building&quot;]  # Optional: filter specific categories</span>
+<span class="p">}</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;⚙️  Detection parameters:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Chip size: </span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;chip_size&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">px&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Stride: </span><span class="si">{</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;stride&#39;</span><span class="p">]</span><span class="si">}</span><span class="s2">px&quot;</span><span class="p">)</span>
+<span class="n">categories_str</span> <span class="o">=</span> <span class="s1">&#39;All (Building, Road, Railway)&#39;</span> <span class="k">if</span> <span class="s1">&#39;categories&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">params</span> <span class="k">else</span> <span class="s1">&#39;, &#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">params</span><span class="p">[</span><span class="s1">&#39;categories&#39;</span><span class="p">])</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Categories: </span><span class="si">{</span><span class="n">categories_str</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="a-validate-input-optional-but-recommended">
+<h2>8a. Validate Input (Optional but Recommended)<a class="headerlink" href="#a-validate-input-optional-but-recommended" title="Permalink to this heading">#</a></h2>
+<p><strong>Comprehensive Pre-flight Check</strong></p>
+<p>Before running estimation or the full workflow, you can explicitly validate your configuration to catch issues early:</p>
+<p><strong>Input Validation:</strong></p>
+<ul class="simple">
+<li><p>✅ <strong>Imagery availability</strong> - Queries STAC to verify data exists for AOI</p></li>
+<li><p>✅ <strong>Required bands available</strong> - Checks collection has RGB bands</p></li>
+<li><p>✅ <strong>Resolution compatibility</strong> - Verifies resolution matches model requirements</p></li>
+<li><p>✅ Collection compatibility with model</p></li>
+<li><p>✅ Filter compatibility with collection</p></li>
+<li><p>✅ Parameter validity (ranges, types)</p></li>
+<li><p>✅ AOI format is readable</p></li>
+</ul>
+<p><strong>Model Endpoint Validation:</strong></p>
+<ul class="simple">
+<li><p>✅ <strong>Endpoint reachable</strong> - Tests model endpoint connectivity</p></li>
+<li><p>✅ <strong>Authentication works</strong> - Validates your API key/credential (prevents 401 errors!)</p></li>
+</ul>
+<p><strong>Output Validation (if output provided):</strong></p>
+<ul class="simple">
+<li><p>✅ <strong>GeoCatalog accessible</strong> - Tests write permissions</p></li>
+<li><p>✅ <strong>Blob storage accessible</strong> - Verifies storage account access</p></li>
+</ul>
+<p><strong>Note:</strong> Validation happens automatically in both <code class="docutils literal notranslate"><span class="pre">estimate()</span></code> and <code class="docutils literal notranslate"><span class="pre">run()</span></code>, so this step is optional.</p>
+<p><strong>What gets checked:</strong></p>
+<ul class="simple">
+<li><p>Queries actual STAC catalog for your AOI</p></li>
+<li><p>Tests model endpoint authentication</p></li>
+<li><p>Verifies output destination access</p></li>
+<li><p>Reports number of imagery items found</p></li>
+<li><p>Returns detected resolution and available bands</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Optional: Validate configuration before estimation</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🔍 Validating input configuration...&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   This queries STAC to verify imagery availability&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   and tests model endpoint + output destination access</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="n">validation</span> <span class="o">=</span> <span class="k">await</span> <span class="n">model</span><span class="o">.</span><span class="n">validate_input</span><span class="p">(</span>
+    <span class="nb">input</span><span class="o">=</span><span class="n">input_source</span><span class="p">,</span>
+    <span class="n">constraint</span><span class="o">=</span><span class="n">constraint</span><span class="p">,</span>
+    <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+    <span class="n">output</span><span class="o">=</span><span class="n">output</span>  <span class="c1"># Also validates model endpoint and output destination!</span>
+<span class="p">)</span>
+
+<span class="c1"># Check validation result</span>
+<span class="k">if</span> <span class="n">validation</span><span class="o">.</span><span class="n">is_valid</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ Validation passed!&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   📊 Found </span><span class="si">{</span><span class="n">validation</span><span class="o">.</span><span class="n">stac_items_count</span><span class="si">}</span><span class="s2"> imagery items&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   📏 Detected resolution: </span><span class="si">{</span><span class="n">validation</span><span class="o">.</span><span class="n">detected_resolution</span><span class="si">}</span><span class="s2">m/pixel&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   🎨 Bands available: </span><span class="si">{</span><span class="n">validation</span><span class="o">.</span><span class="n">bands_found</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">validation</span><span class="o">.</span><span class="n">warnings</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">⚠️  Warnings:&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">warning</span> <span class="ow">in</span> <span class="n">validation</span><span class="o">.</span><span class="n">warnings</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   • </span><span class="si">{</span><span class="n">warning</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;   ✓ No issues found&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;❌ Validation failed!&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Errors:&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">error</span> <span class="ow">in</span> <span class="n">validation</span><span class="o">.</span><span class="n">errors</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   • </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">⚠️  Fix these errors before proceeding&quot;</span><span class="p">)</span>    <span class="c1"># raise Exception(&quot;Validation failed&quot;)</span>
+    <span class="c1"># Uncomment to stop execution on validation failure</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="estimate-job-scope-optional-but-recommended">
+<h2>9. Estimate Job Scope (Optional but Recommended)<a class="headerlink" href="#estimate-job-scope-optional-but-recommended" title="Permalink to this heading">#</a></h2>
+<p>Before running the full workflow, estimate the job scope to:</p>
+<ul class="simple">
+<li><p>✅ Verify imagery is available for your AOI</p></li>
+<li><p>✅ Preview chip count and <strong>estimated duration</strong></p></li>
+<li><p>✅ Check for potential issues (missing data, oversized jobs)</p></li>
+</ul>
+<p><strong>What estimation provides:</strong></p>
+<ul class="simple">
+<li><p>Queries STAC to verify data exists</p></li>
+<li><p>Calculates chip count based on AOI geometry</p></li>
+<li><p><strong>Estimates processing time</strong> (includes inference + GeoCatalog publishing)</p></li>
+<li><p>Per-AOI breakdown for multi-AOI workflows</p></li>
+</ul>
+<p><strong>Note:</strong> MARS processing is slower than EOOS (~30s per chip vs ~3s), so duration estimates help plan accordingly.</p>
+<p><strong>Includes automatic validation</strong> - no need to run validate_input() separately if you run estimate().- Want to know how long processing will take</p>
+<ul class="simple">
+<li><p>Unfamiliar geographic areas</p></li>
+</ul>
+<p><strong>When to use estimation:</strong>- Large AOIs or many chips</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run estimation before full processing</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;📊 Running estimation...&quot;</span><span class="p">)</span>
+
+<span class="n">estimate</span> <span class="o">=</span> <span class="k">await</span> <span class="n">model</span><span class="o">.</span><span class="n">estimate</span><span class="p">(</span>
+    <span class="nb">input</span><span class="o">=</span><span class="n">input_source</span><span class="p">,</span>
+    <span class="n">constraint</span><span class="o">=</span><span class="n">constraint</span><span class="p">,</span>
+    <span class="n">params</span><span class="o">=</span><span class="n">params</span>
+<span class="p">)</span>
+
+<span class="c1"># Print summary</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✅ Estimation Complete:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Total chips: </span><span class="si">{</span><span class="n">estimate</span><span class="o">.</span><span class="n">estimated_chips</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   STAC items: </span><span class="si">{</span><span class="n">estimate</span><span class="o">.</span><span class="n">stac_items_found</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Inference requests: </span><span class="si">{</span><span class="n">estimate</span><span class="o">.</span><span class="n">total_requests</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Display estimated duration</span>
+<span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">estimate</span><span class="p">,</span> <span class="s1">&#39;estimated_duration_minutes&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">estimate</span><span class="o">.</span><span class="n">estimated_duration_minutes</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   ⏱️  Estimated duration: ~</span><span class="si">{</span><span class="n">estimate</span><span class="o">.</span><span class="n">estimated_duration_minutes</span><span class="si">}</span><span class="s2"> minutes&quot;</span><span class="p">)</span>
+
+<span class="c1"># Per-AOI breakdown (if multi-AOI)</span>
+<span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">estimate</span><span class="p">,</span> <span class="s1">&#39;aoi_estimates&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">estimate</span><span class="o">.</span><span class="n">aoi_estimates</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">📍 Per-AOI Breakdown:&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">aoi_data</span> <span class="ow">in</span> <span class="n">estimate</span><span class="o">.</span><span class="n">aoi_estimates</span><span class="p">:</span>
+        <span class="n">aoi_id</span> <span class="o">=</span> <span class="n">aoi_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;aoi_id&#39;</span><span class="p">,</span> <span class="s1">&#39;unknown&#39;</span><span class="p">)</span>
+        <span class="n">chips</span> <span class="o">=</span> <span class="n">aoi_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;estimated_chips&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="c1"># Try different possible field names for STAC items</span>
+        <span class="n">items</span> <span class="o">=</span> <span class="p">(</span><span class="n">aoi_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;stac_items_found&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> 
+                 <span class="n">aoi_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;stac_items&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="ow">or</span> 
+                 <span class="n">aoi_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;items_found&#39;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   </span><span class="si">{</span><span class="n">aoi_id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">chips</span><span class="si">}</span><span class="s2"> chips, </span><span class="si">{</span><span class="n">items</span><span class="si">}</span><span class="s2"> items&quot;</span><span class="p">)</span>
+
+<span class="c1"># Simple validation</span>
+<span class="k">if</span> <span class="n">estimate</span><span class="o">.</span><span class="n">stac_items_found</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">❌ No imagery found - adjust datetime/AOI and re-run&quot;</span><span class="p">)</span>
+<span class="k">elif</span> <span class="n">estimate</span><span class="o">.</span><span class="n">estimated_chips</span> <span class="o">&gt;</span> <span class="mi">1000</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">⚠️  Large job (</span><span class="si">{</span><span class="n">estimate</span><span class="o">.</span><span class="n">estimated_chips</span><span class="si">}</span><span class="s2"> chips) - consider reducing AOIs or increasing stride&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">✅ Ready to proceed!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="run-mars-map-generation">
+<h2>10. Run MARS Map Generation<a class="headerlink" href="#run-mars-map-generation" title="Permalink to this heading">#</a></h2>
+<p>Execute the detection workflow. This may take several minutes depending on AOI size.</p>
+<p><strong>Workflow Steps:</strong></p>
+<ol class="arabic simple">
+<li><p>🔒 Validation</p></li>
+<li><p>🔲 Chip creation</p></li>
+<li><p>🔍 STAC search</p></li>
+<li><p>📥 Image fetching</p></li>
+<li><p>🤖 Model inference (Building, Road, Railway detection)</p></li>
+<li><p>🔄 Result merging</p></li>
+<li><p>📤 GeoCatalog publishing</p></li>
+</ol>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Run MARS map generation with publishing</span>
+<span class="c1"># SDK handles all logging internally</span>
+<span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">model</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
+    <span class="nb">input</span><span class="o">=</span><span class="n">input_source</span><span class="p">,</span>
+    <span class="n">constraint</span><span class="o">=</span><span class="n">constraint</span><span class="p">,</span>
+    <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+    <span class="n">output</span><span class="o">=</span><span class="n">output</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="view-results">
+<h2>11. View Results<a class="headerlink" href="#view-results" title="Permalink to this heading">#</a></h2>
+<p>Review detection statistics, category breakdown, and output locations.</p>
+<p><strong>Results include:</strong></p>
+<ul class="simple">
+<li><p>Category breakdown: Buildings, Roads, Railways</p></li>
+<li><p>Chip processing statistics</p></li>
+<li><p>Local GeoJSON file with all detections</p></li>
+<li><p>GeoCatalog publication link (if enabled)</p></li>
+<li><p>Blob storage location for chip imagery</p></li>
+</ul>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Print results summary</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">70</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🗺️  MARS Map Generation Results&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">70</span><span class="p">)</span>
+
+<span class="c1"># Check if multi-AOI or single AOI</span>
+<span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">total_aois</span><span class="p">:</span>
+    <span class="c1"># Multi-AOI: Show GeoCatalog first, then Local Output</span>
+    <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">published</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">☁️  GeoCatalog Published:&quot;</span><span class="p">)</span>
+        <span class="n">collection_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">geocatalog_uri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">/collections/</span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">collection_name</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Collection: </span><span class="si">{</span><span class="n">collection_url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Items published: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">successful_aois</span><span class="si">}</span><span class="s2"> AOIs&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Blob storage: </span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">storage_url</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">blob_container</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">run_id</span><span class="si">}</span><span class="s2">/&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">   💡 View individual AOI results in the GeoCatalog collection&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">⚠️  GeoCatalog publishing: Not enabled or failed&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Local output (only shown if save_local=True)</span>
+    <span class="k">if</span> <span class="n">output</span><span class="o">.</span><span class="n">save_local</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">💾 Local Output:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Directory: </span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">output_dir</span><span class="si">}</span><span class="s2">/&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Structure:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      </span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">output_dir</span><span class="si">}</span><span class="s2">/&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      ├── &lt;aoi_id&gt;/&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      │   ├── detections.geojson  (filtered to AOI bounds)&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      │   └── final_overlay.jpg   (visual overlay)&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Multi-AOI results statistics</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">🌍 Multi-AOI Processing:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Total AOIs: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">total_aois</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Successful: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">successful_aois</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Failed: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">total_aois</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">result</span><span class="o">.</span><span class="n">successful_aois</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">📈 Aggregate Statistics:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Total chips: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">total_chips</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Successful: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">successful_chips</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Total detections: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">detection_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">🏗️  Detections by Category:&quot;</span><span class="p">)</span>
+    <span class="c1"># Aggregate detection counts from all AOIs</span>
+    <span class="n">aoi_results</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">_raw_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;results&#39;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="k">if</span> <span class="n">aoi_results</span><span class="p">:</span>
+        <span class="n">category_totals</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">for</span> <span class="n">aoi_result</span> <span class="ow">in</span> <span class="n">aoi_results</span><span class="p">:</span>
+            <span class="n">aoi_data</span> <span class="o">=</span> <span class="n">aoi_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;result&#39;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="k">if</span> <span class="s1">&#39;detection_counts&#39;</span> <span class="ow">in</span> <span class="n">aoi_data</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">category</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">aoi_data</span><span class="p">[</span><span class="s1">&#39;detection_counts&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="n">category_totals</span><span class="p">[</span><span class="n">category</span><span class="p">]</span> <span class="o">=</span> <span class="n">category_totals</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">category</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span> <span class="o">+</span> <span class="n">count</span>
+        
+        <span class="k">if</span> <span class="n">category_totals</span><span class="p">:</span>
+            <span class="k">for</span> <span class="n">category</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">category_totals</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                <span class="n">icon</span> <span class="o">=</span> <span class="s2">&quot;🏢&quot;</span> <span class="k">if</span> <span class="n">category</span> <span class="o">==</span> <span class="s2">&quot;Building&quot;</span> <span class="k">else</span> <span class="s2">&quot;🛣️&quot;</span> <span class="k">if</span> <span class="n">category</span> <span class="o">==</span> <span class="s2">&quot;Road&quot;</span> <span class="k">else</span> <span class="s2">&quot;🚂&quot;</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   </span><span class="si">{</span><span class="n">icon</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">category</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Total detections: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">detection_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Total detections: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">detection_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">📍 Per-AOI Breakdown:&quot;</span><span class="p">)</span>
+    <span class="n">aoi_results</span> <span class="o">=</span> <span class="n">result</span><span class="o">.</span><span class="n">_raw_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;results&#39;</span><span class="p">,</span> <span class="p">[])</span>
+    <span class="k">if</span> <span class="n">aoi_results</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">aoi_result</span> <span class="ow">in</span> <span class="n">aoi_results</span><span class="p">:</span>
+            <span class="n">aoi_id</span> <span class="o">=</span> <span class="n">aoi_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;aoi_id&#39;</span><span class="p">,</span> <span class="s1">&#39;unknown&#39;</span><span class="p">)</span>
+            <span class="n">aoi_data</span> <span class="o">=</span> <span class="n">aoi_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;result&#39;</span><span class="p">,</span> <span class="p">{})</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   </span><span class="si">{</span><span class="n">aoi_id</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span><span class="si">}</span><span class="s2">:&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      Chips: </span><span class="si">{</span><span class="n">aoi_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;total_chips&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;      Detections: </span><span class="si">{</span><span class="n">aoi_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;detection_count&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;detection_counts&#39;</span> <span class="ow">in</span> <span class="n">aoi_data</span><span class="p">:</span>
+                <span class="k">for</span> <span class="n">cat</span><span class="p">,</span> <span class="n">cnt</span> <span class="ow">in</span> <span class="n">aoi_data</span><span class="p">[</span><span class="s1">&#39;detection_counts&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+                    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;         </span><span class="si">{</span><span class="n">cat</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">cnt</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="c1"># Single AOI results</span>
+    <span class="k">if</span> <span class="n">result</span><span class="o">.</span><span class="n">published</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">☁️  GeoCatalog Published:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Run ID: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">run_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Collection: </span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">collection_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   View: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">geocatalog_url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Blob path: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">blob_base_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">⚠️  GeoCatalog publishing: Not enabled or failed&quot;</span><span class="p">)</span>
+    
+    <span class="c1"># Local output (only shown if save_local=True)</span>
+    <span class="k">if</span> <span class="n">output</span><span class="o">.</span><span class="n">save_local</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">💾 Local Output:&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Directory: </span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">output_dir</span><span class="si">}</span><span class="s2">/&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Files: detections.geojson, final_overlay.jpg&quot;</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">📈 Processing Summary:&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Total chips: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">total_chips</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Successful: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">successful_chips</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Failed: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">total_chips</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">result</span><span class="o">.</span><span class="n">successful_chips</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">🏗️  Detections by Category:&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">result</span><span class="p">,</span> <span class="s1">&#39;detection_counts&#39;</span><span class="p">)</span> <span class="ow">and</span> <span class="n">result</span><span class="o">.</span><span class="n">detection_counts</span><span class="p">:</span>
+        <span class="k">for</span> <span class="n">category</span><span class="p">,</span> <span class="n">count</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">detection_counts</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="n">icon</span> <span class="o">=</span> <span class="s2">&quot;🏢&quot;</span> <span class="k">if</span> <span class="n">category</span> <span class="o">==</span> <span class="s2">&quot;Building&quot;</span> <span class="k">else</span> <span class="s2">&quot;🛣️&quot;</span> <span class="k">if</span> <span class="n">category</span> <span class="o">==</span> <span class="s2">&quot;Road&quot;</span> <span class="k">else</span> <span class="s2">&quot;🚂&quot;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   </span><span class="si">{</span><span class="n">icon</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">category</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Total detections: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">detection_count</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;=&quot;</span><span class="o">*</span><span class="mi">70</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+<section id="next-steps">
+<h2>12. Next Steps<a class="headerlink" href="#next-steps" title="Permalink to this heading">#</a></h2>
+<p><strong>View Results:</strong></p>
+<ul class="simple">
+<li><p>Open GeoCatalog URL above to visualize detections</p>
+<ul>
+<li><p>Buildings: Red polygons</p></li>
+<li><p>Roads: Cyan lines</p></li>
+<li><p>Railways: Yellow lines</p></li>
+</ul>
+</li>
+<li><p>Check <code class="docutils literal notranslate"><span class="pre">./output/</span></code> directory for local files and visualizations</p></li>
+<li><p>Load GeoJSON in QGIS, ArcGIS, or other GIS tools</p></li>
+</ul>
+<p><strong>Process More Locations:</strong></p>
+<ul class="simple">
+<li><p>Add more AOIs to the GeoDataFrame in section 5</p></li>
+<li><p>Use GeoParquet file like EOOS example: <code class="docutils literal notranslate"><span class="pre">constraint</span> <span class="pre">=</span> <span class="pre">geoai.Constraint(aois=&quot;areas.geoparquet&quot;,</span> <span class="pre">...)</span></code></p></li>
+<li><p>Create custom AOIs with different Miami neighborhoods</p></li>
+</ul>
+<p><strong>Adjust Parameters:</strong></p>
+<ul class="simple">
+<li><p><strong>Threshold</strong> (section 8): Increase to reduce false positives (try 0.7-0.8)</p></li>
+<li><p><strong>Categories</strong> (section 8): Filter specific features <code class="docutils literal notranslate"><span class="pre">[&quot;Building&quot;]</span></code> or <code class="docutils literal notranslate"><span class="pre">[&quot;Road&quot;,</span> <span class="pre">&quot;Railway&quot;]</span></code></p></li>
+<li><p><strong>Chip size</strong> (section 8): Larger chips (1024px) for coverage, smaller (512px) for detail</p></li>
+<li><p><strong>AOIs</strong> (section 5): Add/remove locations, change datetime range</p></li>
+</ul>
+<p><strong>Before Large Jobs:</strong></p>
+<ul class="simple">
+<li><p>Always run estimation (section 9) to verify data availability</p></li>
+<li><p>Check chip count and adjust stride if needed</p></li>
+<li><p>Test on small AOI subset first to validate parameters</p></li>
+</ul>
+<p><strong>Multi-AOI Tips:</strong></p>
+<ul class="simple">
+<li><p>SDK processes each AOI independently</p></li>
+<li><p>Failed AOIs don’t stop the entire job</p></li>
+<li><p>All results published to single GeoCatalog collection</p></li>
+<li><p>Check per-AOI breakdown in results</p></li>
+</ul>
+<p><strong>Troubleshooting:</strong></p>
+<ul class="simple">
+<li><p><strong>No detections</strong>: Lower threshold, verify AOI has visible structures</p></li>
+<li><p><strong>Too many false positives</strong>: Increase threshold, filter by category</p></li>
+<li><p><strong>Missing buildings</strong>: Check AOI has clear building footprints</p></li>
+<li><p><strong>Authentication errors</strong>: Run <code class="docutils literal notranslate"><span class="pre">az</span> <span class="pre">login</span></code> and verify RBAC roles</p></li>
+<li><p><strong>GeoCatalog errors</strong>: Check collection exists and credentials have write access</p></li>
+<li><p><strong>Some AOIs skipped</strong>: Check STAC item coverage, expand datetime range</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="additional-resources">
+<h2>📚 Additional Resources<a class="headerlink" href="#additional-resources" title="Permalink to this heading">#</a></h2>
+<p><strong>Documentation:</strong></p>
+<ul class="simple">
+<li><p><span class="xref myst">SDK Documentation</span> - Complete SDK reference</p></li>
+<li><p><span class="xref myst">Examples README</span> - All example notebooks</p></li>
+<li><p><span class="xref myst">EOOS Notebook</span> - Object detection workflow</p></li>
+</ul>
+<p><strong>External Resources:</strong></p>
+<ul class="simple">
+<li><p><a class="reference external" href="https://arxiv.org/abs/2212.07689">MARS Model Paper</a> - Research paper</p></li>
+<li><p><a class="reference external" href="https://planetarycomputer.microsoft.com/">Planetary Computer</a> - Public STAC catalog</p></li>
+<li><p><a class="reference external" href="https://planetarycomputer.microsoft.com/dataset/naip">NAIP Imagery</a> - Dataset documentation</p></li>
+<li><p><a class="reference external" href="https://stacspec.org/">STAC Specification</a> - STAC API reference</p></li>
+</ul>
+<p><strong>SDK Features:</strong></p>
+<ul class="simple">
+<li><p>🔍 <strong>Discovery</strong>: <code class="docutils literal notranslate"><span class="pre">models.list()</span></code>, <code class="docutils literal notranslate"><span class="pre">models.get()</span></code>, <code class="docutils literal notranslate"><span class="pre">Model.get_supported_collections()</span></code></p></li>
+<li><p>🔒 <strong>Validation</strong>: Automatic input/collection validation before processing</p></li>
+<li><p>📊 <strong>Estimation</strong>: <code class="docutils literal notranslate"><span class="pre">model.estimate()</span></code> - Preview chip count and verify data</p></li>
+<li><p>🚀 <strong>Execution</strong>: <code class="docutils literal notranslate"><span class="pre">model.run()</span></code> - Process with automatic validation</p></li>
+</ul>
+<p><strong>Model Details:</strong></p>
+<ul class="simple">
+<li><p>MARS detects: Building (Polygon), Road (LineString), Railway (LineString)</p></li>
+<li><p>Optimized for high-resolution aerial imagery (&lt; 1m/pixel)</p></li>
+<li><p>Returns native GeoJSON geometries (not just bounding boxes)</p></li>
+</ul>
+<p><strong>Support:</strong></p>
+<ul class="simple">
+<li><p>GitHub: Report issues or contribute</p></li>
+<li><p>Azure Orbital Spatio Team: Technical support</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "geoai-sdk"
+        },
+        kernelOptions: {
+            name: "geoai-sdk",
+            path: "./examples"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'geoai-sdk'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="eoos_object_detection.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">EO-OS Object Detection</p>
+      </div>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-this-does">What This Does:</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-capabilities">Key Capabilities:</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#workflow-overview">Workflow Overview:</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites:</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#setup-and-imports">1. Setup and Imports</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#azure-authentication">2. Azure Authentication</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#discover-available-models-optional">3. Discover Available Models (Optional)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-input-source">4. Define Input Source</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#define-areas-of-interest-multi-aoi">5. Define Areas of Interest (Multi-AOI)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-advanced-custom-stac-search-optional">5a. Advanced: Custom STAC Search (Optional)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configure-output-destination">6. Configure Output Destination</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#initialize-mars-model">7. Initialize MARS Model</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#configure-detection-parameters">8. Configure Detection Parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#a-validate-input-optional-but-recommended">8a. Validate Input (Optional but Recommended)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#estimate-job-scope-optional-but-recommended">9. Estimate Job Scope (Optional but Recommended)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#run-mars-map-generation">10. Run MARS Map Generation</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#view-results">11. View Results</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#next-steps">12. Next Steps</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-resources">📚 Additional Resources</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Microsoft Corporation
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

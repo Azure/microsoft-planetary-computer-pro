@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>Models &#8212; GeoAI with Microsoft Planetary Computer Pro</title>
+    <title>Input &#8212; GeoAI with Microsoft Planetary Computer Pro</title>
   
   
   
@@ -62,12 +62,12 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="../_static/sphinx-thebe.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'models/placeholder';</script>
-    <link rel="canonical" href="https://azure.github.io/microsoft-planetary-computer-pro/geoai/models/placeholder.html" />
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/input';</script>
+    <link rel="canonical" href="https://azure.github.io/microsoft-planetary-computer-pro/geoai/api/input.html" />
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="EO-OS Object Detection" href="../examples/eoos_object_detection.html" />
-    <link rel="prev" title="Validation" href="../api/validation.html" />
+    <link rel="next" title="Output" href="output.html" />
+    <link rel="prev" title="API Reference" href="index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -173,21 +173,21 @@ const thebe_selector_output = ".output, .cell_output"
             </li>
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">GeoAI SDK</span></p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../geoai-sdk/README.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../sdk-index.html">Documentation</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../api/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../api/input.html">Input</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api/output.html">Output</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api/constraints.html">Constraints</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api/models.html">Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api/validation.html">Validation</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">API Reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="constraints.html">Constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="validation.html">Validation</a></li>
 </ul>
 </details></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Models</span></p>
-<ul class="current nav bd-sidenav">
-<li class="toctree-l1 current active"><a class="current reference internal" href="#">Models</a></li>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../models/placeholder.html">Models</a></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul class="nav bd-sidenav">
@@ -264,7 +264,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://github.com/Azure/microsoft-planetary-computer-pro/issues/new?title=Issue%20on%20page%20%2Fmodels/placeholder.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/Azure/microsoft-planetary-computer-pro/issues/new?title=Issue%20on%20page%20%2Fapi/input.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -294,7 +294,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="../_sources/models/placeholder.md" target="_blank"
+      <li><a href="../_sources/api/input.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -365,7 +365,9 @@ document.write(`
   </button>
 `);
 </script>
-
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
 </div></div>
       
     </div>
@@ -376,11 +378,27 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>Models</h1>
+    <h1>Input</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
             
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constructor">Constructor</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#required-parameters">Required Parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-parameters">Optional Parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#planetary-computer-default">Planetary Computer (Default)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#private-geocatalog">Private GeoCatalog</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#see-also">See Also</a></li>
+</ul>
+            </nav>
         </div>
     </div>
 </div>
@@ -390,13 +408,74 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="models">
-<h1>Models<a class="headerlink" href="#models" title="Permalink to this heading">#</a></h1>
-<p>Overview of GeoAI models available through Microsoft Planetary Computer Pro.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>Content coming soon.</p>
+  <section id="input">
+<h1>Input<a class="headerlink" href="#input" title="Permalink to this heading">#</a></h1>
+<p>Configure where the SDK retrieves geospatial data.</p>
+<hr class="docutils" />
+<section id="constructor">
+<h2>Constructor<a class="headerlink" href="#constructor" title="Permalink to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">Input</span><span class="p">(</span><span class="n">collection</span><span class="p">,</span> <span class="n">geocatalog_uri</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">credential</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
 </div>
+</section>
+<hr class="docutils" />
+<section id="required-parameters">
+<h2>Required Parameters<a class="headerlink" href="#required-parameters" title="Permalink to this heading">#</a></h2>
+<p><strong><code class="docutils literal notranslate"><span class="pre">collection</span></code></strong> : <code class="docutils literal notranslate"><span class="pre">str</span></code><br />
+STAC collection name containing the imagery.</p>
+<p><strong>Common collections:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">naip</span></code> - High-resolution aerial imagery (0.6m, USA only)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">sentinel-2-l2a</span></code> - Sentinel-2 satellite (10m, global)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">landsat-c2-l2</span></code> - Landsat Collection 2 (30m, global)</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="optional-parameters">
+<h2>Optional Parameters<a class="headerlink" href="#optional-parameters" title="Permalink to this heading">#</a></h2>
+<p><strong><code class="docutils literal notranslate"><span class="pre">geocatalog_uri</span></code></strong> : <code class="docutils literal notranslate"><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></code><br />
+STAC API endpoint URL. Default: Planetary Computer</p>
+<p><strong>Default:</strong> <code class="docutils literal notranslate"><span class="pre">https://planetarycomputer.microsoft.com/api/stac/v1</span></code></p>
+<p><strong>Custom GeoCatalog example:</strong> <code class="docutils literal notranslate"><span class="pre">https://your-geocatalog.com/stac</span></code></p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">credential</span></code></strong> : <code class="docutils literal notranslate"><span class="pre">Any</span> <span class="pre">|</span> <span class="pre">None</span></code><br />
+Azure credential for authentication. Required for private GeoCatalogs.</p>
+<p><strong>Example:</strong> <code class="docutils literal notranslate"><span class="pre">DefaultAzureCredential()</span></code></p>
+</section>
+<hr class="docutils" />
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">#</a></h2>
+<section id="planetary-computer-default">
+<h3>Planetary Computer (Default)<a class="headerlink" href="#planetary-computer-default" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geoai</span>
+
+<span class="c1"># Uses Planetary Computer by default</span>
+<span class="n">input_source</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">collection</span><span class="o">=</span><span class="s2">&quot;naip&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="private-geocatalog">
+<h3>Private GeoCatalog<a class="headerlink" href="#private-geocatalog" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">azure.identity</span><span class="w"> </span><span class="kn">import</span> <span class="n">DefaultAzureCredential</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">geoai</span>
+
+<span class="n">input_source</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span>
+    <span class="n">collection</span><span class="o">=</span><span class="s2">&quot;custom-imagery&quot;</span><span class="p">,</span>
+    <span class="n">geocatalog_uri</span><span class="o">=</span><span class="s2">&quot;https://my-geocatalog.com/stac&quot;</span><span class="p">,</span>
+    <span class="n">credential</span><span class="o">=</span><span class="n">DefaultAzureCredential</span><span class="p">()</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong><span class="xref myst">Complete Example</span></strong> - Full workflow with Input configuration</p></li>
+<li><p><strong><a class="reference internal" href="output.html"><span class="doc std std-doc">Output</span></a></strong> - Configure result destinations</p></li>
+<li><p><strong><a class="reference internal" href="constraints.html"><span class="doc std std-doc">Constraint</span></a></strong> - Filter imagery</p></li>
+</ul>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -412,7 +491,7 @@ document.write(`
         },
         kernelOptions: {
             name: "python3",
-            path: "./models"
+            path: "./api"
         },
         predefinedOutput: true
     }
@@ -430,20 +509,20 @@ document.write(`
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../api/validation.html"
+       href="index.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Validation</p>
+        <p class="prev-next-title">API Reference</p>
       </div>
     </a>
     <a class="right-next"
-       href="../examples/eoos_object_detection.html"
+       href="output.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">EO-OS Object Detection</p>
+        <p class="prev-next-title">Output</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -453,6 +532,29 @@ document.write(`
             </div>
             
             
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#constructor">Constructor</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#required-parameters">Required Parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#optional-parameters">Optional Parameters</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#planetary-computer-default">Planetary Computer (Default)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#private-geocatalog">Private GeoCatalog</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#see-also">See Also</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
               
             
           </div>

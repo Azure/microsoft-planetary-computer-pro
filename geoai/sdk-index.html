@@ -9,7 +9,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
 
-    <title>GeoAI &#8212; GeoAI with Microsoft Planetary Computer Pro</title>
+    <title>GeoAI SDK Documentation &#8212; GeoAI with Microsoft Planetary Computer Pro</title>
   
   
   
@@ -62,11 +62,12 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
-    <script>DOCUMENTATION_OPTIONS.pagename = 'intro';</script>
-    <link rel="canonical" href="https://azure.github.io/microsoft-planetary-computer-pro/geoai/intro.html" />
+    <script>DOCUMENTATION_OPTIONS.pagename = 'sdk-index';</script>
+    <link rel="canonical" href="https://azure.github.io/microsoft-planetary-computer-pro/geoai/sdk-index.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="GeoAI SDK" href="geoai-sdk/README.html" />
+    <link rel="next" title="API Reference" href="api/index.html" />
+    <link rel="prev" title="GeoAI SDK" href="geoai-sdk/README.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -129,8 +130,6 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-        
-      
       <div class="bd-sidebar-primary bd-sidebar">
         
 
@@ -149,7 +148,7 @@ const thebe_selector_output = ".output, .cell_output"
     
   
 
-<a class="navbar-brand logo" href="#">
+<a class="navbar-brand logo" href="intro.html">
   
   
   
@@ -167,16 +166,16 @@ const thebe_selector_output = ".output, .cell_output"
     <div class="bd-toc-item navbar-nav active">
         
         <ul class="nav bd-sidenav bd-sidenav__home-link">
-            <li class="toctree-l1 current active">
-                <a class="reference internal" href="#">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
                     GeoAI
                 </a>
             </li>
         </ul>
         <p aria-level="2" class="caption" role="heading"><span class="caption-text">GeoAI SDK</span></p>
-<ul class="nav bd-sidenav">
+<ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="geoai-sdk/README.html">Overview</a></li>
-<li class="toctree-l1"><a class="reference internal" href="sdk-index.html">Documentation</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Documentation</a></li>
 <li class="toctree-l1 has-children"><a class="reference internal" href="api/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
 <li class="toctree-l2"><a class="reference internal" href="api/input.html">Input</a></li>
 <li class="toctree-l2"><a class="reference internal" href="api/output.html">Output</a></li>
@@ -265,7 +264,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="https://github.com/Azure/microsoft-planetary-computer-pro/issues/new?title=Issue%20on%20page%20%2Fintro.html&body=Your%20issue%20content%20here." target="_blank"
+      <li><a href="https://github.com/Azure/microsoft-planetary-computer-pro/issues/new?title=Issue%20on%20page%20%2Fsdk-index.html&body=Your%20issue%20content%20here." target="_blank"
    class="btn btn-sm btn-source-issues-button dropdown-item"
    title="Open an issue"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -295,7 +294,7 @@ const thebe_selector_output = ".output, .cell_output"
       
       
       
-      <li><a href="_sources/intro.md" target="_blank"
+      <li><a href="_sources/sdk-index.md" target="_blank"
    class="btn btn-sm btn-download-source-button dropdown-item"
    title="Download source file"
    data-bs-placement="left" data-bs-toggle="tooltip"
@@ -379,7 +378,7 @@ document.write(`
               
 
 <div id="jb-print-docs-body" class="onlyprint">
-    <h1>GeoAI</h1>
+    <h1>GeoAI SDK Documentation</h1>
     <!-- Table of contents -->
     <div id="print-main-content">
         <div id="jb-print-toc">
@@ -389,7 +388,28 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#about">About</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-links">Quick Links</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api-reference">API Reference</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-classes">Core Classes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#features">Features</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-installation">Local Installation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#development">Development</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture">Architecture</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#public-api-layer">1. Public API Layer</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#executors-layer">2. Executors Layer</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-components-layer">3. Core Components Layer</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-models">Supported Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#support">Support</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#license">License</a></li>
 </ul>
             </nav>
         </div>
@@ -401,23 +421,149 @@ document.write(`
 <div id="searchbox"></div>
                 <article class="bd-article">
                   
-  <section id="geoai">
-<h1>GeoAI<a class="headerlink" href="#geoai" title="Permalink to this heading">#</a></h1>
-<p>Welcome to the GeoAI documentation for Microsoft Planetary Computer Pro.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This site is under construction. Content will be added soon.</p>
-</div>
-<section id="about">
-<h2>About<a class="headerlink" href="#about" title="Permalink to this heading">#</a></h2>
-<p>GeoAI brings together geospatial data from Microsoft Planetary Computer with AI foundation models to enable Earth observation analysis at scale.</p>
+  <section id="geoai-sdk-documentation">
+<h1>GeoAI SDK Documentation<a class="headerlink" href="#geoai-sdk-documentation" title="Permalink to this heading">#</a></h1>
+<p>Python SDK for running geospatial AI models at scale on Azure AI Foundry and Planetary Computer.</p>
+<hr class="docutils" />
+<section id="quick-links">
+<h2>Quick Links<a class="headerlink" href="#quick-links" title="Permalink to this heading">#</a></h2>
+<p>📖 <strong><span class="xref myst">README</span></strong> - Overview and quick start<br />
+📓 <strong><span class="xref myst">Example Notebooks</span></strong> - Interactive tutorials<br />
+🔧 <strong><span class="xref myst">API Reference</span></strong> - Complete parameter documentation</p>
 </section>
-<div class="toctree-wrapper compound">
+<hr class="docutils" />
+<section id="getting-started">
+<h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Install:</strong> Clone the repository and run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.</span></code></p></li>
+<li><p><strong>Learn:</strong> Try the <span class="xref myst">EOOS notebook</span> or <span class="xref myst">MARS notebook</span></p></li>
+<li><p><strong>Reference:</strong> Use API docs below for parameter details</p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="api-reference">
+<h2>API Reference<a class="headerlink" href="#api-reference" title="Permalink to this heading">#</a></h2>
+<section id="core-classes">
+<h3>Core Classes<a class="headerlink" href="#core-classes" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong><a class="reference internal" href="api/input.html"><span class="doc std std-doc">Input</span></a></strong> - Configure data sources (STAC catalogs, collections)</p></li>
+<li><p><strong><a class="reference internal" href="api/output.html"><span class="doc std std-doc">Output</span></a></strong> - Configure result destinations (GeoCatalog, blob storage)</p></li>
+<li><p><strong><a class="reference internal" href="api/constraints.html"><span class="doc std std-doc">Constraint</span></a></strong> - Filter by space, time, and properties</p></li>
+<li><p><strong><a class="reference internal" href="api/models.html"><span class="doc std std-doc">Models</span></a></strong> - Available models (EOOS, MARS)</p></li>
+</ul>
+</section>
+<section id="features">
+<h3>Features<a class="headerlink" href="#features" title="Permalink to this heading">#</a></h3>
+<ul class="simple">
+<li><p><strong><a class="reference internal" href="api/validation.html"><span class="doc std std-doc">Validation</span></a></strong> - Pre-flight checks for input, model, and output</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">#</a></h2>
+<p>All examples are available as Jupyter notebooks in <span class="xref myst">examples/</span>:</p>
+<ul class="simple">
+<li><p><strong><span class="xref myst">EOOS Object Detection</span></strong> - Detect objects in satellite imagery</p></li>
+<li><p><strong><span class="xref myst">MARS Map Generation</span></strong> - Extract buildings, roads, railways</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">#</a></h2>
+<section id="local-installation">
+<h3>Local Installation<a class="headerlink" href="#local-installation" title="Permalink to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clone the repository</span>
+<span class="nb">cd</span><span class="w"> </span>geoai-sdk
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+</pre></div>
 </div>
-<div class="toctree-wrapper compound">
+</section>
+<section id="development">
+<h3>Development<a class="headerlink" href="#development" title="Permalink to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># For contributors: install with dev tools</span>
+<span class="nb">cd</span><span class="w"> </span>geoai-sdk
+pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span>
+
+<span class="c1"># Format code before commits</span>
+python<span class="w"> </span>-m<span class="w"> </span>black<span class="w"> </span>geoai/<span class="w"> </span>--line-length<span class="w"> </span><span class="m">100</span>
+python<span class="w"> </span>-m<span class="w"> </span>isort<span class="w"> </span>geoai/<span class="w"> </span>--profile<span class="w"> </span>black<span class="w"> </span>--line-length<span class="w"> </span><span class="m">100</span>
+python<span class="w"> </span>-m<span class="w"> </span>flake8<span class="w"> </span>geoai/<span class="w"> </span>--count<span class="w"> </span>--select<span class="o">=</span>E9,F63,F7,F82
+</pre></div>
 </div>
-<div class="toctree-wrapper compound">
+</section>
+</section>
+<hr class="docutils" />
+<section id="architecture">
+<h2>Architecture<a class="headerlink" href="#architecture" title="Permalink to this heading">#</a></h2>
+<p>The SDK is built with three layers:</p>
+<section id="public-api-layer">
+<h3>1. Public API Layer<a class="headerlink" href="#public-api-layer" title="Permalink to this heading">#</a></h3>
+<p>User-facing classes for configuration:</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="api/input.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">Input</span></code></span></a> - Data source configuration</p></li>
+<li><p><a class="reference internal" href="api/output.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">Output</span></code></span></a> - Result destination</p></li>
+<li><p><a class="reference internal" href="api/constraints.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">Constraint</span></code></span></a> - Spatial/temporal filtering</p></li>
+<li><p><a class="reference internal" href="api/models.html"><span class="doc std std-doc"><code class="docutils literal notranslate"><span class="pre">Models</span></code></span></a> - EOOS, MARS</p></li>
+</ul>
+</section>
+<section id="executors-layer">
+<h3>2. Executors Layer<a class="headerlink" href="#executors-layer" title="Permalink to this heading">#</a></h3>
+<p>Handles workflow execution:</p>
+<ul class="simple">
+<li><p><strong>LocalExecutor</strong> - Sequential processing with progress bars</p></li>
+</ul>
+</section>
+<section id="core-components-layer">
+<h3>3. Core Components Layer<a class="headerlink" href="#core-components-layer" title="Permalink to this heading">#</a></h3>
+<p>Reusable business logic:</p>
+<ul class="simple">
+<li><p><strong>Spatial</strong> - ChipMaker, DetectionMerger</p></li>
+<li><p><strong>STAC</strong> - STACSearcher, ItemSelector</p></li>
+<li><p><strong>Imagery</strong> - ImageFetcher, ImagePreprocessor</p></li>
+<li><p><strong>Models</strong> - ModelClient, PayloadBuilder, ResponseParser</p></li>
+<li><p><strong>Results</strong> - DetectionFormatter, GeoCatalogWriter</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="supported-models">
+<h2>Supported Models<a class="headerlink" href="#supported-models" title="Permalink to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Input</p></th>
+<th class="head"><p>Output</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><a class="reference internal" href="api/models.html"><span class="doc std std-doc">EOOS</span></a></p></td>
+<td><p>Object Detection</p></td>
+<td><p>NAIP</p></td>
+<td><p>GeoJSON Features</p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="api/models.html"><span class="doc std std-doc">MARS</span></a></p></td>
+<td><p>Map Generation</p></td>
+<td><p>NAIP</p></td>
+<td><p>GeoJSON Features</p></td>
+</tr>
+</tbody>
+</table>
 </div>
+</section>
+<hr class="docutils" />
+<section id="support">
+<h2>Support<a class="headerlink" href="#support" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong>Team:</strong> Azure Orbital Spatio Team</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this heading">#</a></h2>
+<p>This project is licensed under the MIT License - see the LICENSE file for details.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -450,12 +596,21 @@ document.write(`
                 <footer class="prev-next-footer d-print-none">
                   
 <div class="prev-next-area">
-    <a class="right-next"
+    <a class="left-prev"
        href="geoai-sdk/README.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">GeoAI SDK</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="api/index.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">GeoAI SDK</p>
+        <p class="prev-next-title">API Reference</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -475,7 +630,28 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#about">About</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#quick-links">Quick Links</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#getting-started">Getting Started</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#api-reference">API Reference</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-classes">Core Classes</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#features">Features</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-installation">Local Installation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#development">Development</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#architecture">Architecture</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#public-api-layer">1. Public API Layer</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#executors-layer">2. Executors Layer</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#core-components-layer">3. Core Components Layer</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#supported-models">Supported Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#support">Support</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#license">License</a></li>
 </ul>
   </nav></div>
 

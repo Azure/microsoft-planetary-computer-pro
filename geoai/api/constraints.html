@@ -1,0 +1,910 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Constraints &#8212; GeoAI with Microsoft Planetary Computer Pro</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/constraints';</script>
+    <link rel="canonical" href="https://azure.github.io/microsoft-planetary-computer-pro/geoai/api/constraints.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Models" href="models.html" />
+    <link rel="prev" title="Output" href="output.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/planetary-computer-pro-ai.svg" class="logo__image only-light" alt="GeoAI with Microsoft Planetary Computer Pro - Home"/>
+    <script>document.write(`<img src="../_static/planetary-computer-pro-ai.svg" class="logo__image only-dark" alt="GeoAI with Microsoft Planetary Computer Pro - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    GeoAI
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">GeoAI SDK</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../geoai-sdk/README.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sdk-index.html">Documentation</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">API Reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="input.html">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html">Models</a></li>
+<li class="toctree-l2"><a class="reference internal" href="validation.html">Validation</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../models/placeholder.html">Models</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../examples/eoos_object_detection.html">EO-OS Object Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/mars_map_generation.html">MARS Map Generation</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/Azure/microsoft-planetary-computer-pro" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/Azure/microsoft-planetary-computer-pro/issues/new?title=Issue%20on%20page%20%2Fapi/constraints.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/api/constraints.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Constraints</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters">Parameters</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#single-aoi-parameters-choose-one">Single AOI Parameters (choose one)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-aoi-parameters">Multi-AOI Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#temporal-filtering">Temporal Filtering</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-filters">Additional Filters</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#single-aoi-bounding-box">Single AOI - Bounding Box</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#single-aoi-geometry">Single AOI - Geometry</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#single-aoi-with-filters">Single AOI - With Filters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#complex-geometry-from-file">Complex Geometry from File</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-aoi-geodataframe">Multi-AOI - GeoDataFrame</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-aoi-geoparquet-file">Multi-AOI - GeoParquet File</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-aoi-with-properties">Multi-AOI with Properties</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-aoi-benefits">Multi-AOI Benefits</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mode-detection">Mode Detection</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validation">Validation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-validation-errors">Common Validation Errors</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cql2-filter-examples">CQL2 Filter Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cloud-cover">Cloud Cover</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resolution">Resolution</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#combined-filters">Combined Filters</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#see-also">See Also</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="constraints">
+<h1>Constraints<a class="headerlink" href="#constraints" title="Permalink to this heading">#</a></h1>
+<p>Constraint classes define spatial, temporal, and model-specific filtering for model execution.</p>
+<hr class="docutils" />
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
+<p>The SDK supports two modes:</p>
+<ul class="simple">
+<li><p><strong>Single AOI</strong> - Process one location (bbox or geometry)</p></li>
+<li><p><strong>Multi-AOI</strong> - Process multiple locations concurrently (GeoDataFrame or GeoParquet)</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="parameters">
+<h2>Parameters<a class="headerlink" href="#parameters" title="Permalink to this heading">#</a></h2>
+<section id="single-aoi-parameters-choose-one">
+<h3>Single AOI Parameters (choose one)<a class="headerlink" href="#single-aoi-parameters-choose-one" title="Permalink to this heading">#</a></h3>
+<p><strong><code class="docutils literal notranslate"><span class="pre">bbox</span></code></strong> : <code class="docutils literal notranslate"><span class="pre">List[float]</span> <span class="pre">|</span> <span class="pre">None</span></code><br />
+Bounding box in WGS84 coordinates: <code class="docutils literal notranslate"><span class="pre">[west,</span> <span class="pre">south,</span> <span class="pre">east,</span> <span class="pre">north]</span></code> (longitude, latitude).</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">geometry</span></code></strong> : <code class="docutils literal notranslate"><span class="pre">Dict</span> <span class="pre">|</span> <span class="pre">None</span></code><br />
+GeoJSON geometry (alternative to bbox). Supports Polygon, MultiPolygon, etc.</p>
+</section>
+<section id="multi-aoi-parameters">
+<h3>Multi-AOI Parameters<a class="headerlink" href="#multi-aoi-parameters" title="Permalink to this heading">#</a></h3>
+<p><strong><code class="docutils literal notranslate"><span class="pre">aois</span></code></strong> : <code class="docutils literal notranslate"><span class="pre">GeoDataFrame</span> <span class="pre">|</span> <span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></code><br />
+Multiple areas of interest for concurrent processing.</p>
+<p>Accepts:</p>
+<ul class="simple">
+<li><p><strong>GeoDataFrame</strong> - Direct GeoDataFrame with geometries</p></li>
+<li><p><strong>str</strong> - Path to GeoParquet file (<code class="docutils literal notranslate"><span class="pre">.geoparquet</span></code>)</p></li>
+</ul>
+<p><strong>Requirements:</strong></p>
+<ul class="simple">
+<li><p>Must have <code class="docutils literal notranslate"><span class="pre">geometry</span></code> column</p></li>
+<li><p>Recommended: Include <code class="docutils literal notranslate"><span class="pre">id</span></code> column for tracking results</p></li>
+<li><p>CRS: Any (automatically converted to EPSG:4326)</p></li>
+</ul>
+</section>
+<section id="temporal-filtering">
+<h3>Temporal Filtering<a class="headerlink" href="#temporal-filtering" title="Permalink to this heading">#</a></h3>
+<p><strong><code class="docutils literal notranslate"><span class="pre">datetime</span></code></strong> : <code class="docutils literal notranslate"><span class="pre">str</span> <span class="pre">|</span> <span class="pre">None</span></code><br />
+ISO 8601 datetime or range:</p>
+<ul class="simple">
+<li><p>Single: <code class="docutils literal notranslate"><span class="pre">&quot;2024-01-15T00:00:00Z&quot;</span></code></p></li>
+<li><p>Range: <code class="docutils literal notranslate"><span class="pre">&quot;2024-01-01/2024-12-31&quot;</span></code></p></li>
+<li><p>Open-ended: <code class="docutils literal notranslate"><span class="pre">&quot;2024-01-01/..&quot;</span></code> or <code class="docutils literal notranslate"><span class="pre">&quot;../2024-12-31&quot;</span></code></p></li>
+</ul>
+</section>
+<section id="additional-filters">
+<h3>Additional Filters<a class="headerlink" href="#additional-filters" title="Permalink to this heading">#</a></h3>
+<p><strong><code class="docutils literal notranslate"><span class="pre">filter</span></code></strong> : <code class="docutils literal notranslate"><span class="pre">Dict</span> <span class="pre">|</span> <span class="pre">None</span></code><br />
+CQL2-JSON filter for STAC search. Common filters:</p>
+<ul class="simple">
+<li><p>Cloud cover: <code class="docutils literal notranslate"><span class="pre">{&quot;eo:cloud_cover&quot;:</span> <span class="pre">{&quot;lte&quot;:</span> <span class="pre">20}}</span></code></p></li>
+<li><p>GSD: <code class="docutils literal notranslate"><span class="pre">{&quot;gsd&quot;:</span> <span class="pre">{&quot;lte&quot;:</span> <span class="pre">1.0}}</span></code></p></li>
+<li><p>Platform: <code class="docutils literal notranslate"><span class="pre">{&quot;platform&quot;:</span> <span class="pre">{&quot;eq&quot;:</span> <span class="pre">&quot;sentinel-2a&quot;}}</span></code></p></li>
+</ul>
+<p><strong><code class="docutils literal notranslate"><span class="pre">stac_search</span></code></strong> : <code class="docutils literal notranslate"><span class="pre">Search</span> <span class="pre">|</span> <span class="pre">None</span></code><br />
+Pre-built pystac_client Search object. Advanced users only.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">#</a></h2>
+<section id="single-aoi-bounding-box">
+<h3>Single AOI - Bounding Box<a class="headerlink" href="#single-aoi-bounding-box" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geoai</span>
+
+<span class="n">constraint</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span>
+    <span class="n">bbox</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">122.5</span><span class="p">,</span> <span class="mf">37.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.0</span><span class="p">,</span> <span class="mf">38.0</span><span class="p">],</span>
+    <span class="n">datetime</span><span class="o">=</span><span class="s2">&quot;2024-01-01/2024-12-31&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="single-aoi-geometry">
+<h3>Single AOI - Geometry<a class="headerlink" href="#single-aoi-geometry" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">constraint</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span>
+    <span class="n">geometry</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="s2">&quot;Polygon&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;coordinates&quot;</span><span class="p">:</span> <span class="p">[[</span>
+            <span class="p">[</span><span class="o">-</span><span class="mf">122.5</span><span class="p">,</span> <span class="mf">37.5</span><span class="p">],</span>
+            <span class="p">[</span><span class="o">-</span><span class="mf">122.0</span><span class="p">,</span> <span class="mf">37.5</span><span class="p">],</span>
+            <span class="p">[</span><span class="o">-</span><span class="mf">122.0</span><span class="p">,</span> <span class="mf">38.0</span><span class="p">],</span>
+            <span class="p">[</span><span class="o">-</span><span class="mf">122.5</span><span class="p">,</span> <span class="mf">38.0</span><span class="p">],</span>
+            <span class="p">[</span><span class="o">-</span><span class="mf">122.5</span><span class="p">,</span> <span class="mf">37.5</span><span class="p">]</span>
+        <span class="p">]]</span>
+    <span class="p">},</span>
+    <span class="n">datetime</span><span class="o">=</span><span class="s2">&quot;2024-01-01/2024-12-31&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="single-aoi-with-filters">
+<h3>Single AOI - With Filters<a class="headerlink" href="#single-aoi-with-filters" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">constraint</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span>
+    <span class="n">bbox</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">122.5</span><span class="p">,</span> <span class="mf">37.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.0</span><span class="p">,</span> <span class="mf">38.0</span><span class="p">],</span>
+    <span class="n">datetime</span><span class="o">=</span><span class="s2">&quot;2024-01-01/2024-12-31&quot;</span><span class="p">,</span>
+    <span class="nb">filter</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;eo:cloud_cover&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;lte&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">}}</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="complex-geometry-from-file">
+<h3>Complex Geometry from File<a class="headerlink" href="#complex-geometry-from-file" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+
+<span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="s2">&quot;aoi.geojson&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+    <span class="n">geojson</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+<span class="n">constraint</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span>
+    <span class="n">geometry</span><span class="o">=</span><span class="n">geojson</span><span class="p">[</span><span class="s2">&quot;features&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][</span><span class="s2">&quot;geometry&quot;</span><span class="p">],</span>
+    <span class="n">datetime</span><span class="o">=</span><span class="s2">&quot;2024-01-01/2024-12-31&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="multi-aoi-geodataframe">
+<h3>Multi-AOI - GeoDataFrame<a class="headerlink" href="#multi-aoi-geodataframe" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geopandas</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">gpd</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">shapely.geometry</span><span class="w"> </span><span class="kn">import</span> <span class="n">box</span>
+
+<span class="c1"># Create GeoDataFrame with multiple AOIs</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;site_1&#39;</span><span class="p">,</span> <span class="s1">&#39;site_2&#39;</span><span class="p">,</span> <span class="s1">&#39;site_3&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;Downtown&#39;</span><span class="p">,</span> <span class="s1">&#39;Airport&#39;</span><span class="p">,</span> <span class="s1">&#39;Harbor&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;geometry&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="n">box</span><span class="p">(</span><span class="o">-</span><span class="mf">122.5</span><span class="p">,</span> <span class="mf">37.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.4</span><span class="p">,</span> <span class="mf">37.6</span><span class="p">),</span>
+        <span class="n">box</span><span class="p">(</span><span class="o">-</span><span class="mf">122.3</span><span class="p">,</span> <span class="mf">37.7</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.2</span><span class="p">,</span> <span class="mf">37.8</span><span class="p">),</span>
+        <span class="n">box</span><span class="p">(</span><span class="o">-</span><span class="mf">122.1</span><span class="p">,</span> <span class="mf">37.9</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.0</span><span class="p">,</span> <span class="mf">38.0</span><span class="p">)</span>
+    <span class="p">]</span>
+<span class="p">},</span> <span class="n">crs</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">)</span>
+
+<span class="n">constraint</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span>
+    <span class="n">aois</span><span class="o">=</span><span class="n">gdf</span><span class="p">,</span>
+    <span class="n">datetime</span><span class="o">=</span><span class="s2">&quot;2024-01-01/2024-12-31&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Process all AOIs concurrently</span>
+<span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">model</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">constraint</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Processed </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">total_aois</span><span class="si">}</span><span class="s2"> locations&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Successful: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">successful_aois</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="multi-aoi-geoparquet-file">
+<h3>Multi-AOI - GeoParquet File<a class="headerlink" href="#multi-aoi-geoparquet-file" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Save to GeoParquet (efficient format)</span>
+<span class="n">gdf</span><span class="o">.</span><span class="n">to_parquet</span><span class="p">(</span><span class="s2">&quot;sites.geoparquet&quot;</span><span class="p">)</span>
+
+<span class="c1"># Load and process</span>
+<span class="n">constraint</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span>
+    <span class="n">aois</span><span class="o">=</span><span class="s2">&quot;sites.geoparquet&quot;</span><span class="p">,</span>
+    <span class="n">datetime</span><span class="o">=</span><span class="s2">&quot;2024-01-01/2024-12-31&quot;</span><span class="p">,</span>
+    <span class="nb">filter</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;gsd&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;lte&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">}}</span>  <span class="c1"># High-res only</span>
+<span class="p">)</span>
+
+<span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">model</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="nb">input</span><span class="p">,</span> <span class="n">constraint</span><span class="p">,</span> <span class="n">params</span><span class="p">,</span> <span class="n">output</span><span class="p">)</span>
+
+<span class="c1"># Per-AOI results available</span>
+<span class="k">for</span> <span class="n">aoi_result</span> <span class="ow">in</span> <span class="n">result</span><span class="o">.</span><span class="n">_raw_result</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;results&#39;</span><span class="p">,</span> <span class="p">[]):</span>
+    <span class="n">aoi_id</span> <span class="o">=</span> <span class="n">aoi_result</span><span class="p">[</span><span class="s1">&#39;aoi_id&#39;</span><span class="p">]</span>
+    <span class="n">detections</span> <span class="o">=</span> <span class="n">aoi_result</span><span class="p">[</span><span class="s1">&#39;result&#39;</span><span class="p">][</span><span class="s1">&#39;detection_count&#39;</span><span class="p">]</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">aoi_id</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">detections</span><span class="si">}</span><span class="s2"> detections&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="multi-aoi-with-properties">
+<h3>Multi-AOI with Properties<a class="headerlink" href="#multi-aoi-with-properties" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># AOIs can include custom properties</span>
+<span class="n">gdf</span> <span class="o">=</span> <span class="n">gpd</span><span class="o">.</span><span class="n">GeoDataFrame</span><span class="p">({</span>
+    <span class="s1">&#39;id&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;zone_1&#39;</span><span class="p">,</span> <span class="s1">&#39;zone_2&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;zone_type&#39;</span><span class="p">:</span> <span class="p">[</span><span class="s1">&#39;residential&#39;</span><span class="p">,</span> <span class="s1">&#39;commercial&#39;</span><span class="p">],</span>
+    <span class="s1">&#39;priority&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+    <span class="s1">&#39;geometry&#39;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="n">box</span><span class="p">(</span><span class="o">-</span><span class="mf">122.5</span><span class="p">,</span> <span class="mf">37.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.4</span><span class="p">,</span> <span class="mf">37.6</span><span class="p">),</span>
+        <span class="n">box</span><span class="p">(</span><span class="o">-</span><span class="mf">122.3</span><span class="p">,</span> <span class="mf">37.7</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.2</span><span class="p">,</span> <span class="mf">37.8</span><span class="p">)</span>
+    <span class="p">]</span>
+<span class="p">},</span> <span class="n">crs</span><span class="o">=</span><span class="s2">&quot;EPSG:4326&quot;</span><span class="p">)</span>
+
+<span class="n">constraint</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span><span class="n">aois</span><span class="o">=</span><span class="n">gdf</span><span class="p">,</span> <span class="n">datetime</span><span class="o">=</span><span class="s2">&quot;2024-01-01/2024-12-31&quot;</span><span class="p">)</span>
+<span class="c1"># Properties preserved in results</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="multi-aoi-benefits">
+<h2>Multi-AOI Benefits<a class="headerlink" href="#multi-aoi-benefits" title="Permalink to this heading">#</a></h2>
+<p>Processing multiple AOIs in a single run provides:</p>
+<ul class="simple">
+<li><p><strong>Efficiency</strong> - SDK optimizes STAC search across all locations</p></li>
+<li><p><strong>Concurrency</strong> - Chips processed in parallel across all AOIs</p></li>
+<li><p><strong>Robustness</strong> - Failed AOIs don’t stop the entire job</p></li>
+<li><p><strong>Single Output</strong> - All results published to one GeoCatalog collection</p></li>
+<li><p><strong>Per-AOI Results</strong> - Individual statistics and outputs for each location</p></li>
+</ul>
+<p><strong>Use cases:</strong></p>
+<ul class="simple">
+<li><p>Multiple buildings or sites</p></li>
+<li><p>City-wide analysis by neighborhood</p></li>
+<li><p>Regional infrastructure surveys</p></li>
+<li><p>Portfolio analysis across properties</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="mode-detection">
+<h2>Mode Detection<a class="headerlink" href="#mode-detection" title="Permalink to this heading">#</a></h2>
+<p>The SDK automatically detects the constraint mode:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Single AOI mode</span>
+<span class="n">constraint</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span><span class="n">bbox</span><span class="o">=</span><span class="p">[</span><span class="o">...</span><span class="p">],</span> <span class="n">datetime</span><span class="o">=</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">constraint</span><span class="o">.</span><span class="n">mode</span><span class="p">)</span>  <span class="c1"># &quot;single&quot;</span>
+
+<span class="c1"># Multi-AOI mode</span>
+<span class="n">constraint</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span><span class="n">aois</span><span class="o">=</span><span class="n">gdf</span><span class="p">,</span> <span class="n">datetime</span><span class="o">=</span><span class="s2">&quot;...&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">constraint</span><span class="o">.</span><span class="n">mode</span><span class="p">)</span>  <span class="c1"># &quot;multi&quot;</span>
+
+<span class="c1"># Iterate AOIs (works for both modes)</span>
+<span class="k">for</span> <span class="n">aoi</span> <span class="ow">in</span> <span class="n">constraint</span><span class="o">.</span><span class="n">iter_aois</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">aoi</span><span class="p">[</span><span class="s1">&#39;id&#39;</span><span class="p">],</span> <span class="n">aoi</span><span class="p">[</span><span class="s1">&#39;geometry&#39;</span><span class="p">])</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="validation">
+<h2>Validation<a class="headerlink" href="#validation" title="Permalink to this heading">#</a></h2>
+<p>Constraints are validated automatically during initialization:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">constraint</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span>
+    <span class="n">bbox</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">122.5</span><span class="p">,</span> <span class="mf">37.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.0</span><span class="p">,</span> <span class="mf">38.0</span><span class="p">],</span>
+    <span class="n">datetime</span><span class="o">=</span><span class="s2">&quot;2024-01-01/2024-12-31&quot;</span>
+<span class="p">)</span>
+<span class="c1"># Raises ValueError if invalid</span>
+</pre></div>
+</div>
+<section id="common-validation-errors">
+<h3>Common Validation Errors<a class="headerlink" href="#common-validation-errors" title="Permalink to this heading">#</a></h3>
+<p><strong>“Must provide either bbox, geometry, or aois”</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Wrong</span>
+<span class="n">constraint</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span><span class="n">datetime</span><span class="o">=</span><span class="s2">&quot;2024-01-01/2024-12-31&quot;</span><span class="p">)</span>
+
+<span class="c1"># Correct - single AOI</span>
+<span class="n">constraint</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span>
+    <span class="n">bbox</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">118.5</span><span class="p">,</span> <span class="mf">34.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">118.0</span><span class="p">,</span> <span class="mf">34.5</span><span class="p">],</span>
+    <span class="n">datetime</span><span class="o">=</span><span class="s2">&quot;2024-01-01/2024-12-31&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Correct - multi AOI</span>
+<span class="n">constraint</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span>
+    <span class="n">aois</span><span class="o">=</span><span class="n">gdf</span><span class="p">,</span>
+    <span class="n">datetime</span><span class="o">=</span><span class="s2">&quot;2024-01-01/2024-12-31&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>“Cannot provide both bbox and aois”</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Wrong - mixing single and multi AOI modes</span>
+<span class="n">constraint</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span>
+    <span class="n">bbox</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">118.5</span><span class="p">,</span> <span class="mf">34.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">118.0</span><span class="p">,</span> <span class="mf">34.5</span><span class="p">],</span>
+    <span class="n">aois</span><span class="o">=</span><span class="n">gdf</span><span class="p">,</span>
+    <span class="n">datetime</span><span class="o">=</span><span class="s2">&quot;2024-01-01/2024-12-31&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Correct - choose one mode</span>
+<span class="n">constraint</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span>
+    <span class="n">aois</span><span class="o">=</span><span class="n">gdf</span><span class="p">,</span>
+    <span class="n">datetime</span><span class="o">=</span><span class="s2">&quot;2024-01-01/2024-12-31&quot;</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p><strong>“minx must be &lt; maxx”</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Wrong - west &gt; east</span>
+<span class="n">bbox</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">118.0</span><span class="p">,</span> <span class="mf">34.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">118.5</span><span class="p">,</span> <span class="mf">34.5</span><span class="p">]</span>
+
+<span class="c1"># Correct</span>
+<span class="n">bbox</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">118.5</span><span class="p">,</span> <span class="mf">34.0</span><span class="p">,</span> <span class="o">-</span><span class="mf">118.0</span><span class="p">,</span> <span class="mf">34.5</span><span class="p">]</span>
+</pre></div>
+</div>
+<p><strong>“longitude must be in range [-180, 180]”</strong></p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Wrong</span>
+<span class="n">bbox</span><span class="o">=</span><span class="p">[</span><span class="mi">190</span><span class="p">,</span> <span class="mf">34.0</span><span class="p">,</span> <span class="mi">195</span><span class="p">,</span> <span class="mf">34.5</span><span class="p">]</span>
+
+<span class="c1"># Correct</span>
+<span class="n">bbox</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">170</span><span class="p">,</span> <span class="mf">34.0</span><span class="p">,</span> <span class="o">-</span><span class="mi">165</span><span class="p">,</span> <span class="mf">34.5</span><span class="p">]</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="cql2-filter-examples">
+<h2>CQL2 Filter Examples<a class="headerlink" href="#cql2-filter-examples" title="Permalink to this heading">#</a></h2>
+<section id="cloud-cover">
+<h3>Cloud Cover<a class="headerlink" href="#cloud-cover" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">filter</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;eo:cloud_cover&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;lte&quot;</span><span class="p">:</span> <span class="mi">20</span><span class="p">}}</span>
+</pre></div>
+</div>
+</section>
+<section id="resolution">
+<h3>Resolution<a class="headerlink" href="#resolution" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">filter</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;gsd&quot;</span><span class="p">:</span> <span class="p">{</span><span class="s2">&quot;lte&quot;</span><span class="p">:</span> <span class="mf">1.0</span><span class="p">}}</span>
+</pre></div>
+</div>
+</section>
+<section id="combined-filters">
+<h3>Combined Filters<a class="headerlink" href="#combined-filters" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="nb">filter</span><span class="o">=</span><span class="p">{</span>
+    <span class="s2">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;and&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[</span>
+        <span class="p">{</span><span class="s2">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;=&quot;</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;property&quot;</span><span class="p">:</span> <span class="s2">&quot;eo:cloud_cover&quot;</span><span class="p">},</span> <span class="mi">10</span><span class="p">]},</span>
+        <span class="p">{</span><span class="s2">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;&lt;=&quot;</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;property&quot;</span><span class="p">:</span> <span class="s2">&quot;gsd&quot;</span><span class="p">},</span> <span class="mf">0.6</span><span class="p">]},</span>
+        <span class="p">{</span><span class="s2">&quot;op&quot;</span><span class="p">:</span> <span class="s2">&quot;=&quot;</span><span class="p">,</span> <span class="s2">&quot;args&quot;</span><span class="p">:</span> <span class="p">[{</span><span class="s2">&quot;property&quot;</span><span class="p">:</span> <span class="s2">&quot;platform&quot;</span><span class="p">},</span> <span class="s2">&quot;naip&quot;</span><span class="p">]}</span>
+    <span class="p">]</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><span class="xref myst">Complete Examples</span> - Multi-AOI workflows in notebooks</p></li>
+<li><p><a class="reference internal" href="input.html"><span class="doc std std-doc">Input</span></a> - Data source configuration</p></li>
+<li><p><a class="reference internal" href="output.html"><span class="doc std std-doc">Output</span></a> - Result destinations</p></li>
+<li><p><a class="reference internal" href="models.html"><span class="doc std std-doc">Models</span></a> - Model-specific requirements</p></li>
+<li><p><span class="xref myst">STAC Guide</span> - Working with STAC catalogs</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./api"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="output.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Output</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="models.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Models</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#parameters">Parameters</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#single-aoi-parameters-choose-one">Single AOI Parameters (choose one)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-aoi-parameters">Multi-AOI Parameters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#temporal-filtering">Temporal Filtering</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#additional-filters">Additional Filters</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#single-aoi-bounding-box">Single AOI - Bounding Box</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#single-aoi-geometry">Single AOI - Geometry</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#single-aoi-with-filters">Single AOI - With Filters</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#complex-geometry-from-file">Complex Geometry from File</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-aoi-geodataframe">Multi-AOI - GeoDataFrame</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-aoi-geoparquet-file">Multi-AOI - GeoParquet File</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-aoi-with-properties">Multi-AOI with Properties</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#multi-aoi-benefits">Multi-AOI Benefits</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mode-detection">Mode Detection</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validation">Validation</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#common-validation-errors">Common Validation Errors</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#cql2-filter-examples">CQL2 Filter Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#cloud-cover">Cloud Cover</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#resolution">Resolution</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#combined-filters">Combined Filters</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#see-also">See Also</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Microsoft Corporation
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>

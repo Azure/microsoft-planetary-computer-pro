@@ -1,0 +1,852 @@
+
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="" data-theme="light">
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.18.1: http://docutils.sourceforge.net/" />
+
+    <title>Validation &#8212; GeoAI with Microsoft Planetary Computer Pro</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "light";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "light";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="../_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="../_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" href="../_static/styles/sphinx-book-theme.css?digest=14f4ca6b54d191a8c7657f6c759bf11a5fb86285" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/design-style.4045f2051d55cab465a707391d5b2007.min.css" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="../_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script src="../_static/scripts/sphinx-book-theme.js?digest=5a5c038af52cf7bc1a1ec88eea08e6366ee68824"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'api/validation';</script>
+    <link rel="canonical" href="https://azure.github.io/microsoft-planetary-computer-pro/geoai/api/validation.html" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Models" href="../models/placeholder.html" />
+    <link rel="prev" title="Models" href="models.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="light">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../intro.html">
+  
+  
+  
+  
+  
+    
+    
+    
+    <img src="../_static/planetary-computer-pro-ai.svg" class="logo__image only-light" alt="GeoAI with Microsoft Planetary Computer Pro - Home"/>
+    <script>document.write(`<img src="../_static/planetary-computer-pro-ai.svg" class="logo__image only-dark" alt="GeoAI with Microsoft Planetary Computer Pro - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item"><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../intro.html">
+                    GeoAI
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading"><span class="caption-text">GeoAI SDK</span></p>
+<ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../geoai-sdk/README.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../sdk-index.html">Documentation</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="index.html">API Reference</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="input.html">Input</a></li>
+<li class="toctree-l2"><a class="reference internal" href="output.html">Output</a></li>
+<li class="toctree-l2"><a class="reference internal" href="constraints.html">Constraints</a></li>
+<li class="toctree-l2"><a class="reference internal" href="models.html">Models</a></li>
+<li class="toctree-l2 current active"><a class="current reference internal" href="#">Validation</a></li>
+</ul>
+</details></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Models</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../models/placeholder.html">Models</a></li>
+</ul>
+<p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
+<ul class="nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="../examples/eoos_object_detection.html">EO-OS Object Detection</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples/mars_map_generation.html">MARS Map Generation</a></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><label class="sidebar-toggle primary-toggle btn btn-sm" for="__primary" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</label></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/Azure/microsoft-planetary-computer-pro" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/Azure/microsoft-planetary-computer-pro/issues/new?title=Issue%20on%20page%20%2Fapi/validation.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="../_sources/api/validation.md" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.md</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<label class="sidebar-toggle secondary-toggle btn btn-sm" for="__secondary"title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</label>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Validation</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#when-validation-runs">When Validation Runs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validation-method">Validation Method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-gets-validated">What Gets Validated</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#input-validation">Input Validation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-endpoint-validation">Model Endpoint Validation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#output-validation">Output Validation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validation-results">Validation Results</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#validationresult-object">ValidationResult Object</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-response">Example Response</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-validation-errors">Common Validation Errors</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#input-errors">Input Errors</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-endpoint-errors">Model Endpoint Errors</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#output-errors">Output Errors</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-validation">Basic Validation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#validate-with-output">Validate with Output</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#handle-warnings">Handle Warnings</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#see-also">See Also</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="validation">
+<h1>Validation<a class="headerlink" href="#validation" title="Permalink to this heading">#</a></h1>
+<p>Pre-flight checks for input, model endpoints, and output destinations.</p>
+<hr class="docutils" />
+<section id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this heading">#</a></h2>
+<p>The SDK provides comprehensive validation to catch configuration errors <strong>before</strong> running expensive inference jobs.</p>
+<p>Validation checks:</p>
+<ul class="simple">
+<li><p><strong>Input</strong> - Imagery availability, band compatibility, resolution</p></li>
+<li><p><strong>Model Endpoint</strong> - Connectivity and authentication</p></li>
+<li><p><strong>Output</strong> - GeoCatalog and blob storage access</p></li>
+</ul>
+</section>
+<hr class="docutils" />
+<section id="when-validation-runs">
+<h2>When Validation Runs<a class="headerlink" href="#when-validation-runs" title="Permalink to this heading">#</a></h2>
+<p>Validation happens <strong>automatically</strong> in:</p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">model.run()</span></code> - Always validates before execution</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">model.estimate()</span></code> - Validates before estimating job scope</p></li>
+</ul>
+<p><strong>Optional:</strong> Explicit validation with <code class="docutils literal notranslate"><span class="pre">model.validate_input()</span></code></p>
+</section>
+<hr class="docutils" />
+<section id="validation-method">
+<h2>Validation Method<a class="headerlink" href="#validation-method" title="Permalink to this heading">#</a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">validation</span> <span class="o">=</span> <span class="k">await</span> <span class="n">model</span><span class="o">.</span><span class="n">validate_input</span><span class="p">(</span>
+    <span class="nb">input</span><span class="o">=</span><span class="n">input_source</span><span class="p">,</span>
+    <span class="n">constraint</span><span class="o">=</span><span class="n">constraint</span><span class="p">,</span>
+    <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+    <span class="n">output</span><span class="o">=</span><span class="n">output</span>  <span class="c1"># Optional: validates output if provided</span>
+<span class="p">)</span>
+
+<span class="k">if</span> <span class="n">validation</span><span class="o">.</span><span class="n">is_valid</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ Ready to run!&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">for</span> <span class="n">error</span> <span class="ow">in</span> <span class="n">validation</span><span class="o">.</span><span class="n">errors</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot; </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<hr class="docutils" />
+<section id="what-gets-validated">
+<h2>What Gets Validated<a class="headerlink" href="#what-gets-validated" title="Permalink to this heading">#</a></h2>
+<section id="input-validation">
+<h3>Input Validation<a class="headerlink" href="#input-validation" title="Permalink to this heading">#</a></h3>
+<p><strong>Imagery Availability:</strong></p>
+<ul class="simple">
+<li><p>Queries STAC catalog to verify data exists for AOI</p></li>
+<li><p>Reports number of imagery items found</p></li>
+<li><p>Detects resolution from STAC metadata</p></li>
+</ul>
+<p><strong>Band Compatibility:</strong></p>
+<ul class="simple">
+<li><p>Checks collection has required bands (e.g., RGB for EOOS/MARS)</p></li>
+<li><p>Validates against model specifications</p></li>
+</ul>
+<p><strong>Resolution Compatibility:</strong></p>
+<ul class="simple">
+<li><p>Verifies resolution matches model requirements</p></li>
+<li><p>Warns if suboptimal but acceptable</p></li>
+</ul>
+<p><strong>Collection Support:</strong></p>
+<ul class="simple">
+<li><p>Checks if model supports the specified collection</p></li>
+<li><p>Validates filter compatibility</p></li>
+</ul>
+</section>
+<section id="model-endpoint-validation">
+<h3>Model Endpoint Validation<a class="headerlink" href="#model-endpoint-validation" title="Permalink to this heading">#</a></h3>
+<p><strong>Connectivity:</strong></p>
+<ul class="simple">
+<li><p>Tests that endpoint URL is reachable</p></li>
+<li><p>Detects network/DNS issues</p></li>
+</ul>
+<p><strong>Authentication:</strong></p>
+<ul class="simple">
+<li><p>Validates API key or Azure credential works</p></li>
+<li><p>Catches 401/403 errors <strong>before</strong> running</p></li>
+<li><p><strong>Prevents the “wrong token but validation passed” issue!</strong></p></li>
+</ul>
+</section>
+<section id="output-validation">
+<h3>Output Validation<a class="headerlink" href="#output-validation" title="Permalink to this heading">#</a></h3>
+<p><strong>GeoCatalog Access:</strong></p>
+<ul class="simple">
+<li><p>Tests endpoint is reachable</p></li>
+<li><p>Validates credential has write permissions</p></li>
+</ul>
+<p><strong>Blob Storage Access:</strong></p>
+<ul class="simple">
+<li><p>Tests storage account accessibility</p></li>
+<li><p>Validates credential can list containers</p></li>
+<li><p>Checks if blob container exists or can be created</p></li>
+</ul>
+</section>
+</section>
+<hr class="docutils" />
+<section id="validation-results">
+<h2>Validation Results<a class="headerlink" href="#validation-results" title="Permalink to this heading">#</a></h2>
+<section id="validationresult-object">
+<h3>ValidationResult Object<a class="headerlink" href="#validationresult-object" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">class</span><span class="w"> </span><span class="nc">ValidationResult</span><span class="p">:</span>
+    <span class="n">is_valid</span><span class="p">:</span> <span class="nb">bool</span>              <span class="c1"># Overall validation status</span>
+    <span class="n">errors</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>           <span class="c1"># List of errors (empty if valid)</span>
+    <span class="n">warnings</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>         <span class="c1"># Non-fatal warnings</span>
+    <span class="n">detected_resolution</span><span class="p">:</span> <span class="nb">float</span>  <span class="c1"># Detected imagery resolution (m/pixel)</span>
+    <span class="n">bands_found</span><span class="p">:</span> <span class="n">List</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>      <span class="c1"># Available bands in imagery</span>
+    <span class="n">stac_items_count</span><span class="p">:</span> <span class="nb">int</span>       <span class="c1"># Number of STAC items found</span>
+</pre></div>
+</div>
+</section>
+<section id="example-response">
+<h3>Example Response<a class="headerlink" href="#example-response" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">ValidationResult</span><span class="p">(</span>
+    <span class="n">is_valid</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">errors</span><span class="o">=</span><span class="p">[],</span>
+    <span class="n">warnings</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;Resolution 0.3m differs from optimal 0.6m&quot;</span><span class="p">],</span>
+    <span class="n">detected_resolution</span><span class="o">=</span><span class="mf">0.3</span><span class="p">,</span>
+    <span class="n">bands_found</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;red&#39;</span><span class="p">,</span> <span class="s1">&#39;green&#39;</span><span class="p">,</span> <span class="s1">&#39;blue&#39;</span><span class="p">],</span>
+    <span class="n">stac_items_count</span><span class="o">=</span><span class="mi">2</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="common-validation-errors">
+<h2>Common Validation Errors<a class="headerlink" href="#common-validation-errors" title="Permalink to this heading">#</a></h2>
+<section id="input-errors">
+<h3>Input Errors<a class="headerlink" href="#input-errors" title="Permalink to this heading">#</a></h3>
+<p><strong>No imagery found:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>❌ No STAC items found for collection &#39;naip&#39; in specified AOI/datetime
+</pre></div>
+</div>
+<p><strong>Fix:</strong> Adjust datetime range or check AOI coordinates</p>
+<p><strong>Missing bands:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>❌ Collection &#39;sentinel-2-l2a&#39; missing required bands: [&#39;red&#39;]. Found: [&#39;B02&#39;, &#39;B03&#39;, &#39;B04&#39;]
+</pre></div>
+</div>
+<p><strong>Fix:</strong> Use correct band names or choose different collection</p>
+<p><strong>Unsupported collection:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>❌ Model &#39;EOOS&#39; does not support collection &#39;landsat-c2-l2&#39;. Supported: [&#39;naip&#39;]
+</pre></div>
+</div>
+<p><strong>Fix:</strong> Use a supported collection</p>
+</section>
+<section id="model-endpoint-errors">
+<h3>Model Endpoint Errors<a class="headerlink" href="#model-endpoint-errors" title="Permalink to this heading">#</a></h3>
+<p><strong>Authentication failure:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>❌ Model endpoint authentication failed: Authentication failed (401 Unauthorized). Check your credential/API key.
+</pre></div>
+</div>
+<p><strong>Fix:</strong> Verify API key or Azure credential has proper role assignments</p>
+<p><strong>Cannot reach endpoint:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>❌ Model endpoint authentication failed: Cannot connect to endpoint: [connection error details]
+</pre></div>
+</div>
+<p><strong>Fix:</strong> Check endpoint URL, network connectivity, firewall rules</p>
+</section>
+<section id="output-errors">
+<h3>Output Errors<a class="headerlink" href="#output-errors" title="Permalink to this heading">#</a></h3>
+<p><strong>GeoCatalog access denied:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>❌ GeoCatalog authentication failed: Credential failed to obtain access token
+</pre></div>
+</div>
+<p><strong>Fix:</strong> Run <code class="docutils literal notranslate"><span class="pre">az</span> <span class="pre">login</span></code> or check credential has access to GeoCatalog</p>
+<p><strong>Blob storage access denied:</strong></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>❌ Blob storage access denied: [error]. Ensure your identity has &#39;Storage Blob Data Contributor&#39; role.
+</pre></div>
+</div>
+<p><strong>Fix:</strong> Assign required RBAC roles to your identity</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="examples">
+<h2>Examples<a class="headerlink" href="#examples" title="Permalink to this heading">#</a></h2>
+<section id="basic-validation">
+<h3>Basic Validation<a class="headerlink" href="#basic-validation" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">geoai</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">azure.identity</span><span class="w"> </span><span class="kn">import</span> <span class="n">DefaultAzureCredential</span>
+
+<span class="c1"># Configure</span>
+<span class="n">input_source</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">Input</span><span class="p">(</span><span class="n">collection</span><span class="o">=</span><span class="s2">&quot;naip&quot;</span><span class="p">)</span>
+<span class="n">constraint</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">Constraint</span><span class="p">(</span>
+    <span class="n">bbox</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mf">122.5</span><span class="p">,</span> <span class="mf">37.5</span><span class="p">,</span> <span class="o">-</span><span class="mf">122.0</span><span class="p">,</span> <span class="mf">38.0</span><span class="p">],</span>
+    <span class="n">datetime</span><span class="o">=</span><span class="s2">&quot;2020-01-01/2024-12-31&quot;</span>
+<span class="p">)</span>
+
+<span class="n">model</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">EOOS</span><span class="p">(</span>
+    <span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;https://eoos.eastus.inference.ml.azure.com/score&quot;</span><span class="p">,</span>
+    <span class="n">credential</span><span class="o">=</span><span class="s2">&quot;your-api-key&quot;</span>
+<span class="p">)</span>
+
+<span class="c1"># Validate before running</span>
+<span class="n">validation</span> <span class="o">=</span> <span class="k">await</span> <span class="n">model</span><span class="o">.</span><span class="n">validate_input</span><span class="p">(</span>
+    <span class="nb">input</span><span class="o">=</span><span class="n">input_source</span><span class="p">,</span>
+    <span class="n">constraint</span><span class="o">=</span><span class="n">constraint</span><span class="p">,</span>
+    <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;chip_size&quot;</span><span class="p">:</span> <span class="mi">1024</span><span class="p">,</span> <span class="s2">&quot;threshold&quot;</span><span class="p">:</span> <span class="mf">0.5</span><span class="p">}</span>
+<span class="p">)</span>
+
+<span class="k">if</span> <span class="n">validation</span><span class="o">.</span><span class="n">is_valid</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;✅ Found </span><span class="si">{</span><span class="n">validation</span><span class="o">.</span><span class="n">stac_items_count</span><span class="si">}</span><span class="s2"> imagery items&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;📏 Resolution: </span><span class="si">{</span><span class="n">validation</span><span class="o">.</span><span class="n">detected_resolution</span><span class="si">}</span><span class="s2">m/pixel&quot;</span><span class="p">)</span>
+<span class="k">else</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;❌ Validation failed:&quot;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">error</span> <span class="ow">in</span> <span class="n">validation</span><span class="o">.</span><span class="n">errors</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   </span><span class="si">{</span><span class="n">error</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="validate-with-output">
+<h3>Validate with Output<a class="headerlink" href="#validate-with-output" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="c1"># Also validate output destination</span>
+<span class="n">output</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">Output</span><span class="p">(</span>
+    <span class="n">geocatalog_uri</span><span class="o">=</span><span class="s2">&quot;https://geocatalog.contoso.com&quot;</span><span class="p">,</span>
+    <span class="n">collection_name</span><span class="o">=</span><span class="s2">&quot;detections&quot;</span><span class="p">,</span>
+    <span class="n">credential</span><span class="o">=</span><span class="n">DefaultAzureCredential</span><span class="p">(),</span>
+    <span class="n">storage_url</span><span class="o">=</span><span class="s2">&quot;https://myaccount.blob.core.windows.net&quot;</span><span class="p">,</span>
+    <span class="n">blob_container</span><span class="o">=</span><span class="s2">&quot;results&quot;</span>
+<span class="p">)</span>
+
+<span class="n">validation</span> <span class="o">=</span> <span class="k">await</span> <span class="n">model</span><span class="o">.</span><span class="n">validate_input</span><span class="p">(</span>
+    <span class="nb">input</span><span class="o">=</span><span class="n">input_source</span><span class="p">,</span>
+    <span class="n">constraint</span><span class="o">=</span><span class="n">constraint</span><span class="p">,</span>
+    <span class="n">params</span><span class="o">=</span><span class="n">params</span><span class="p">,</span>
+    <span class="n">output</span><span class="o">=</span><span class="n">output</span>  <span class="c1"># Validates GeoCatalog + blob storage access</span>
+<span class="p">)</span>
+
+<span class="k">if</span> <span class="n">validation</span><span class="o">.</span><span class="n">is_valid</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ Input, model endpoint, and output all validated!&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="handle-warnings">
+<h3>Handle Warnings<a class="headerlink" href="#handle-warnings" title="Permalink to this heading">#</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">if</span> <span class="n">validation</span><span class="o">.</span><span class="n">is_valid</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">validation</span><span class="o">.</span><span class="n">warnings</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;⚠️  Warnings:&quot;</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">warning</span> <span class="ow">in</span> <span class="n">validation</span><span class="o">.</span><span class="n">warnings</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   </span><span class="si">{</span><span class="n">warning</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        
+        <span class="c1"># Decide whether to proceed</span>
+        <span class="n">proceed</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s2">&quot;Continue anyway? (y/n): &quot;</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">proceed</span><span class="o">.</span><span class="n">lower</span><span class="p">()</span> <span class="o">!=</span> <span class="s1">&#39;y&#39;</span><span class="p">:</span>
+            <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+    
+    <span class="c1"># Run model</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">model</span><span class="o">.</span><span class="n">run</span><span class="p">(</span><span class="o">...</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+</section>
+<hr class="docutils" />
+<section id="best-practices">
+<h2>Best Practices<a class="headerlink" href="#best-practices" title="Permalink to this heading">#</a></h2>
+<ol class="arabic simple">
+<li><p><strong>Always validate on new configurations</strong> - First time using a new AOI, collection, or endpoint</p></li>
+<li><p><strong>Validate output</strong> - Pass <code class="docutils literal notranslate"><span class="pre">output</span></code> parameter to catch destination issues early</p></li>
+<li><p><strong>Check warnings</strong> - Non-fatal but may indicate suboptimal configuration</p></li>
+<li><p><strong>Use validation to debug</strong> - If <code class="docutils literal notranslate"><span class="pre">run()</span></code> fails, explicit validation provides clearer error messages</p></li>
+</ol>
+</section>
+<hr class="docutils" />
+<section id="see-also">
+<h2>See Also<a class="headerlink" href="#see-also" title="Permalink to this heading">#</a></h2>
+<ul class="simple">
+<li><p><strong><span class="xref myst">Complete Example</span></strong> - Notebooks show validation in action</p></li>
+<li><p><strong><a class="reference internal" href="input.html"><span class="doc std std-doc">Input</span></a></strong> - Input configuration parameters</p></li>
+<li><p><strong><a class="reference internal" href="output.html"><span class="doc std std-doc">Output</span></a></strong> - Output configuration parameters</p></li>
+<li><p><strong><a class="reference internal" href="models.html"><span class="doc std std-doc">Models</span></a></strong> - Model-specific requirements</p></li>
+</ul>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./api"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="models.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Models</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="../models/placeholder.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Models</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#when-validation-runs">When Validation Runs</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validation-method">Validation Method</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#what-gets-validated">What Gets Validated</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#input-validation">Input Validation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-endpoint-validation">Model Endpoint Validation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#output-validation">Output Validation</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#validation-results">Validation Results</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#validationresult-object">ValidationResult Object</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#example-response">Example Response</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-validation-errors">Common Validation Errors</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#input-errors">Input Errors</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#model-endpoint-errors">Model Endpoint Errors</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#output-errors">Output Errors</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#basic-validation">Basic Validation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#validate-with-output">Validate with Output</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#handle-warnings">Handle Warnings</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practices">Best Practices</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#see-also">See Also</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By Microsoft Corporation
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2026.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="../_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
