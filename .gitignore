@@ -431,6 +431,9 @@ share/python-wheels/
 *.egg
 MANIFEST
 
+# GeoAI SDK release artifacts (built by publish script)
+release-artifacts/
+
 # PyInstaller
 *.manifest
 *.spec
