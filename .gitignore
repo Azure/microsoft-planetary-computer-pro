@@ -552,3 +552,13 @@ Thumbs.db
 
 # Notebook backup files (created by nb_edit.py)
 *.ipynb.backup_*
+
+# Environment Files
+.env
+
+# VS Code
+.vscode/
+
+# Generic input / output folders
+.inputs/
+.outputs/

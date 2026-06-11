@@ -1,0 +1,254 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://spatio.azure.com/schemas/geoai-model-spec/v1.0.0",
+  "title": "GeoAI Model Specification",
+  "description": "Schema for GeoAI SDK model specifications that define how to orchestrate geospatial workflows and call AI Foundry model endpoints",
+  "type": "object",
+  
+  "required": [
+    "model_id",
+    "model_name", 
+    "model_type",
+    "workflow_type",
+    "foundry_api",
+    "parameters"
+  ],
+  
+  "properties": {
+    "model_id": {
+      "type": "string",
+      "description": "Unique identifier for the model (e.g., 'microsoft/eo-os-object-detection', 'customer/my-detector')",
+      "pattern": "^[a-zA-Z0-9_-]+/[a-zA-Z0-9_-]+$"
+    },
+    
+    "model_name": {
+      "type": "string",
+      "description": "Human-readable name for the model",
+      "minLength": 1
+    },
+    
+    "model_type": {
+      "type": "string",
+      "description": "Type of model task",
+      "enum": [
+        "object_detection",
+        "semantic_segmentation", 
+        "instance_segmentation",
+        "classification",
+        "regression",
+        "weather_forecast",
+        "custom"
+      ]
+    },
+    
+    "workflow_type": {
+      "type": "string",
+      "description": "Type of workflow orchestration needed",
+      "enum": [
+        "aoi_based",
+        "weather_forecast",
+        "item_based"
+      ]
+    },
+    
+    "description": {
+      "type": "string",
+      "description": "Detailed description of the model's purpose and capabilities"
+    },
+    
+    "data_requirements": {
+      "type": "object",
+      "description": "Defines what geospatial data the model requires",
+      "properties": {
+        "required_bands": {
+          "type": "array",
+          "description": "Required spectral bands (e.g., ['red', 'green', 'blue', 'nir'])",
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1
+        },
+        
+        "resolution_range_meters": {
+          "type": "object",
+          "description": "Supported resolution range in meters",
+          "properties": {
+            "min": {
+              "type": "number",
+              "description": "Minimum supported resolution",
+              "exclusiveMinimum": 0
+            },
+            "max": {
+              "type": "number",
+              "description": "Maximum supported resolution",
+              "exclusiveMinimum": 0
+            },
+            "optimal": {
+              "type": "number",
+              "description": "Optimal resolution for best results",
+              "exclusiveMinimum": 0
+            }
+          },
+          "required": ["min", "max", "optimal"]
+        },
+        
+        "preferred_resolution_meters": {
+          "type": "number",
+          "description": "Preferred resolution (alternative to resolution_range_meters)",
+          "exclusiveMinimum": 0
+        },
+        
+        "supported_collections": {
+          "type": "array",
+          "description": "STAC collections this model works with",
+          "items": {
+            "type": "string"
+          }
+        },
+        
+        "crs": {
+          "type": "string",
+          "description": "Coordinate reference system (default: EPSG:4326)",
+          "default": "EPSG:4326"
+        }
+      }
+    },
+    
+    "preprocessing": {
+      "type": "object",
+      "description": "Preprocessing configuration for model inputs (e.g., normalization)",
+      "properties": {
+        "color_normalization": {
+          "type": "string",
+          "description": "Color normalization strategy",
+          "enum": ["imagenet", "custom", "none"]
+        },
+        
+        "target_mean_rgb": {
+          "type": "array",
+          "description": "Target mean RGB values for normalization",
+          "items": {"type": "number"},
+          "minItems": 3,
+          "maxItems": 3
+        },
+        
+        "target_std_rgb": {
+          "type": "array",
+          "description": "Target standard deviation RGB values for normalization",
+          "items": {"type": "number"},
+          "minItems": 3,
+          "maxItems": 3
+        },
+        
+        "description": {
+          "type": "string",
+          "description": "Description of preprocessing approach"
+        }
+      }
+    },
+    
+    "foundry_api": {
+      "type": "object",
+      "description": "AI Foundry endpoint configuration",
+      "required": ["endpoint_path", "method", "payload_format", "input_format", "request_format", "response_format"],
+      "properties": {
+        "endpoint_path": {
+          "type": "string",
+          "description": "Endpoint path (e.g., /score)",
+          "pattern": "^/.*"
+        },
+        
+        "method": {
+          "type": "string",
+          "description": "HTTP method",
+          "enum": ["POST", "GET", "PUT"]
+        },
+        
+        "payload_format": {
+          "type": "string",
+          "description": "HTTP payload format",
+          "enum": ["json", "json-base64", "multipart", "binary", "form"]
+        },
+        
+        "input_format": {
+          "type": "string",
+          "description": "How to encode input imagery",
+          "enum": ["png", "jpg", "tif", "tiff", "base64"]
+        },
+        
+        "request_format": {
+          "type": "object",
+          "description": "Structure of the request payload sent to the endpoint (example/template)",
+          "additionalProperties": true
+        },
+        
+        "response_format": {
+          "type": "object",
+          "description": "Schema defining the structure of the response payload for spec-driven parsing",
+          "required": ["type", "fields"],
+          "properties": {
+            "type": {
+              "type": "string",
+              "enum": ["list"],
+              "description": "Response container type (currently only 'list' is supported)"
+            },
+            "fields": {
+              "type": "object",
+              "description": "Field schema mapping field names to types. Supported types: 'string', 'float', 'int', 'geojson'. For nested objects, use nested schema. Special _format field can declare conversion intent (e.g., '_format': 'bbox_xyxy' converts box to internal bbox format).",
+              "additionalProperties": true
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+
+    "performance": {
+      "type": "object",
+      "description": "Performance characteristics and timing estimates",
+      "properties": {
+        "estimated_per_request_seconds": {
+          "type": "number",
+          "description": "Estimated inference time per request in seconds (endpoint inference only, excludes fetch/preprocess overhead). Each request processes one chip.",
+          "exclusiveMinimum": 0
+        }
+      }
+    },
+    
+    "parameters": {
+      "type": "object",
+      "description": "Model-specific parameters that users can configure",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["type"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["float", "int", "string", "boolean", "array", "object"]
+          },
+          "default": {
+            "description": "Default value for this parameter"
+          },
+          "min": {
+            "type": "number",
+            "description": "Minimum value (for numeric types)"
+          },
+          "max": {
+            "type": "number",
+            "description": "Maximum value (for numeric types)"
+          },
+          "items": {
+            "type": "object",
+            "description": "Schema for array items (for array types)"
+          },
+          "description": {
+            "type": "string",
+            "description": "Human-readable description"
+          }
+        }
+      }
+    }
+  },
+  
+  "additionalProperties": false
+}

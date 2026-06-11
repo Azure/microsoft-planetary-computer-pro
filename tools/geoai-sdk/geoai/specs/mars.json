@@ -1,0 +1,57 @@
+{
+  "model_id": "microsoft/mars-map-autoregressive",
+  "model_name": "MARS",
+  "model_type": "object_detection",
+  "workflow_type": "aoi_based",
+  
+  "description": "Map generation and Road/Area/Structure detection model",
+  
+  "data_requirements": {
+    "required_bands": ["red", "green", "blue"],
+    "preferred_resolution_meters": 0.6,
+    "resolution_range_meters": {
+      "min": 0.3,
+      "max": 1.5,
+      "optimal": 0.6
+    },
+    "supported_collections": ["naip"]
+  },
+  
+  "foundry_api": {
+    "endpoint_path": "/score",
+    "method": "POST",
+    "payload_format": "json-base64",
+    "input_format": "tif",
+    "request_format": {
+      "image": "base64_image",
+      "categories": ["Building", "Road", "Railway"]
+    },
+    "response_format": {
+      "type": "list",
+      "fields": {
+        "label": "string",
+        "score": "float",
+        "geometry": "geojson"
+      }
+    }
+  },
+  
+  "parameters": {
+    "chip_size": {
+      "type": "int",
+      "default": 1024,
+      "description": "Input chip size in pixels"
+    },
+    "stride": {
+      "type": "int",
+      "default": 800,
+      "description": "Stride in pixels (controls chip overlap)"
+    },
+    "categories": {
+      "type": "array",
+      "default": ["Building", "Road", "Railway"],
+      "items": {"type": "string"},
+      "description": "Filter detections to specific categories"
+    }
+  }
+}
