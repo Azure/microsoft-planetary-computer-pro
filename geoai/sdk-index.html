@@ -66,7 +66,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="canonical" href="https://azure.github.io/microsoft-planetary-computer-pro/geoai/sdk-index.html" />
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="API Reference" href="api/index.html" />
+    <link rel="next" title="EO-OS Object Detection" href="examples/eoos_object_detection.html" />
     <link rel="prev" title="GeoAI SDK" href="geoai-sdk/README.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -176,14 +176,6 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="geoai-sdk/README.html">Overview</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Documentation</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="api/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="api/input.html">Input</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/output.html">Output</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/constraints.html">Constraints</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/models.html">Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/validation.html">Validation</a></li>
-</ul>
-</details></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul class="nav bd-sidenav">
@@ -393,7 +385,9 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-installation">Local Installation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#from-wheel">From Wheel</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#from-cloned-repo">From Cloned Repo</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#with-notebook-dependencies">With Notebook Dependencies</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#development">Development</a></li>
 </ul>
 </li>
@@ -431,7 +425,7 @@ document.write(`
 <section id="getting-started">
 <h2>Getting Started<a class="headerlink" href="#getting-started" title="Permalink to this heading">#</a></h2>
 <ol class="arabic simple">
-<li><p><strong>Install:</strong> Clone the repository and run <code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.</span></code></p></li>
+<li><p><strong>Install:</strong> See <span class="xref myst">Installation</span> below</p></li>
 <li><p><strong>Learn:</strong> Try the <span class="xref myst">EOOS notebook</span> or <span class="xref myst">MARS notebook</span></p></li>
 <li><p><strong>Reference:</strong> Use API docs below for parameter details</p></li>
 </ol>
@@ -467,19 +461,33 @@ document.write(`
 <hr class="docutils" />
 <section id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">#</a></h2>
-<section id="local-installation">
-<h3>Local Installation<a class="headerlink" href="#local-installation" title="Permalink to this heading">#</a></h3>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Clone the repository</span>
-<span class="nb">cd</span><span class="w"> </span>geoai-sdk
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+<section id="from-wheel">
+<h3>From Wheel<a class="headerlink" href="#from-wheel" title="Permalink to this heading">#</a></h3>
+<p>Download the wheel from the <a class="reference external" href="https://github.com/Azure/microsoft-planetary-computer-pro/releases">GitHub Release</a>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>geoai_sdk-0.1.0-py3-none-any.whl
+</pre></div>
+</div>
+</section>
+<section id="from-cloned-repo">
+<h3>From Cloned Repo<a class="headerlink" href="#from-cloned-repo" title="Permalink to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>tools/geoai-sdk/
+</pre></div>
+</div>
+</section>
+<section id="with-notebook-dependencies">
+<h3>With Notebook Dependencies<a class="headerlink" href="#with-notebook-dependencies" title="Permalink to this heading">#</a></h3>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># From wheel</span>
+pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;geoai_sdk-0.1.0-py3-none-any.whl[examples]&quot;</span>
+
+<span class="c1"># From cloned repo</span>
+pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;tools/geoai-sdk[examples]&quot;</span>
 </pre></div>
 </div>
 </section>
 <section id="development">
 <h3>Development<a class="headerlink" href="#development" title="Permalink to this heading">#</a></h3>
 <div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># For contributors: install with dev tools</span>
-<span class="nb">cd</span><span class="w"> </span>geoai-sdk
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span>
+pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;tools/geoai-sdk[dev]&quot;</span>
 
 <span class="c1"># Format code before commits</span>
 python<span class="w"> </span>-m<span class="w"> </span>black<span class="w"> </span>geoai/<span class="w"> </span>--line-length<span class="w"> </span><span class="m">100</span>
@@ -602,11 +610,11 @@ python<span class="w"> </span>-m<span class="w"> </span>flake8<span class="w"> <
       </div>
     </a>
     <a class="right-next"
-       href="api/index.html"
+       href="examples/eoos_object_detection.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">API Reference</p>
+        <p class="prev-next-title">EO-OS Object Detection</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -635,7 +643,9 @@ python<span class="w"> </span>-m<span class="w"> </span>flake8<span class="w"> <
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#examples">Examples</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">Installation</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-installation">Local Installation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#from-wheel">From Wheel</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#from-cloned-repo">From Cloned Repo</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#with-notebook-dependencies">With Notebook Dependencies</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#development">Development</a></li>
 </ul>
 </li>

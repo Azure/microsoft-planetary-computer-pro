@@ -67,7 +67,7 @@ const thebe_selector_output = ".output, .cell_output"
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
     <link rel="next" title="MARS Map Generation" href="mars_map_generation.html" />
-    <link rel="prev" title="Validation" href="../api/validation.html" />
+    <link rel="prev" title="GeoAI SDK Documentation" href="../sdk-index.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   </head>
@@ -176,14 +176,6 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="../geoai-sdk/README.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../sdk-index.html">Documentation</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../api/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../api/input.html">Input</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api/output.html">Output</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api/constraints.html">Constraints</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api/models.html">Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api/validation.html">Validation</a></li>
-</ul>
-</details></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul class="current nav bd-sidenav">
@@ -443,14 +435,22 @@ document.write(`
 <h2>Prerequisites:<a class="headerlink" href="#prerequisites" title="Permalink to this heading">#</a></h2>
 <p><strong>Before running this notebook:</strong></p>
 <ol class="arabic">
-<li><p><strong>Create virtual environment and install SDK</strong>: Navigate to the SDK directory and run:</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Create and activate virtual environment</span>
-python<span class="w"> </span>-m<span class="w"> </span>venv<span class="w"> </span>venv
-venv<span class="se">\S</span>cripts<span class="se">\a</span>ctivate<span class="w">  </span><span class="c1"># Windows</span>
-<span class="c1"># source venv/bin/activate  # macOS/Linux</span>
+<li><p><strong>Deploy Model in Azure AI Foundry</strong>: Follow the <a class="reference external" href="https://ai.azure.com/explore/models/eo-os-object-detection/version/1/registry/azureml-spectre-p">Azure AI Foundry deployment guide</a> to deploy an EOOS model and obtain your endpoint URL and API key</p></li>
+<li><p><strong>Create Azure Storage Account</strong>: Set up a storage account with a blob container for storing results (e.g., <code class="docutils literal notranslate"><span class="pre">sdk-results</span></code>)</p></li>
+<li><p><strong>Prepare GeoCatalog</strong>: Set up your GeoCatalog instance for publishing results to a collection</p></li>
+<li><p><strong>Azure RBAC Roles</strong>: Ensure you have the required roles assigned:</p>
+<ul class="simple">
+<li><p>Storage: <code class="docutils literal notranslate"><span class="pre">Storage</span> <span class="pre">Blob</span> <span class="pre">Data</span> <span class="pre">Contributor</span></code> + <code class="docutils literal notranslate"><span class="pre">Storage</span> <span class="pre">Blob</span> <span class="pre">Delegator</span></code></p></li>
+<li><p>Model endpoint: <code class="docutils literal notranslate"><span class="pre">AzureML</span> <span class="pre">Data</span> <span class="pre">Scientist</span></code> or <code class="docutils literal notranslate"><span class="pre">Azure</span> <span class="pre">AI</span> <span class="pre">Developer</span></code></p></li>
+<li><p>GeoCatalog: Write access to target collection</p></li>
+</ul>
+</li>
+<li><p><strong>Install SDK</strong>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># From wheel (download from GitHub Release)</span>
+pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;geoai_sdk-0.1.0-py3-none-any.whl[examples]&quot;</span>
 
-<span class="c1"># Install SDK (includes ipykernel)</span>
-pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+<span class="c1"># Or from cloned repo</span>
+pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;tools/geoai-sdk[examples]&quot;</span>
 
 <span class="c1"># Register Jupyter kernel</span>
 python<span class="w"> </span>-m<span class="w"> </span>ipykernel<span class="w"> </span>install<span class="w"> </span>--user<span class="w"> </span>--name<span class="o">=</span>geoai-sdk
@@ -462,9 +462,10 @@ python<span class="w"> </span>-m<span class="w"> </span>ipykernel<span class="w"
 </pre></div>
 </div>
 </li>
-<li><p><strong>Select Kernel</strong>: Choose “Python 3.12 (geoai-sdk)” as the notebook kernel</p></li>
-<li><p><strong>Configure Settings</strong>: Update cells with your model endpoint and output storage details</p></li>
+<li><p><strong>Select Kernel</strong>: Choose “Python 3.9+ (geoai-sdk)” as the notebook kernel</p></li>
+<li><p><strong>Configure Settings</strong>: Update cells with your model endpoint and storage details</p></li>
 </ol>
+<p><strong>Optional:</strong> Copy <code class="docutils literal notranslate"><span class="pre">.env.example</span></code> to <code class="docutils literal notranslate"><span class="pre">.env</span></code> (in the same directory as this notebook) to set environment variables</p>
 </section>
 <section id="setup-and-imports">
 <h2>1. Setup and Imports<a class="headerlink" href="#setup-and-imports" title="Permalink to this heading">#</a></h2>
@@ -482,11 +483,18 @@ python<span class="w"> </span>-m<span class="w"> </span>ipykernel<span class="w"
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">asyncio</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
 <span class="kn">from</span><span class="w"> </span><span class="nn">azure.identity</span><span class="w"> </span><span class="kn">import</span> <span class="n">DefaultAzureCredential</span>
 
-<span class="c1"># Optional: Enable DEBUG logging for troubleshooting</span>
-<span class="c1"># Uncomment to see detailed per-chip processing logs</span>
-<span class="c1"># os.environ[&#39;GEOAI_LOG_LEVEL&#39;] = &#39;DEBUG&#39;</span>
+<span class="c1"># Load environment variables from .env file if it exists</span>
+<span class="k">try</span><span class="p">:</span>
+    <span class="kn">from</span><span class="w"> </span><span class="nn">dotenv</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_dotenv</span>
+    <span class="n">env_path</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;.env&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">env_path</span><span class="o">.</span><span class="n">exists</span><span class="p">():</span>
+        <span class="n">load_dotenv</span><span class="p">(</span><span class="n">env_path</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;✅ Loaded environment variables from .env&quot;</span><span class="p">)</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="k">pass</span>  <span class="c1"># python-dotenv not installed</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">geoai</span>
 
@@ -763,17 +771,17 @@ python<span class="w"> </span>-m<span class="w"> </span>ipykernel<span class="w"
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Configure output destination (GeoCatalog + Blob Storage)</span>
 <span class="n">output</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">Output</span><span class="p">(</span>
     <span class="c1"># GeoCatalog endpoint (required)</span>
-    <span class="n">geocatalog_uri</span><span class="o">=</span><span class="s2">&quot;https://cerademo.gsa0gkcaf5c9e6dv.uksouth.geocatalog.spatio.azure.com/&quot;</span><span class="p">,</span>
-    <span class="n">collection_name</span><span class="o">=</span><span class="s2">&quot;eoos-infer-01&quot;</span><span class="p">,</span>
+    <span class="n">geocatalog_uri</span><span class="o">=</span><span class="s2">&quot;https://your-geocatalog.example.com/&quot;</span><span class="p">,</span>
+    <span class="n">collection_name</span><span class="o">=</span><span class="s2">&quot;my-eoos-detections&quot;</span><span class="p">,</span>
     <span class="n">credential</span><span class="o">=</span><span class="n">credential</span><span class="p">,</span>
     
     <span class="c1"># Blob storage for chip imagery and STAC assets (required)</span>
-    <span class="n">storage_url</span><span class="o">=</span><span class="s2">&quot;https://planetarycomputeremo.blob.core.windows.net&quot;</span><span class="p">,</span>
+    <span class="n">storage_url</span><span class="o">=</span><span class="s2">&quot;https://yourstorageaccount.blob.core.windows.net&quot;</span><span class="p">,</span>
     <span class="n">blob_container</span><span class="o">=</span><span class="s2">&quot;sdk-results&quot;</span><span class="p">,</span>
     <span class="n">storage_account_key</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;STORAGE_ACCOUNT_KEY&quot;</span><span class="p">),</span>  <span class="c1"># Optional: use Azure AD if not provided</span>
     
     <span class="c1"># Run identifier (optional - auto-generates UUID if not provided)</span>
-    <span class="n">run_id</span><span class="o">=</span><span class="s2">&quot;eoos-infer-01&quot;</span><span class="p">,</span>
+    <span class="n">run_id</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>  <span class="c1"># Auto-generate unique ID</span>
     
     <span class="c1"># Local file saving (optional - for debugging only)</span>
     <span class="n">save_local</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># Set to True to save GeoJSON files locally</span>
@@ -832,58 +840,22 @@ az<span class="w"> </span>role<span class="w"> </span>assignment<span class="w">
 </div>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># ============================================================================</span>
-<span class="c1"># Choose ONE authentication method below:</span>
-<span class="c1"># ============================================================================</span>
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># Initialize EOOS model with your endpoint</span>
+<span class="c1"># Authentication: Uses EOOS_API_KEY from .env if set, otherwise uses Azure AD (credential)</span>
 
-<span class="c1"># ------------------------------</span>
-<span class="c1"># Option 1: API Key / JWT Token</span>
-<span class="c1"># ------------------------------</span>
-<span class="c1"># Simplest method - works with both Azure ML and AI Foundry</span>
-<span class="c1"># Get key from Azure ML Studio or AI Foundry portal</span>
-
-<span class="c1"># Example for Azure ML (JWT token from &quot;Consume&quot; tab), this endpoint supports 2 instances with 5 concurrent requests each</span>
 <span class="n">model</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">EOOS</span><span class="p">(</span>
-    <span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;https://eoos-foundry.polandcentral.inference.ml.azure.com/score&quot;</span><span class="p">,</span>
-    <span class="n">credential</span><span class="o">=</span><span class="s2">&quot;auth-token&quot;</span><span class="p">,</span>  <span class="c1"># Replace with actual token from Azure ML &quot;Consume&quot; tab</span>
-    <span class="n">num_instances</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="c1"># We currently support two insatances in AML, the published notebook will use defaults of 1</span>
-    <span class="n">concurrent_per_instance</span><span class="o">=</span><span class="mi">5</span>
+    <span class="n">endpoint</span><span class="o">=</span><span class="s2">&quot;https://your-eoos-endpoint.eastus2.inference.ml.azure.com/score&quot;</span><span class="p">,</span>
+    <span class="n">credential</span><span class="o">=</span><span class="n">os</span><span class="o">.</span><span class="n">getenv</span><span class="p">(</span><span class="s2">&quot;EOOS_API_KEY&quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">credential</span><span class="p">,</span>  <span class="c1"># API key from .env or Azure AD</span>
+    <span class="c1"># num_instances=1,           # Configure based on your endpoint capacity</span>
+    <span class="c1"># concurrent_per_instance=1  # Configure based on your endpoint capacity</span>
 <span class="p">)</span>
-
-<span class="c1"># Example for AI Foundry (API key from portal)</span>
-<span class="c1"># model = geoai.models.EOOS(</span>
-<span class="c1">#     endpoint=&quot;https://your-model.eastus.inference.ai.azure.com/score&quot;,</span>
-<span class="c1">#     credential=os.getenv(&quot;EOOS_API_KEY&quot;, &quot;your-api-key-here&quot;),</span>
-<span class="c1">#     num_instances=2,</span>
-<span class="c1">#     concurrent_per_instance=5</span>
-<span class="c1"># )</span>
-
-<span class="c1"># ------------------------------</span>
-<span class="c1"># Option 2: Azure AD (Recommended for Production)</span>
-<span class="c1"># ------------------------------</span>
-<span class="c1"># Uses DefaultAzureCredential - no secrets in code!</span>
-<span class="c1"># Requires role assignment (see Cell 14 for details)</span>
-
-<span class="c1"># model = geoai.models.EOOS(</span>
-<span class="c1">#     endpoint=&quot;https://your-model.eastus.inference.ai.azure.com/score&quot;,</span>
-<span class="c1">#     credential=credential,  # DefaultAzureCredential from Cell 2</span>
-<span class="c1">#     num_instances=2,</span>
-<span class="c1">#     concurrent_per_instance=5</span>
-<span class="c1"># )</span>
-<span class="c1">#</span>
-<span class="c1"># Required roles:</span>
-<span class="c1">#   - Azure ML: &quot;AzureML Data Scientist&quot;</span>
-<span class="c1">#   - AI Foundry: &quot;Azure AI Developer&quot; or &quot;Cognitive Services User&quot;</span>
-
-<span class="c1"># ============================================================================</span>
 
 <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;🤖 EO-OS model initialized&quot;</span><span class="p">)</span>
 <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Endpoint: </span><span class="si">{</span><span class="n">model</span><span class="o">.</span><span class="n">endpoint</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
 <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">credential</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Auth: API Key/Token (length: </span><span class="si">{</span><span class="nb">len</span><span class="p">(</span><span class="n">model</span><span class="o">.</span><span class="n">credential</span><span class="p">)</span><span class="si">}</span><span class="s2"> chars)&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Auth: API Key (from EOOS_API_KEY env var)&quot;</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Auth: Azure AD (DefaultAzureCredential)&quot;</span><span class="p">)</span>
-    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   ℹ️  Scope auto-detected based on endpoint URL&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
@@ -1123,11 +1095,11 @@ az<span class="w"> </span>role<span class="w"> </span>assignment<span class="w">
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Blob storage: </span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">storage_url</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">blob_container</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">run_id</span><span class="si">}</span><span class="s2">/&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">   💡 View individual AOI results in the GeoCatalog collection&quot;</span><span class="p">)</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="c1"># Single AOI: show item-level info</span>
+        <span class="c1"># Single AOI results</span>
+        <span class="n">collection_url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">geocatalog_uri</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;/&#39;</span><span class="p">)</span><span class="si">}</span><span class="s2">/collections/</span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">collection_name</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Collection: </span><span class="si">{</span><span class="n">collection_url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
         <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Run ID: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">run_id</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Collection: </span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">collection_name</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   View: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">geocatalog_url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Blob path: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">blob_base_path</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;   Blob storage: </span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">storage_url</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">output</span><span class="o">.</span><span class="n">blob_container</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">run_id</span><span class="si">}</span><span class="s2">/&quot;</span><span class="p">)</span>
 <span class="k">else</span><span class="p">:</span>
     <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">⚠️  GeoCatalog publishing: Not enabled or failed&quot;</span><span class="p">)</span>
 
@@ -1275,10 +1247,6 @@ az<span class="w"> </span>role<span class="w"> </span>assignment<span class="w">
 <li><p>📊 <strong>Estimation</strong>: <code class="docutils literal notranslate"><span class="pre">model.estimate()</span></code> - Preview chip count and verify data</p></li>
 <li><p>🚀 <strong>Execution</strong>: <code class="docutils literal notranslate"><span class="pre">model.run()</span></code> - Process with automatic validation</p></li>
 </ul>
-<p><strong>Support:</strong></p>
-<ul class="simple">
-<li><p>GitHub: Report issues or contribute</p></li>
-</ul>
 </section>
 </section>
 
@@ -1313,12 +1281,12 @@ az<span class="w"> </span>role<span class="w"> </span>assignment<span class="w">
                   
 <div class="prev-next-area">
     <a class="left-prev"
-       href="../api/validation.html"
+       href="../sdk-index.html"
        title="previous page">
       <i class="fa-solid fa-angle-left"></i>
       <div class="prev-next-info">
         <p class="prev-next-subtitle">previous</p>
-        <p class="prev-next-title">Validation</p>
+        <p class="prev-next-title">GeoAI SDK Documentation</p>
       </div>
     </a>
     <a class="right-next"

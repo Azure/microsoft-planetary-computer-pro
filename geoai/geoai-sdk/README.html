@@ -176,14 +176,6 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="current nav bd-sidenav">
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="../sdk-index.html">Documentation</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="../api/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="../api/input.html">Input</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api/output.html">Output</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api/constraints.html">Constraints</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api/models.html">Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="../api/validation.html">Validation</a></li>
-</ul>
-</details></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul class="nav bd-sidenav">
@@ -392,6 +384,14 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-capabilities"><strong>Key Capabilities</strong></a></li>
 </ul>
 </li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">� Prerequisites</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deploy-ai-model-in-azure-ai-foundry">1. Deploy AI Model in Azure AI Foundry</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#azure-storage-account">2. Azure Storage Account</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geocatalog">3. GeoCatalog</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#azure-rbac-roles">4. Azure RBAC Roles</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-variables-optional">5. Environment Variables (Optional)</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">🛠️ Installation</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-it-works">🎯 How It Works</a><ul class="nav section-nav flex-column">
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#automated-workflow-steps">Automated Workflow Steps</a></li>
@@ -508,18 +508,130 @@ document.write(`
 </section>
 </section>
 <hr class="docutils" />
-<section id="installation">
-<h2>🛠️ Installation<a class="headerlink" href="#installation" title="Permalink to this heading">#</a></h2>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span>.
+<section id="prerequisites">
+<h2>� Prerequisites<a class="headerlink" href="#prerequisites" title="Permalink to this heading">#</a></h2>
+<p>Before using the SDK, you’ll need to set up the following Azure resources:</p>
+<section id="deploy-ai-model-in-azure-ai-foundry">
+<h3>1. Deploy AI Model in Azure AI Foundry<a class="headerlink" href="#deploy-ai-model-in-azure-ai-foundry" title="Permalink to this heading">#</a></h3>
+<p>Deploy an EOOS or MARS model endpoint to run inference:</p>
+<ul class="simple">
+<li><p>Browse models in <a class="reference external" href="https://ai.azure.com/explore/models">Azure AI Foundry Model Catalog</a>:</p>
+<ul>
+<li><p><a class="reference external" href="https://ai.azure.com/explore/models/eo-os-object-detection/version/1/registry/azureml-spectre-p">EOOS Object Detection</a></p></li>
+<li><p><a class="reference external" href="https://ai.azure.com/explore/models/mars-map-autoregressive/version/1/registry/azureml-spectre-p">MARS Map Generation</a></p></li>
+</ul>
+</li>
+<li><p>Obtain your endpoint URL (e.g., <code class="docutils literal notranslate"><span class="pre">https://your-model.eastus.inference.ml.azure.com/score</span></code>)</p></li>
+<li><p>Get your API key or configure Azure AD authentication</p></li>
+</ul>
+</section>
+<section id="azure-storage-account">
+<h3>2. Azure Storage Account<a class="headerlink" href="#azure-storage-account" title="Permalink to this heading">#</a></h3>
+<p>Required for storing imagery and STAC item assets:</p>
+<ul class="simple">
+<li><p>Create an <a class="reference external" href="https://learn.microsoft.com/en-us/azure/storage/common/storage-account-create">Azure Storage Account</a></p></li>
+<li><p>Create a blob container (e.g., <code class="docutils literal notranslate"><span class="pre">sdk-results</span></code>)</p></li>
+<li><p>Note your storage URL (e.g., <code class="docutils literal notranslate"><span class="pre">https://youraccount.blob.core.windows.net</span></code>)</p></li>
+</ul>
+</section>
+<section id="geocatalog">
+<h3>3. GeoCatalog<a class="headerlink" href="#geocatalog" title="Permalink to this heading">#</a></h3>
+<p>Required for publishing results as STAC items:</p>
+<ul class="simple">
+<li><p>Set up a GeoCatalog instance or use an existing one</p></li>
+<li><p>Note your GeoCatalog URI (collections are auto-created)</p></li>
+</ul>
+</section>
+<section id="azure-rbac-roles">
+<h3>4. Azure RBAC Roles<a class="headerlink" href="#azure-rbac-roles" title="Permalink to this heading">#</a></h3>
+<p>Assign the following roles for Azure AD authentication (recommended):</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Resource</p></th>
+<th class="head"><p>Required Role</p></th>
+<th class="head"><p>Purpose</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Storage Account</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Storage</span> <span class="pre">Blob</span> <span class="pre">Data</span> <span class="pre">Contributor</span></code></p></td>
+<td><p>Upload chips and assets</p></td>
+</tr>
+<tr class="row-odd"><td><p>Storage Account</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Storage</span> <span class="pre">Blob</span> <span class="pre">Delegator</span></code></p></td>
+<td><p>Generate SAS tokens with Azure AD</p></td>
+</tr>
+<tr class="row-even"><td><p>GeoCatalog</p></td>
+<td><p>Write access to collection</p></td>
+<td><p>Publish STAC items</p></td>
+</tr>
+<tr class="row-odd"><td><p>Model Endpoint (Azure ML)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">AzureML</span> <span class="pre">Data</span> <span class="pre">Scientist</span></code></p></td>
+<td><p>Call inference endpoint</p></td>
+</tr>
+<tr class="row-even"><td><p>Model Endpoint (AI Foundry)</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">Azure</span> <span class="pre">AI</span> <span class="pre">Developer</span></code> or <code class="docutils literal notranslate"><span class="pre">Cognitive</span> <span class="pre">Services</span> <span class="pre">User</span></code></p></td>
+<td><p>Call inference endpoint</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>Assign roles using Azure CLI:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Storage roles</span>
+az<span class="w"> </span>role<span class="w"> </span>assignment<span class="w"> </span>create<span class="w"> </span>--assignee<span class="w"> </span>user@contoso.com<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--role<span class="w"> </span><span class="s2">&quot;Storage Blob Data Contributor&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--scope<span class="w"> </span>/subscriptions/<span class="o">{</span>sub-id<span class="o">}</span>/resourceGroups/<span class="o">{</span>rg<span class="o">}</span>/providers/Microsoft.Storage/storageAccounts/<span class="o">{</span>account<span class="o">}</span>
+
+<span class="c1"># Model endpoint role (Azure ML example)</span>
+az<span class="w"> </span>role<span class="w"> </span>assignment<span class="w"> </span>create<span class="w"> </span>--assignee<span class="w"> </span>user@contoso.com<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--role<span class="w"> </span><span class="s2">&quot;AzureML Data Scientist&quot;</span><span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--scope<span class="w"> </span>/subscriptions/<span class="o">{</span>sub-id<span class="o">}</span>/resourceGroups/<span class="o">{</span>rg<span class="o">}</span>/providers/Microsoft.MachineLearningServices/workspaces/<span class="o">{</span>workspace<span class="o">}</span>
 </pre></div>
 </div>
-<p>For development (includes pytest, notebooks, linting):</p>
-<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>-e<span class="w"> </span><span class="s2">&quot;.[dev]&quot;</span>
+</section>
+<section id="environment-variables-optional">
+<h3>5. Environment Variables (Optional)<a class="headerlink" href="#environment-variables-optional" title="Permalink to this heading">#</a></h3>
+<p>For convenience, you can set environment variables instead of using Azure AD:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Storage account key (alternative to Azure AD)</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">STORAGE_ACCOUNT_KEY</span><span class="o">=</span><span class="s2">&quot;your-key-here&quot;</span>
+
+<span class="c1"># Model API keys (alternative to Azure AD)</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">EOOS_API_KEY</span><span class="o">=</span><span class="s2">&quot;your-eoos-key&quot;</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">MARS_API_KEY</span><span class="o">=</span><span class="s2">&quot;your-mars-key&quot;</span>
+
+<span class="c1"># SDK logging level</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">GEOAI_LOG_LEVEL</span><span class="o">=</span><span class="s2">&quot;INFO&quot;</span><span class="w">  </span><span class="c1"># or DEBUG for detailed logs</span>
+</pre></div>
+</div>
+<p><strong>For example notebooks:</strong> Copy <code class="docutils literal notranslate"><span class="pre">.env.example</span></code> to <code class="docutils literal notranslate"><span class="pre">.env</span></code> (in the same directory as the notebooks) and edit with your values. The notebooks will automatically load it.</p>
+</section>
+</section>
+<hr class="docutils" />
+<section id="installation">
+<h2>🛠️ Installation<a class="headerlink" href="#installation" title="Permalink to this heading">#</a></h2>
+<p><strong>From wheel</strong> (download from <a class="reference external" href="https://github.com/Azure/microsoft-planetary-computer-pro/releases">GitHub Release</a>):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>geoai_sdk-0.1.0-py3-none-any.whl
+</pre></div>
+</div>
+<p><strong>From cloned repo:</strong></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>tools/geoai-sdk/
+</pre></div>
+</div>
+<p>For running example notebooks, install with the <code class="docutils literal notranslate"><span class="pre">examples</span></code> extra:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># From wheel</span>
+pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;geoai_sdk-0.1.0-py3-none-any.whl[examples]&quot;</span>
+
+<span class="c1"># From cloned repo</span>
+pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;tools/geoai-sdk[examples]&quot;</span>
+</pre></div>
+</div>
+<p>For development (includes pytest, linting tools):</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="s2">&quot;tools/geoai-sdk[dev]&quot;</span>
 </pre></div>
 </div>
 <p><strong>Requirements:</strong></p>
 <ul class="simple">
-<li><p>Python 3.12+</p></li>
+<li><p>Python 3.9+</p></li>
 <li><p>Azure credentials (for GeoCatalog publishing)</p></li>
 <li><p>Model endpoint (Azure AI Foundry deployment)</p></li>
 </ul>
@@ -738,6 +850,9 @@ document.write(`
 <section id="support">
 <h2>🤝 Support<a class="headerlink" href="#support" title="Permalink to this heading">#</a></h2>
 <ul class="simple">
+<li><p><strong>Homepage</strong>: <a class="reference external" href="https://aka.ms/geoaisdk">https://aka.ms/geoaisdk</a></p></li>
+<li><p><strong>Documentation</strong>: <a class="reference external" href="https://github.com/Azure/microsoft-planetary-computer-pro/tree/main/docs/geoai">Full Docs</a></p></li>
+<li><p><strong>Repository</strong>: <a class="reference external" href="https://github.com/Azure/microsoft-planetary-computer-pro/tree/main/tools/geoai-sdk">GitHub</a></p></li>
 <li><p><strong>Issues</strong>: <a class="reference external" href="https://github.com/Azure/microsoft-planetary-computer-pro/issues">GitHub Issues</a></p></li>
 </ul>
 <hr class="docutils" />
@@ -814,6 +929,14 @@ document.write(`
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#no-infrastructure-management"><strong>No Infrastructure Management</strong></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#intelligent-workflow"><strong>Intelligent Workflow</strong></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#key-capabilities"><strong>Key Capabilities</strong></a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">� Prerequisites</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deploy-ai-model-in-azure-ai-foundry">1. Deploy AI Model in Azure AI Foundry</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#azure-storage-account">2. Azure Storage Account</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#geocatalog">3. GeoCatalog</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#azure-rbac-roles">4. Azure RBAC Roles</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#environment-variables-optional">5. Environment Variables (Optional)</a></li>
 </ul>
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#installation">🛠️ Installation</a></li>

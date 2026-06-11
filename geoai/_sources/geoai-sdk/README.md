@@ -75,20 +75,112 @@ print(f"🔗 View: {result.geocatalog_url}")
 
 ---
 
-## 🛠️ Installation
+## � Prerequisites
 
+Before using the SDK, you'll need to set up the following Azure resources:
+
+### 1. Deploy AI Model in Azure AI Foundry
+
+Deploy an EOOS or MARS model endpoint to run inference:
+
+- Browse models in [Azure AI Foundry Model Catalog](https://ai.azure.com/explore/models):
+  - [EOOS Object Detection](https://ai.azure.com/explore/models/eo-os-object-detection/version/1/registry/azureml-spectre-p)
+  - [MARS Map Generation](https://ai.azure.com/explore/models/mars-map-autoregressive/version/1/registry/azureml-spectre-p)
+- Obtain your endpoint URL (e.g., `https://your-model.eastus.inference.ml.azure.com/score`)
+- Get your API key or configure Azure AD authentication
+
+### 2. Azure Storage Account
+
+Required for storing imagery and STAC item assets:
+
+- Create an [Azure Storage Account](https://learn.microsoft.com/en-us/azure/storage/common/storage-account-create)
+- Create a blob container (e.g., `sdk-results`)
+- Note your storage URL (e.g., `https://youraccount.blob.core.windows.net`)
+
+### 3. GeoCatalog
+
+Required for publishing results as STAC items:
+
+- Set up a GeoCatalog instance or use an existing one
+- Note your GeoCatalog URI (collections are auto-created)
+
+### 4. Azure RBAC Roles
+
+Assign the following roles for Azure AD authentication (recommended):
+
+| Resource | Required Role | Purpose |
+|----------|--------------|---------|
+| Storage Account | `Storage Blob Data Contributor` | Upload chips and assets |
+| Storage Account | `Storage Blob Delegator` | Generate SAS tokens with Azure AD |
+| GeoCatalog | Write access to collection | Publish STAC items |
+| Model Endpoint (Azure ML) | `AzureML Data Scientist` | Call inference endpoint |
+| Model Endpoint (AI Foundry) | `Azure AI Developer` or `Cognitive Services User` | Call inference endpoint |
+
+**Assign roles using Azure CLI:**
 ```bash
-pip install -e .
+# Storage roles
+az role assignment create --assignee user@contoso.com \
+  --role "Storage Blob Data Contributor" \
+  --scope /subscriptions/{sub-id}/resourceGroups/{rg}/providers/Microsoft.Storage/storageAccounts/{account}
+
+# Model endpoint role (Azure ML example)
+az role assignment create --assignee user@contoso.com \
+  --role "AzureML Data Scientist" \
+  --scope /subscriptions/{sub-id}/resourceGroups/{rg}/providers/Microsoft.MachineLearningServices/workspaces/{workspace}
 ```
 
-For development (includes pytest, notebooks, linting):
+### 5. Environment Variables (Optional)
+
+For convenience, you can set environment variables instead of using Azure AD:
 
 ```bash
-pip install -e ".[dev]"
+# Storage account key (alternative to Azure AD)
+export STORAGE_ACCOUNT_KEY="your-key-here"
+
+# Model API keys (alternative to Azure AD)
+export EOOS_API_KEY="your-eoos-key"
+export MARS_API_KEY="your-mars-key"
+
+# SDK logging level
+export GEOAI_LOG_LEVEL="INFO"  # or DEBUG for detailed logs
+```
+
+**For example notebooks:** Copy `.env.example` to `.env` (in the same directory as the notebooks) and edit with your values. The notebooks will automatically load it.
+
+---
+
+## 🛠️ Installation
+
+**From wheel** (download from [GitHub Release](https://github.com/Azure/microsoft-planetary-computer-pro/releases)):
+
+```bash
+pip install geoai_sdk-0.1.0-py3-none-any.whl
+```
+
+**From cloned repo:**
+
+```bash
+pip install tools/geoai-sdk/
+```
+
+For running example notebooks, install with the `examples` extra:
+
+```bash
+# From wheel
+pip install "geoai_sdk-0.1.0-py3-none-any.whl[examples]"
+
+# From cloned repo
+pip install "tools/geoai-sdk[examples]"
+```
+
+For development (includes pytest, linting tools):
+
+```bash
+pip install "tools/geoai-sdk[dev]"
 ```
 
 **Requirements:**
-- Python 3.12+
+- Python 3.9+
 - Azure credentials (for GeoCatalog publishing)
 - Model endpoint (Azure AI Foundry deployment)
 
@@ -289,6 +381,9 @@ print(f"🚂 Railways: {result.detection_counts.get('Railway', 0)}")
 
 ## 🤝 Support
 
+- **Homepage**: [https://aka.ms/geoaisdk](https://aka.ms/geoaisdk)
+- **Documentation**: [Full Docs](https://github.com/Azure/microsoft-planetary-computer-pro/tree/main/docs/geoai)
+- **Repository**: [GitHub](https://github.com/Azure/microsoft-planetary-computer-pro/tree/main/tools/geoai-sdk)
 - **Issues**: [GitHub Issues](https://github.com/Azure/microsoft-planetary-computer-pro/issues)
 
 ---

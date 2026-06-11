@@ -177,14 +177,6 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="geoai-sdk/README.html">Overview</a></li>
 <li class="toctree-l1"><a class="reference internal" href="sdk-index.html">Documentation</a></li>
-<li class="toctree-l1 has-children"><a class="reference internal" href="api/index.html">API Reference</a><details><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul>
-<li class="toctree-l2"><a class="reference internal" href="api/input.html">Input</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/output.html">Output</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/constraints.html">Constraints</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/models.html">Models</a></li>
-<li class="toctree-l2"><a class="reference internal" href="api/validation.html">Validation</a></li>
-</ul>
-</details></li>
 </ul>
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">Examples</span></p>
 <ul class="nav bd-sidenav">
@@ -385,7 +377,18 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#about">About</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#about">About</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#support">Support</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#geoai-models">GeoAI Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#geoai-sdk-preview">GeoAI SDK (Preview)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#azure-services">Azure Services</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#microsoft-planetary-computer">Microsoft Planetary Computer</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#microsoft-planetary-computer-pro">Microsoft Planetary Computer Pro</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#microsoft-foundry">Microsoft Foundry</a></li>
+</ul>
+</li>
 </ul>
             </nav>
         </div>
@@ -399,14 +402,86 @@ document.write(`
                   
   <section id="geoai">
 <h1>GeoAI<a class="headerlink" href="#geoai" title="Permalink to this heading">#</a></h1>
-<p>Welcome to the GeoAI documentation for Microsoft Planetary Computer Pro.</p>
-<div class="admonition note">
-<p class="admonition-title">Note</p>
-<p>This site is under construction. Content will be added soon.</p>
-</div>
+<p>Welcome to the GeoAI documentation for Microsoft Planetary Computer Pro!</p>
 <section id="about">
 <h2>About<a class="headerlink" href="#about" title="Permalink to this heading">#</a></h2>
-<p>GeoAI brings together geospatial data from Microsoft Planetary Computer with AI foundation models to enable Earth observation analysis at scale.</p>
+<p>Microsoft is developing GeoAI (Geospatial Artificial Intelligence) solutions by delivering tools and tutorials that unify the geospatial data management capabilities of Microsoft Planetary Computer Pro and the Azure AI platform Microsoft Foundry. Through a combination of first-party and third-party models, Microsoft is building an ecosystem of GeoAI capabilities for organizations to deploy at scale with Azure Cloud.</p>
+<p>We are using this resource to share and distribute materials to help guide your organization on your journey to build AI powered geospatial solutions. As new models and capabilities are released we will announce them through our product blogs for <a class="reference external" href="https://techcommunity.microsoft.com/category/azure/blog/microsoft-planetary-computer-blog">Planetary Computer Pro</a> or <a class="reference external" href="https://techcommunity.microsoft.com/category/azure-ai-foundry/blog/azure-ai-foundry-blog">Microsoft Foundry</a>, and provide documentation, examples, and tutorials here.</p>
+<section id="support">
+<h3>Support<a class="headerlink" href="#support" title="Permalink to this heading">#</a></h3>
+<p>If you have questions, or experience any challenges working with this resource, please <a class="reference external" href="https://github.com/Azure/microsoft-planetary-computer-pro/issues/new">open an issue</a>.</p>
+</section>
+</section>
+<section id="geoai-models">
+<h2>GeoAI Models<a class="headerlink" href="#geoai-models" title="Permalink to this heading">#</a></h2>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Model Name</p></th>
+<th class="head"><p>Description</p></th>
+<th class="head"><p>Publisher</p></th>
+<th class="head"><p>Applications</p></th>
+<th class="head"><p>Example(s)</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Aurora</p></td>
+<td><p>AI weather forecasting model for atmospheric and climate impact analysis. <a class="reference external" href="https://ai.azure.com/catalog/models/Aurora">Model Card</a></p></td>
+<td><p>Microsoft Research</p></td>
+<td><p>Weather Forecasting</p></td>
+<td><p><a class="reference external" href="https://aka.ms/aurora-on-mpc-github">Storm Impact Assessment</a></p></td>
+</tr>
+<tr class="row-odd"><td><p>EO-OS Object Detection</p></td>
+<td><p>Geospatial object detection model for Earth observation imagery. <a class="reference external" href="https://ai.azure.com/catalog/models/eo-os-object-detection">Model Card</a></p></td>
+<td><p>Microsoft</p></td>
+<td><p>Object Detection</p></td>
+<td><p><a class="reference internal" href="examples/eoos_object_detection.html"><span class="doc std std-doc">Airplane detection with NAIP</span></a></p></td>
+</tr>
+<tr class="row-even"><td><p>MARS Map Autoregressive</p></td>
+<td><p>Autoregressive geospatial model for map generation and completion tasks. <a class="reference external" href="https://ai.azure.com/catalog/models/mars-map-autoregressive">Model Card</a></p></td>
+<td><p>Microsoft</p></td>
+<td><p>Map Generation</p></td>
+<td><p><a class="reference internal" href="examples/mars_map_generation.html"><span class="doc std std-doc">Map Feature Extraction with NAIP</span></a></p></td>
+</tr>
+<tr class="row-odd"><td><p>Fields of the World (FTW) ‘PRUE’</p></td>
+<td><p>Baseline AI model for agricultural field boundary detection. <a class="reference external" href="https://ai.azure.com/catalog/models/ftw-prue-efnet-b7-ccby">Model Card</a></p></td>
+<td><p>Taylor Geospatial</p></td>
+<td><p>Agriculture</p></td>
+<td><p>Coming Soon</p></td>
+</tr>
+<tr class="row-even"><td><p>Earth2Studio FCN3 StormScope</p></td>
+<td><p>Storm-focused weather forecasting model for atmospheric prediction workflows. <a class="reference external" href="https://ai.azure.com/catalog/models/earth2studio-fcn3-stormscope">Model Card</a></p></td>
+<td><p>NVIDIA</p></td>
+<td><p>Weather Forecasting</p></td>
+<td><p>Coming Soon</p></td>
+</tr>
+<tr class="row-odd"><td><p>Earth2Studio FCN3</p></td>
+<td><p>Foundation weather forecasting model for global atmospheric prediction. <a class="reference external" href="https://ai.azure.com/catalog/models/earth2studio-fcn3">Model Card</a></p></td>
+<td><p>NVIDIA</p></td>
+<td><p>Weather Forecasting</p></td>
+<td><p>Coming Soon</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="geoai-sdk-preview">
+<h2>GeoAI SDK (Preview)<a class="headerlink" href="#geoai-sdk-preview" title="Permalink to this heading">#</a></h2>
+<p>The Planetary Computer Pro <a class="reference internal" href="geoai-sdk/README.html"><span class="doc std std-doc">GeoAI SDK</span></a> provides an extensible, Python API for working with geospatial AI models. By abstracting interactions with Planetary Computer, Planetary Computer Pro, and GeoAI models hosted in Microsoft Foundry.  As new models are added to the geospatial ai model offerings in Foundry, the GeoAI SDK can be extended to support new models while providing an easy to use and consistent user experience.</p>
+</section>
+<section id="azure-services">
+<h2>Azure Services<a class="headerlink" href="#azure-services" title="Permalink to this heading">#</a></h2>
+<section id="microsoft-planetary-computer">
+<h3>Microsoft Planetary Computer<a class="headerlink" href="#microsoft-planetary-computer" title="Permalink to this heading">#</a></h3>
+<p>The Planetary Computer combines a multi-petabyte catalog of global environmental data with intuitive APIs, a flexible scientific environment that allows users to answer global questions about that data, and applications that put those answers in the hands of conservation stakeholders. <a class="reference external" href="https://aka.ms/planetarycomputer">Learn More</a></p>
+</section>
+<section id="microsoft-planetary-computer-pro">
+<h3>Microsoft Planetary Computer Pro<a class="headerlink" href="#microsoft-planetary-computer-pro" title="Permalink to this heading">#</a></h3>
+<p>Microsoft Planetary Computer’s vision is to empower every organization to unlock the full potential of geospatial data. Microsoft Planetary Computer Pro is a geospatial data management service built on top of Azure’s hyperscale infrastructure and ecosystem. The Microsoft Planetary Computer Pro GeoCatalog is a new Azure resource that provides foundational capabilities to ingest, manage, search, and distribute geospatial datasets. <a class="reference external" href="https://aka.ms/planetarycomputerpro">Learn more</a></p>
+</section>
+<section id="microsoft-foundry">
+<h3>Microsoft Foundry<a class="headerlink" href="#microsoft-foundry" title="Permalink to this heading">#</a></h3>
+<p>Microsoft Foundry is a unified Azure platform-as-a-service offering for enterprise AI operations, model builders, and application development. This foundation combines production-grade infrastructure with friendly interfaces, enabling developers to focus on building applications rather than managing infrastructure. Microsoft Foundry unifies agents, models, and tools under a single management grouping with built-in enterprise-readiness capabilities including tracing, monitoring, evaluations, and customizable enterprise setup configurations. <a class="reference external" href="https://ai.azure.com">Learn More</a></p>
+</section>
 </section>
 <div class="toctree-wrapper compound">
 </div>
@@ -469,7 +544,18 @@ document.write(`
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#about">About</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#about">About</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#support">Support</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#geoai-models">GeoAI Models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#geoai-sdk-preview">GeoAI SDK (Preview)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#azure-services">Azure Services</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#microsoft-planetary-computer">Microsoft Planetary Computer</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#microsoft-planetary-computer-pro">Microsoft Planetary Computer Pro</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#microsoft-foundry">Microsoft Foundry</a></li>
+</ul>
+</li>
 </ul>
   </nav></div>
 

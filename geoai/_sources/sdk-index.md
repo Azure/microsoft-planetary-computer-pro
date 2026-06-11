@@ -14,7 +14,7 @@ Python SDK for running geospatial AI models at scale on Azure AI Foundry and Pla
 
 ## Getting Started
 
-1. **Install:** Clone the repository and run `pip install -e .`
+1. **Install:** See [Installation](#installation) below
 2. **Learn:** Try the [EOOS notebook](../examples/EO_OS_Object_Detection/eoos_object_detection.ipynb) or [MARS notebook](../examples/MARS_Map_Autoregressive/mars_map_generation.ipynb)
 3. **Reference:** Use API docs below for parameter details
 
@@ -46,20 +46,35 @@ All examples are available as Jupyter notebooks in [examples/](../examples/):
 
 ## Installation
 
-### Local Installation
+### From Wheel
+
+Download the wheel from the [GitHub Release](https://github.com/Azure/microsoft-planetary-computer-pro/releases):
 
 ```bash
-# Clone the repository
-cd geoai-sdk
-pip install -e .
+pip install geoai_sdk-0.1.0-py3-none-any.whl
+```
+
+### From Cloned Repo
+
+```bash
+pip install tools/geoai-sdk/
+```
+
+### With Notebook Dependencies
+
+```bash
+# From wheel
+pip install "geoai_sdk-0.1.0-py3-none-any.whl[examples]"
+
+# From cloned repo
+pip install "tools/geoai-sdk[examples]"
 ```
 
 ### Development
 
 ```bash
 # For contributors: install with dev tools
-cd geoai-sdk
-pip install -e ".[dev]"
+pip install "tools/geoai-sdk[dev]"
 
 # Format code before commits
 python -m black geoai/ --line-length 100
