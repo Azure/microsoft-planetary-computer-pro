@@ -40,7 +40,7 @@ Python SDK for running geospatial AI models at scale on Azure AI Foundry and Pla
 All examples are available as Jupyter notebooks in [examples/](../examples/):
 
 - **[EOOS Object Detection](../examples/EO_OS_Object_Detection/eoos_object_detection.ipynb)** - Detect objects in satellite imagery
-- **[MARS Map Generation](../examples/MARS_Map_Autoregressive/mars_map_generation.ipynb)** - Extract buildings, roads, railways
+- **[MARS Map Generation](../examples/MARS_Map_Autoregressive/mars_map_generation.ipynb)** - Extract buildings, roads, railways, water
 
 ---
 
@@ -117,7 +117,7 @@ Reusable business logic:
 | Model | Type | Input | Output |
 |-------|------|-------|--------|
 | [EOOS](api/models.md) | Object Detection | NAIP | GeoJSON Features |
-| [MARS](api/models.md) | Map Generation | NAIP | GeoJSON Features |
+| [MARS](api/models.md) | Map Generation | NAIP | GeoJSON Features + PNG |
 
 
 ---

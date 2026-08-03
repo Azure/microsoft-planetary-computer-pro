@@ -9,7 +9,7 @@ Available geospatial AI models in the SDK.
 | Model | Task | Collections | Resolution | Output |
 |-------|------|-------------|------------|--------|
 | **EOOS** | Object Detection | NAIP | 0.6m | GeoJSON (points/polygons) |
-| **MARS** | Building/Road/Railway Detection | NAIP | 0.6m | GeoJSON (polygons/lines) |
+| **MARS** | Building/Road/Railway/Water Detection + Map Render | NAIP | 0.6m | GeoJSON (polygons/lines) + PNG |
 
 ---
 
@@ -87,9 +87,9 @@ result = await model.run(
 
 ---
 
-## MARS (Building/Road/Railway Detection)
+## MARS (Building/Road/Railway/Water Detection)
 
-Extracts building footprints, road networks, and railway lines from aerial imagery.
+Extracts building footprints, road networks, railway lines, and water bodies from aerial imagery.
 
 **Model ID:** `microsoft/mars-map-autoregressive`
 
@@ -97,12 +97,12 @@ Extracts building footprints, road networks, and railway lines from aerial image
 - **Building** - Polygon geometries (footprints)
 - **Road** - LineString geometries (road networks)
 - **Railway** - LineString geometries (railway tracks)
+- **Water** - Polygon geometries (water segmentation)
 
 **Parameters:**
 - `chip_size` (int): Chip size in pixels (default: 1024, max: 2048)
 - `stride` (int): Stride in pixels for overlap (default: 800)
-- `threshold` (float): Detection confidence threshold (0-1, default: 0.6)
-- `categories` (list): Optional filter for specific features (default: all 3)
+- `categories` (list): Optional filter for specific features (default: all 4 — Building, Road, Railway, Water)
 
 **Example:**
 
@@ -116,27 +116,55 @@ model = geoai.models.MARS(
 result = await model.run(
     input=input_source,
     constraint=constraint,
-    params={"chip_size": 1024, "stride": 800, "threshold": 0.6},
+    params={"chip_size": 1024, "stride": 800},
     output=output
 )
 
-# Filter to buildings only
+# Filter to buildings and water only
 result = await model.run(
     input=input_source,
     constraint=constraint,
     params={
         "chip_size": 1024,
         "stride": 800,
-        "threshold": 0.6,
-        "categories": ["Building"]
+        "categories": ["Building", "Water"]
     },
     output=output
 )
 
-# Check results by category
-print(f"Buildings: {result.detection_counts.get('Building', 0)}")
-print(f"Roads: {result.detection_counts.get('Road', 0)}")
-print(f"Railways: {result.detection_counts.get('Railway', 0)}")
+print(f"Detected {result.detection_count} features")
+```
+
+### Map rendering (`/map:render`)
+
+MARS also exposes a rendering endpoint that rasterizes imagery + extracted GeoJSON
+features into a styled cartographic basemap PNG. The render URL is derived automatically
+from the model's scoring endpoint, so the same `MARS` instance is reused.
+
+**`render_map` parameters:**
+- `image` (bytes | path): GeoTIFF image.
+- `geojson` (dict | list | JSON str | bytes | path): Features to render.
+- `tile_size` (int): Output tile size in pixels, longer side (default: 1024).
+- `coordinate_space` (str): `"geographic"` for georeferenced features (e.g. run
+  output) or `"pixel"` for raw `/score` output (default: `"geographic"`).
+- `theme` (str): Cartographic theme — `default`, `dark`, `standard_oil`, or
+  `streets` (default: `"default"`). See `model.render_themes`.
+- `color_map` (dict): Optional category → hex color overrides.
+
+Returns PNG image bytes.
+
+```python
+from pathlib import Path
+
+png_bytes = await model.render_map(
+    image="chip.tif",
+    geojson=result.merged_results,  # georeferenced FeatureCollection from run()
+    coordinate_space="geographic",
+    theme="streets",
+    color_map={"Water": "#1a6fb0", "Building": "#8a9cbf"},
+)
+
+Path("basemap.png").write_bytes(png_bytes)
 ```
 
 ---

@@ -380,7 +380,10 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-discovery">Model Discovery</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-interface">Common Interface</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eoos-object-detection">EOOS (Object Detection)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mars-building-road-railway-detection">MARS (Building/Road/Railway Detection)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mars-building-road-railway-water-detection">MARS (Building/Road/Railway/Water Detection)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#map-rendering-map-render">Map rendering (<code class="docutils literal notranslate"><span class="pre">/map:render</span></code>)</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#concurrency-configuration">Concurrency Configuration</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#see-also">See Also</a></li>
 </ul>
@@ -417,10 +420,10 @@ document.write(`
 <td><p>GeoJSON (points/polygons)</p></td>
 </tr>
 <tr class="row-odd"><td><p><strong>MARS</strong></p></td>
-<td><p>Building/Road/Railway Detection</p></td>
+<td><p>Building/Road/Railway/Water Detection + Map Render</p></td>
 <td><p>NAIP</p></td>
 <td><p>0.6m</p></td>
-<td><p>GeoJSON (polygons/lines)</p></td>
+<td><p>GeoJSON (polygons/lines) + PNG</p></td>
 </tr>
 </tbody>
 </table>
@@ -494,22 +497,22 @@ document.write(`
 </div>
 </section>
 <hr class="docutils" />
-<section id="mars-building-road-railway-detection">
-<h2>MARS (Building/Road/Railway Detection)<a class="headerlink" href="#mars-building-road-railway-detection" title="Permalink to this heading">#</a></h2>
-<p>Extracts building footprints, road networks, and railway lines from aerial imagery.</p>
+<section id="mars-building-road-railway-water-detection">
+<h2>MARS (Building/Road/Railway/Water Detection)<a class="headerlink" href="#mars-building-road-railway-water-detection" title="Permalink to this heading">#</a></h2>
+<p>Extracts building footprints, road networks, railway lines, and water bodies from aerial imagery.</p>
 <p><strong>Model ID:</strong> <code class="docutils literal notranslate"><span class="pre">microsoft/mars-map-autoregressive</span></code></p>
 <p><strong>Detected Features:</strong></p>
 <ul class="simple">
 <li><p><strong>Building</strong> - Polygon geometries (footprints)</p></li>
 <li><p><strong>Road</strong> - LineString geometries (road networks)</p></li>
 <li><p><strong>Railway</strong> - LineString geometries (railway tracks)</p></li>
+<li><p><strong>Water</strong> - Polygon geometries (water segmentation)</p></li>
 </ul>
 <p><strong>Parameters:</strong></p>
 <ul class="simple">
 <li><p><code class="docutils literal notranslate"><span class="pre">chip_size</span></code> (int): Chip size in pixels (default: 1024, max: 2048)</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">stride</span></code> (int): Stride in pixels for overlap (default: 800)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">threshold</span></code> (float): Detection confidence threshold (0-1, default: 0.6)</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">categories</span></code> (list): Optional filter for specific features (default: all 3)</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">categories</span></code> (list): Optional filter for specific features (default: all 4 — Building, Road, Railway, Water)</p></li>
 </ul>
 <p><strong>Example:</strong></p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">model</span> <span class="o">=</span> <span class="n">geoai</span><span class="o">.</span><span class="n">models</span><span class="o">.</span><span class="n">MARS</span><span class="p">(</span>
@@ -521,29 +524,56 @@ document.write(`
 <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">model</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
     <span class="nb">input</span><span class="o">=</span><span class="n">input_source</span><span class="p">,</span>
     <span class="n">constraint</span><span class="o">=</span><span class="n">constraint</span><span class="p">,</span>
-    <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;chip_size&quot;</span><span class="p">:</span> <span class="mi">1024</span><span class="p">,</span> <span class="s2">&quot;stride&quot;</span><span class="p">:</span> <span class="mi">800</span><span class="p">,</span> <span class="s2">&quot;threshold&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">},</span>
+    <span class="n">params</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;chip_size&quot;</span><span class="p">:</span> <span class="mi">1024</span><span class="p">,</span> <span class="s2">&quot;stride&quot;</span><span class="p">:</span> <span class="mi">800</span><span class="p">},</span>
     <span class="n">output</span><span class="o">=</span><span class="n">output</span>
 <span class="p">)</span>
 
-<span class="c1"># Filter to buildings only</span>
+<span class="c1"># Filter to buildings and water only</span>
 <span class="n">result</span> <span class="o">=</span> <span class="k">await</span> <span class="n">model</span><span class="o">.</span><span class="n">run</span><span class="p">(</span>
     <span class="nb">input</span><span class="o">=</span><span class="n">input_source</span><span class="p">,</span>
     <span class="n">constraint</span><span class="o">=</span><span class="n">constraint</span><span class="p">,</span>
     <span class="n">params</span><span class="o">=</span><span class="p">{</span>
         <span class="s2">&quot;chip_size&quot;</span><span class="p">:</span> <span class="mi">1024</span><span class="p">,</span>
         <span class="s2">&quot;stride&quot;</span><span class="p">:</span> <span class="mi">800</span><span class="p">,</span>
-        <span class="s2">&quot;threshold&quot;</span><span class="p">:</span> <span class="mf">0.6</span><span class="p">,</span>
-        <span class="s2">&quot;categories&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Building&quot;</span><span class="p">]</span>
+        <span class="s2">&quot;categories&quot;</span><span class="p">:</span> <span class="p">[</span><span class="s2">&quot;Building&quot;</span><span class="p">,</span> <span class="s2">&quot;Water&quot;</span><span class="p">]</span>
     <span class="p">},</span>
     <span class="n">output</span><span class="o">=</span><span class="n">output</span>
 <span class="p">)</span>
 
-<span class="c1"># Check results by category</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Buildings: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">detection_counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Building&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Roads: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">detection_counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Road&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
-<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Railways: </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">detection_counts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s1">&#39;Railway&#39;</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;Detected </span><span class="si">{</span><span class="n">result</span><span class="o">.</span><span class="n">detection_count</span><span class="si">}</span><span class="s2"> features&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
+<section id="map-rendering-map-render">
+<h3>Map rendering (<code class="docutils literal notranslate"><span class="pre">/map:render</span></code>)<a class="headerlink" href="#map-rendering-map-render" title="Permalink to this heading">#</a></h3>
+<p>MARS also exposes a rendering endpoint that rasterizes imagery + extracted GeoJSON
+features into a styled cartographic basemap PNG. The render URL is derived automatically
+from the model’s scoring endpoint, so the same <code class="docutils literal notranslate"><span class="pre">MARS</span></code> instance is reused.</p>
+<p><strong><code class="docutils literal notranslate"><span class="pre">render_map</span></code> parameters:</strong></p>
+<ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">image</span></code> (bytes | path): GeoTIFF image.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">geojson</span></code> (dict | list | JSON str | bytes | path): Features to render.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">tile_size</span></code> (int): Output tile size in pixels, longer side (default: 1024).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">coordinate_space</span></code> (str): <code class="docutils literal notranslate"><span class="pre">&quot;geographic&quot;</span></code> for georeferenced features (e.g. run
+output) or <code class="docutils literal notranslate"><span class="pre">&quot;pixel&quot;</span></code> for raw <code class="docutils literal notranslate"><span class="pre">/score</span></code> output (default: <code class="docutils literal notranslate"><span class="pre">&quot;geographic&quot;</span></code>).</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">theme</span></code> (str): Cartographic theme — <code class="docutils literal notranslate"><span class="pre">default</span></code>, <code class="docutils literal notranslate"><span class="pre">dark</span></code>, <code class="docutils literal notranslate"><span class="pre">standard_oil</span></code>, or
+<code class="docutils literal notranslate"><span class="pre">streets</span></code> (default: <code class="docutils literal notranslate"><span class="pre">&quot;default&quot;</span></code>). See <code class="docutils literal notranslate"><span class="pre">model.render_themes</span></code>.</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">color_map</span></code> (dict): Optional category → hex color overrides.</p></li>
+</ul>
+<p>Returns PNG image bytes.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">pathlib</span><span class="w"> </span><span class="kn">import</span> <span class="n">Path</span>
+
+<span class="n">png_bytes</span> <span class="o">=</span> <span class="k">await</span> <span class="n">model</span><span class="o">.</span><span class="n">render_map</span><span class="p">(</span>
+    <span class="n">image</span><span class="o">=</span><span class="s2">&quot;chip.tif&quot;</span><span class="p">,</span>
+    <span class="n">geojson</span><span class="o">=</span><span class="n">result</span><span class="o">.</span><span class="n">merged_results</span><span class="p">,</span>  <span class="c1"># georeferenced FeatureCollection from run()</span>
+    <span class="n">coordinate_space</span><span class="o">=</span><span class="s2">&quot;geographic&quot;</span><span class="p">,</span>
+    <span class="n">theme</span><span class="o">=</span><span class="s2">&quot;streets&quot;</span><span class="p">,</span>
+    <span class="n">color_map</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;Water&quot;</span><span class="p">:</span> <span class="s2">&quot;#1a6fb0&quot;</span><span class="p">,</span> <span class="s2">&quot;Building&quot;</span><span class="p">:</span> <span class="s2">&quot;#8a9cbf&quot;</span><span class="p">},</span>
+<span class="p">)</span>
+
+<span class="n">Path</span><span class="p">(</span><span class="s2">&quot;basemap.png&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">write_bytes</span><span class="p">(</span><span class="n">png_bytes</span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
 </section>
 <hr class="docutils" />
 <section id="concurrency-configuration">
@@ -625,7 +655,10 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#model-discovery">Model Discovery</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#common-interface">Common Interface</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#eoos-object-detection">EOOS (Object Detection)</a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mars-building-road-railway-detection">MARS (Building/Road/Railway Detection)</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mars-building-road-railway-water-detection">MARS (Building/Road/Railway/Water Detection)</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#map-rendering-map-render">Map rendering (<code class="docutils literal notranslate"><span class="pre">/map:render</span></code>)</a></li>
+</ul>
+</li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#concurrency-configuration">Concurrency Configuration</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#see-also">See Also</a></li>
 </ul>
