@@ -5,7 +5,8 @@ MARS - Map generation and object detection model.
 """
 
 import logging
-from typing import Any, Dict
+from pathlib import Path
+from typing import Any, Dict, List, Optional, Union
 
 from geoai.core.models.spec_loader import ModelSpecLoader
 from geoai.executors.local import LocalExecutor
@@ -19,12 +20,17 @@ logger = logging.getLogger(__name__)
 
 class MARS(BaseModel):
     """
-    MARS - Map generation and Road/Area/Structure detection model.
+    MARS - Map generation and Building/Road/Railway/Water extraction model.
 
     Specialized for:
-    - Road network extraction
-    - Building footprints
-    - Land use classification
+    - Building footprints (Polygon)
+    - Road network extraction (LineString)
+    - Railway extraction (LineString)
+    - Water segmentation (Polygon)
+
+    In addition to ``run()`` (vector extraction via ``/score``), MARS exposes
+    ``render_map()`` to rasterize imagery + GeoJSON features into a styled
+    cartographic basemap PNG via the ``/map:render`` endpoint.
 
     Example:
         >>> model = geoai.models.MARS(
@@ -35,7 +41,7 @@ class MARS(BaseModel):
         >>> result = await model.run(
         ...     input=input,
         ...     constraint=constraint,
-        ...     params={"chip_size": 512, "threshold": 0.6},
+        ...     params={"chip_size": 512, "categories": ["Building", "Water"]},
         ...     output=output
         ... )
     """
@@ -77,7 +83,9 @@ class MARS(BaseModel):
             - chip_size: int (default: 512) - Chip size in pixels
             - stride: int (default: 512) - Stride in pixels
             - threshold: float (default: 0.6) - Confidence threshold
-            - categories: list (optional) - Filter to specific categories ["Building", "Road", "Railway"]
+            - categories: list (optional) - Filter to specific categories.
+              Available: ["Building", "Road", "Railway", "Water"]. Building and
+              Water are returned as polygons; Road and Railway as lines.
         :param output: Output destination
 
         :return: RunResult with detection statistics
@@ -147,3 +155,72 @@ class MARS(BaseModel):
         )
 
         return RunResult(result)
+
+    @property
+    def render_themes(self) -> List[str]:
+        """
+        List the cartographic theme presets supported by ``/map:render``.
+
+        :return: List of theme names (e.g. ["default", "dark", "standard_oil", "streets"])
+        """
+        return list(self.spec.get("map_render", {}).get("themes", []))
+
+    async def render_map(
+        self,
+        image: Union[bytes, str, Path],
+        geojson: Union[bytes, str, Path, Dict, List],
+        tile_size: int = 1024,
+        coordinate_space: str = "geographic",
+        theme: str = "default",
+        color_map: Optional[Dict[str, str]] = None,
+        timeout: float = 300.0,
+    ) -> bytes:
+        """
+        Render a styled cartographic basemap PNG from imagery + GeoJSON features.
+
+        Uses the MARS ``/map:render`` endpoint (derived automatically from this
+        model's scoring endpoint). This is a stateless call: pass an image and
+        the GeoJSON features to rasterize, and receive PNG bytes back.
+
+        :param image: GeoTIFF image as bytes or a path to a ``.tif`` file.
+        :param geojson: GeoJSON FeatureCollection / list of features as a dict,
+            list, JSON string, bytes, or a path to a ``.geojson`` file. Use the
+            output of a MARS run, or the raw ``/score`` output with
+            ``coordinate_space="pixel"``.
+        :param tile_size: Output tile size in pixels (longer side). Default: 1024.
+        :param coordinate_space: ``"geographic"`` for georeferenced features
+            (e.g. run output) or ``"pixel"`` for raw ``/score`` pixel-space
+            output. Default: "geographic".
+        :param theme: Named cartographic theme preset. See ``render_themes``.
+            Default: "default".
+        :param color_map: Optional mapping of category name to hex color that
+            overrides the built-in palette (e.g. ``{"Water": "#1a6fb0"}``).
+        :param timeout: Read timeout in seconds. Default: 300.
+        :return: Rendered PNG image as bytes.
+
+        Example:
+            >>> png = await model.render_map(
+            ...     image="chip.tif",
+            ...     geojson=score_output,
+            ...     coordinate_space="pixel",
+            ...     theme="streets",
+            ... )
+            >>> Path("basemap.png").write_bytes(png)
+        """
+        from geoai.core.models.map_renderer import MapRenderer
+
+        renderer = MapRenderer(
+            endpoint=self.endpoint,
+            credential=self.credential,
+            model_spec=self.spec,
+        )
+
+        return await renderer.render(
+            image=image,
+            geojson=geojson,
+            tile_size=tile_size,
+            coordinate_space=coordinate_space,
+            theme=theme,
+            color_map=color_map,
+            timeout=timeout,
+        )

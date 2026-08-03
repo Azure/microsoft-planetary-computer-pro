@@ -230,55 +230,23 @@ class ModelClient:
 
         :return: OAuth scope string
         """
-        endpoint_lower = self.endpoint.lower()
+        from geoai.shared.auth import get_auth_scope
 
-        # Azure AI Foundry / Cognitive Services endpoints
-        if any(
-            pattern in endpoint_lower
-            for pattern in [
-                "inference.ai.azure.com",  # AI Foundry model inference
-                "openai.azure.com",  # Azure OpenAI
-                "cognitiveservices.azure.com",  # Cognitive Services
-            ]
-        ):
-            return "https://cognitiveservices.azure.com/.default"
-
-        # Azure ML managed endpoints (default for backwards compatibility)
-        # Patterns: *.inference.ml.azure.com, *.azureml.net, etc.
-        return "https://ml.azure.com/.default"
+        return get_auth_scope(self.endpoint)
 
     def _build_auth_headers(self) -> Dict[str, str]:
         """
         Build authentication headers based on credential type.
 
         Supports:
-        - String credentials: API keys or JWT tokens (Bearer auth)
+        - String credentials: API keys or JWT tokens (Bearer token)
         - Azure credential objects: DefaultAzureCredential with automatic scope detection
 
         :return: Headers dictionary with Authorization header
         """
-        headers = {}
+        from geoai.shared.auth import build_auth_headers
 
-        if self.credential:
-            if isinstance(self.credential, str):
-                # API Key or JWT Token authentication
-                headers["Authorization"] = f"Bearer {self.credential}"
-            else:
-                # Azure AD authentication with dynamic scope detection
-                try:
-                    scope = self._get_auth_scope()
-                    token = self.credential.get_token(scope)
-                    headers["Authorization"] = f"Bearer {token.token}"
-                    logger.debug(f"Using Azure AD auth with scope: {scope}")
-                except Exception as e:
-                    logger.warning(f"Failed to get Azure AD token: {e}")
-                    logger.warning(f"Ensure you have the appropriate role assignment:")
-                    logger.warning(f"  - Azure ML: 'AzureML Data Scientist' role")
-                    logger.warning(
-                        f"  - AI Foundry: 'Azure AI Developer' or 'Cognitive Services User' role"
-                    )
-
-        return headers
+        return build_auth_headers(self.endpoint, self.credential)
 
     async def close(self):
         """Close any open resources (for future connection pooling)."""

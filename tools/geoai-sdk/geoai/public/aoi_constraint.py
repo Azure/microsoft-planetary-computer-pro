@@ -249,11 +249,9 @@ class Constraint(BaseConstraint):
                 "properties": properties,
             }
 
-            # Use 'id' column if exists
+            # Use 'id' column if exists, otherwise use default (aoi_{idx})
             if "id" in properties:
                 aoi_dict["id"] = str(properties["id"])
-            elif "name" in properties:
-                aoi_dict["id"] = str(properties["name"])
 
             aoi_list.append(aoi_dict)
 

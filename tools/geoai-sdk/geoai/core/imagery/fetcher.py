@@ -17,6 +17,8 @@ from rasterio.merge import merge as rasterio_merge
 from rasterio.warp import Resampling, calculate_default_transform, reproject
 from shapely.geometry import mapping, shape
 
+from geoai.shared.url_utils import is_trusted_domain
+
 logger = logging.getLogger(__name__)
 
 
@@ -75,8 +77,8 @@ class ImageFetcher:
         # Single-item approach (original behavior)
         try:
             # Sign URLs if using Planetary Computer
-            if use_pc_signing and "planetarycomputer.microsoft.com" in str(
-                stac_item.get_self_href()
+            if use_pc_signing and is_trusted_domain(
+                str(stac_item.get_self_href()), ["planetarycomputer.microsoft.com"]
             ):
                 try:
                     import planetary_computer
@@ -192,8 +194,8 @@ class ImageFetcher:
             # Step 1: Sign all items if needed
             signed_items = []
             for item in stac_items:
-                if use_pc_signing and "planetarycomputer.microsoft.com" in str(
-                    item.get_self_href()
+                if use_pc_signing and is_trusted_domain(
+                    str(item.get_self_href()), ["planetarycomputer.microsoft.com"]
                 ):
                     try:
                         import planetary_computer

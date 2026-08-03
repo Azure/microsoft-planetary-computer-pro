@@ -55,6 +55,15 @@
       "type": "string",
       "description": "Detailed description of the model's purpose and capabilities"
     },
+
+    "category_geometry_types": {
+      "type": "object",
+      "description": "Optional mapping of output category name to its GeoJSON geometry type (e.g. {'Building': 'Polygon', 'Road': 'LineString'})",
+      "additionalProperties": {
+        "type": "string",
+        "enum": ["Point", "MultiPoint", "LineString", "MultiLineString", "Polygon", "MultiPolygon"]
+      }
+    },
     
     "data_requirements": {
       "type": "object",
@@ -211,6 +220,57 @@
           "type": "number",
           "description": "Estimated inference time per request in seconds (endpoint inference only, excludes fetch/preprocess overhead). Each request processes one chip.",
           "exclusiveMinimum": 0
+        }
+      }
+    },
+
+    "map_render": {
+      "type": "object",
+      "description": "Optional configuration for a map-rendering endpoint (e.g. /map:render) that rasterizes imagery + GeoJSON into a basemap image",
+      "required": ["endpoint_path", "method", "payload_format", "output_format"],
+      "properties": {
+        "endpoint_path": {
+          "type": "string",
+          "description": "Endpoint path relative to the model base URL (e.g., /map:render)",
+          "pattern": "^/.*"
+        },
+        "method": {
+          "type": "string",
+          "enum": ["POST", "GET", "PUT"]
+        },
+        "payload_format": {
+          "type": "string",
+          "enum": ["multipart", "json", "form"]
+        },
+        "output_format": {
+          "type": "string",
+          "description": "Format of the rendered output (e.g., png)",
+          "enum": ["png", "jpg", "jpeg", "tif", "tiff"]
+        },
+        "description": {
+          "type": "string"
+        },
+        "themes": {
+          "type": "array",
+          "description": "Named cartographic theme presets supported by the render endpoint",
+          "items": {"type": "string"}
+        },
+        "parameters": {
+          "type": "object",
+          "description": "Render-specific parameters that users can configure",
+          "additionalProperties": {
+            "type": "object",
+            "required": ["type"],
+            "properties": {
+              "type": {
+                "type": "string",
+                "enum": ["float", "int", "string", "boolean", "array", "object"]
+              },
+              "default": {"description": "Default value for this parameter"},
+              "enum": {"type": "array", "description": "Allowed values for this parameter"},
+              "description": {"type": "string"}
+            }
+          }
         }
       }
     },

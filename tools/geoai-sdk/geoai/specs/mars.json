@@ -4,8 +4,15 @@
   "model_type": "object_detection",
   "workflow_type": "aoi_based",
   
-  "description": "Map generation and Road/Area/Structure detection model",
-  
+  "description": "Map generation and Building/Road/Railway/Water extraction model. Buildings and water are returned as polygons; roads and railways as lines.",
+
+  "category_geometry_types": {
+    "Building": "Polygon",
+    "Water": "Polygon",
+    "Road": "LineString",
+    "Railway": "LineString"
+  },
+
   "data_requirements": {
     "required_bands": ["red", "green", "blue"],
     "preferred_resolution_meters": 0.6,
@@ -24,7 +31,7 @@
     "input_format": "tif",
     "request_format": {
       "image": "base64_image",
-      "categories": ["Building", "Road", "Railway"]
+      "categories": ["Building", "Road", "Railway", "Water"]
     },
     "response_format": {
       "type": "list",
@@ -35,7 +42,40 @@
       }
     }
   },
-  
+
+  "map_render": {
+    "endpoint_path": "/map:render",
+    "method": "POST",
+    "payload_format": "multipart",
+    "output_format": "png",
+    "description": "Render a styled cartographic basemap PNG from imagery plus extracted GeoJSON features.",
+    "themes": ["default", "dark", "standard_oil", "streets"],
+    "parameters": {
+      "tile_size": {
+        "type": "int",
+        "default": 1024,
+        "description": "Output tile size in pixels (longer side)"
+      },
+      "coordinate_space": {
+        "type": "string",
+        "default": "geographic",
+        "enum": ["geographic", "pixel"],
+        "description": "Coordinate space of the GeoJSON geometries: 'geographic' for georeferenced features (e.g. run output) or 'pixel' for raw /score pixel-space output"
+      },
+      "theme": {
+        "type": "string",
+        "default": "default",
+        "enum": ["default", "dark", "standard_oil", "streets"],
+        "description": "Named cartographic theme preset for the basemap render"
+      },
+      "color_map": {
+        "type": "object",
+        "default": null,
+        "description": "Optional mapping of category name to hex color (e.g. {\"Water\": \"#1a6fb0\"}) that overrides the built-in palette"
+      }
+    }
+  },
+
   "parameters": {
     "chip_size": {
       "type": "int",
@@ -49,9 +89,9 @@
     },
     "categories": {
       "type": "array",
-      "default": ["Building", "Road", "Railway"],
+      "default": ["Building", "Road", "Railway", "Water"],
       "items": {"type": "string"},
-      "description": "Filter detections to specific categories"
+      "description": "Filter detections to specific categories. Building and Water are polygons; Road and Railway are lines."
     }
   }
 }

@@ -50,6 +50,13 @@ class GeoCatalogWriter:
 
         return {"Authorization": f"Bearer {self._access_token.token}"}
 
+    @staticmethod
+    def _redact_sas_token(url: str) -> str:
+        """Remove SAS token query parameters from URL for safe logging."""
+        if '?' in url:
+            return url.split('?')[0] + '?[REDACTED]'
+        return url
+
     async def _poll_operation_status(self, operation_url: str, max_wait_seconds: int = 120) -> bool:
         """
         Poll an async operation until it completes or times out (async version for true parallelism).
@@ -332,7 +339,10 @@ class GeoCatalogWriter:
 
         # Check if render config already exists
         response = requests.get(
-            render_config_endpoint, headers=headers, params={"api-version": "2025-04-30-preview"}
+            render_config_endpoint,
+            headers=headers,
+            params={"api-version": "2025-04-30-preview"},
+            timeout=60,
         )
 
         if response.status_code == 200:
@@ -370,6 +380,7 @@ class GeoCatalogWriter:
             json=render_json,
             headers=headers,
             params={"api-version": "2025-04-30-preview"},
+            timeout=60,
         )
 
         if response.status_code == 201:
@@ -391,6 +402,7 @@ class GeoCatalogWriter:
             f"{collections_endpoint}/{collection_id}",
             headers=headers,
             params={"api-version": "2025-04-30-preview"},
+            timeout=60,
         )
 
         if response.status_code == 200:
@@ -437,6 +449,7 @@ class GeoCatalogWriter:
             json=collection_payload,
             headers=headers,
             params={"api-version": "2025-04-30-preview"},
+            timeout=60,
         )
 
         if response.status_code in [201, 202, 409]:
@@ -492,6 +505,7 @@ class GeoCatalogWriter:
             f"{collections_endpoint}/{collection_id}",
             headers=headers,
             params={"api-version": "2025-04-30-preview"},
+            timeout=60,
         )
 
         if response.status_code != 200:
@@ -519,6 +533,7 @@ class GeoCatalogWriter:
             json=collection_data,
             headers=headers,
             params={"api-version": "2025-04-30-preview"},
+            timeout=60,
         )
 
         if response.status_code in [200, 201, 202]:
@@ -641,8 +656,8 @@ class GeoCatalogWriter:
         geojson_url = list(sas_urls.values())[2]  # Third URL is GeoJSON
 
         logger.debug(f"Using blob URLs with SAS tokens (storage account requires authentication):")
-        logger.debug(f"  Image: {overlay_tif_url[:100]}...")
-        logger.debug(f"  GeoJSON: {geojson_url[:100]}...")
+        logger.debug(f"  Image: {self._redact_sas_token(overlay_tif_url)}")
+        logger.debug(f"  GeoJSON: {self._redact_sas_token(geojson_url)}")
 
         # Extract actual detected classes from results
         detected_classes = set()

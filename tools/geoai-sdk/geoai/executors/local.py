@@ -1337,6 +1337,10 @@ class LocalExecutor(BaseExecutor):
         print(f"🗺️  Multi-AOI Workflow: {num_aois} AOIs")
         print(f"{'='*80}\n")
 
+        # Generate single run_id for entire multi-AOI workflow (if not provided by user)
+        workflow_run_id = output_config.get("run_id") or str(uuid.uuid4())
+        logger.info(f"Multi-AOI workflow run_id: {workflow_run_id}")
+
         # Check if using STAC pass-through mode
         stac_search_items = None
         if constraint_config.get("stac_search"):
@@ -1412,6 +1416,7 @@ class LocalExecutor(BaseExecutor):
                     constraint_config=constraint_config,
                     output_config={
                         **output_config,
+                        "run_id": workflow_run_id,  # Use shared run_id for all AOIs
                         "aoi_id": aoi["id"],
                         "aoi_index": aoi_idx,
                         "aoi_properties": aoi.get("properties", {}),

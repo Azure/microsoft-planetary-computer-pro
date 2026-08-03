@@ -324,9 +324,9 @@ result = await model.run(
 print(f"Detected {result.detection_count} objects")
 ```
 
-### Building/Road Detection (MARS)
+### Building/Road/Railway/Water Detection (MARS)
 
-Extract buildings, roads, and railways:
+Extract buildings, roads, railways, and water bodies:
 
 ```python
 import geoai
@@ -345,17 +345,37 @@ result = await model.run(
     params={
         "chip_size": 1024,
         "stride": 800,
-        "threshold": 0.5,
-        # Optional: filter specific features
-        # "categories": ["Building", "Road"]
+        # Optional: filter specific features.
+        # Available: Building, Road, Railway, Water
+        # Building and Water are polygons; Road and Railway are lines.
+        # "categories": ["Building", "Water"]
     },
     output=output
 )
 
-# Results include category breakdown
-print(f"🏢 Buildings: {result.detection_counts.get('Building', 0)}")
-print(f"🛣️ Roads: {result.detection_counts.get('Road', 0)}")
-print(f"🚂 Railways: {result.detection_counts.get('Railway', 0)}")
+print(f"Detected {result.detection_count} features")
+```
+
+#### Render a basemap PNG (`/map:render`)
+
+MARS can rasterize extracted GeoJSON features plus imagery into a styled
+cartographic basemap PNG via the `/map:render` endpoint. The render URL is derived
+automatically from the scoring endpoint.
+
+```python
+# Render straight from run() output (georeferenced GeoJSON FeatureCollection)
+png_bytes = await model.render_map(
+    image="chip.tif",                    # GeoTIFF bytes or path
+    geojson=result.merged_results,       # FeatureCollection dict / list / JSON / path
+    coordinate_space="geographic",       # "geographic" for run output, "pixel" for raw /score output
+    theme="streets",                     # default | dark | standard_oil | streets
+    color_map={"Water": "#1a6fb0"},      # optional palette override
+)
+
+from pathlib import Path
+Path("basemap.png").write_bytes(png_bytes)
+
+print("Supported themes:", model.render_themes)
 ```
 
 ---
@@ -375,7 +395,7 @@ print(f"🚂 Railways: {result.detection_counts.get('Railway', 0)}")
 | Model | Task | Collections | Resolution |
 |-------|------|-------------|------------|
 | **EOOS** | Object Detection | NAIP | 0.6m |
-| **MARS** | Building/Road/Railway Detection | NAIP | 0.6m |
+| **MARS** | Building/Road/Railway/Water Detection + Map Render | NAIP | 0.6m |
 
 ---
 

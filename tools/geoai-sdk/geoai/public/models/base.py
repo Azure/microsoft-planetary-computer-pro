@@ -18,6 +18,7 @@ from geoai.core.stac.resolution_detector import detect_resolution
 from geoai.core.stac.searcher import STACSearcher
 from geoai.public.estimate_result import EstimateResult
 from geoai.shared.exceptions import ValidationError, ValidationResult
+from geoai.shared.url_utils import is_trusted_domain
 
 logger = logging.getLogger(__name__)
 
@@ -121,7 +122,7 @@ class BaseModel(ABC):
 
         # Only validate collection names for Planetary Computer
         # Private GeoCatalogs can use custom collection names
-        is_planetary_computer = "planetarycomputer.microsoft.com" in input.geocatalog_uri.lower()
+        is_planetary_computer = is_trusted_domain(input.geocatalog_uri, ["planetarycomputer.microsoft.com"])
 
         if is_planetary_computer:
             supported = self.__class__.get_supported_collections()
