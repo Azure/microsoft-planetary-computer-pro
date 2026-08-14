@@ -88,7 +88,7 @@ class ServicePrincipalManager:
         logger.info("Service principal created: objectId=%s", object_id)
 
         # Create a client secret
-        logger.info("Generating client secret (valid %d years) …", secret_years)
+        logger.info("Generating client secret.")
         cred_result = self._az(
             "ad", "app", "credential", "reset",
             "--id", app_id,
@@ -97,6 +97,7 @@ class ServicePrincipalManager:
             "--query", "{password: password}",
         )
         client_secret = cred_result.get("password", "")
+        logger.info("Client secret generated.")
 
         # Get tenant ID
         tenant_id = self._get_tenant_id()
