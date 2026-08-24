@@ -1,20 +1,20 @@
 ---
 title: Vector data in Microsoft Planetary Computer Pro overview (Preview)
-description: Learn about vector data support in Microsoft Planetary Computer Pro. This article explains how to ingest and cloud-optimize Shapefile, GeoJSON, and GeoParquet files for cloud-native analysis and visualization.
+description: Learn how to ingest, optimize, visualize, access, and filter vector data in Microsoft Planetary Computer Pro.
 author: beharris
 ms.author: beharris
 ms.service: planetary-computer-pro
 ms.topic: concept-article
-ms.date: 01/12/2026
+ms.date: 08/24/2026
 
 ms.custom:
 # customer intent: As a GeoCatalog User I want to understand how vector data is supported in Microsoft Planetary Computer Pro so that I can ingest, manage, and visualize vector data formats.
 ---
 # Vector data in Microsoft Planetary Computer Pro (Preview)
 
-Microsoft Planetary Computer Pro now supports ingestion, cloud optimization, and visualization of vector data files in Shapefile, GeoJSON, and GeoParquet formats. By using this preview feature, you can work with vector datasets alongside your raster and data cube assets, providing a comprehensive platform for geospatial analysis and visualization.
+Microsoft Planetary Computer Pro now supports ingestion, cloud optimization, visualization, and feature-level access for vector data. By using this preview feature, you can work with vector datasets alongside your raster and data cube assets, providing a comprehensive platform for geospatial analysis and visualization.
 
-Vector data is optimized for cloud environments through conversion to cloud-native formats: GeoParquet for analysis and PMTiles for visualization. This optimization ensures efficient access and rendering of vector datasets at any scale.
+Vector files in Shapefile, GeoJSON, and GeoParquet formats can be converted to cloud-native formats: GeoParquet for analysis and PMTiles for visualization. Vector feature collections provide another access model for retrieving and filtering individual features through an API that complies with OGC API - Features.
 
 > [!IMPORTANT]
 > Vector data support is currently in preview. Features and capabilities are subject to change. Provide your feedback to help improve this functionality.
@@ -105,9 +105,49 @@ The Vector Tiling API provides access to vector tiles in standard formats, such 
 
 The API automatically serves tiles from the PMTiles archives generated during ingestion, providing efficient, cloud-optimized access to your vector data at any zoom level.
 
+## Vector feature collections
+
+Vector feature collections expose individual vector features and their properties through the GeoCatalog implementation of [OGC API - Features](https://ogcapi.ogc.org/features/). Unlike the Vector Tiling API, which returns rendered map tiles for visualization, OGC API - Features returns vector features as GeoJSON for query, analysis, and display.
+
+Use vector feature collections to:
+
+- Discover the feature collections available in a GeoCatalog.
+- Retrieve features from a collection as GeoJSON.
+- Limit results to a geographic area by using a bounding box (`bbox`). Bounding-box coordinates use OGC CRS84 order: longitude, latitude.
+- Filter on feature properties by using Common Query Language (CQL2) JSON expressions and `filter-lang=cql2-json`.
+- Select the properties to return, limit the page size, and follow response links to retrieve additional pages.
+- Use the same standards-based endpoint from custom applications, QGIS, and ArcGIS Pro.
+
+### Access feature collections through the API
+
+Start with the OGC API landing page for your GeoCatalog. From the landing page, follow the advertised links to discover collections and their items. Feature requests use this general path:
+
+```http
+GET https://<geocatalog-host>/data/features/collections/<collection-id>/items?api-version=2025-04-30-preview
+Accept: application/geo+json
+Authorization: Bearer <access-token>
+```
+
+Add `bbox` for spatial filtering or add `filter` and `filter-lang=cql2-json` for property filtering. The service applies these filters before it returns the GeoJSON response, which reduces the amount of data transferred to the client.
+
+> [!IMPORTANT]
+> Keep the trailing slash in the landing-page URL (`/data/features/`). A redirect from a URL without the trailing slash can cause some clients to omit the authorization header. Never include an access token in a shared URL, project file, screenshot, or log.
+
+### Access feature collections from QGIS
+
+QGIS includes a native OGC API Features provider. Create an API Header authentication configuration for the Microsoft Entra bearer token, and then create a WFS / OGC API Features connection to the GeoCatalog landing page. Enable **Only request features overlapping the view extent** so QGIS sends a `bbox` with feature requests and the service performs spatial filtering.
+
+During the current preview, authenticated collection discovery, map display, and extent-based filtering are supported. Native QGIS attribute subset requests might not propagate authentication reliably. To apply a CQL2 property filter, you can send an authenticated request from the QGIS Python Console and load the returned GeoJSON as a temporary layer.
+
+### Access feature collections from ArcGIS Pro
+
+ArcGIS Pro can discover and display collections through a native OGC API Features connection when the endpoint uses an authentication method supported by ArcGIS Pro. The native client sends bounding boxes for extent-based requests, allowing the service to limit the features returned for the visible map area.
+
+For authenticated CQL2 property filtering during the current preview, use an integrated ArcGIS Pro notebook to request filtered GeoJSON and convert the response to a feature class with ArcPy. A native ArcGIS Pro definition query can filter the displayed layer locally, but it isn't currently guaranteed to send a CQL2 filter to the service.
+
 ## Integration with desktop GIS applications
 
-Microsoft Planetary Computer Pro's vector data support integrates seamlessly with industry-standard desktop GIS applications, enabling professional workflows and advanced analysis capabilities.
+In addition to the feature collection workflows described previously, Microsoft Planetary Computer Pro supports file- and tile-based workflows in desktop GIS applications.
 
 ### QGIS integration
 
