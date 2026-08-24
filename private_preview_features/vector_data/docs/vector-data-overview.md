@@ -1,5 +1,5 @@
 ---
-title: Vector data in Microsoft Planetary Computer Pro overview (Preview)
+title: Vector data in Microsoft Planetary Computer Pro
 description: Learn how to ingest, optimize, visualize, access, and filter vector data in Microsoft Planetary Computer Pro.
 author: beharris
 ms.author: beharris
@@ -10,7 +10,7 @@ ms.date: 08/24/2026
 ms.custom:
 # customer intent: As a GeoCatalog User I want to understand how vector data is supported in Microsoft Planetary Computer Pro so that I can ingest, manage, and visualize vector data formats.
 ---
-# Vector data in Microsoft Planetary Computer Pro (Preview)
+# Vector data in Microsoft Planetary Computer Pro
 
 Microsoft Planetary Computer Pro now supports ingestion, cloud optimization, visualization, and feature-level access for vector data. By using this preview feature, you can work with vector datasets alongside your raster and data cube assets, providing a comprehensive platform for geospatial analysis and visualization.
 
