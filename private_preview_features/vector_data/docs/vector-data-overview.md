@@ -29,11 +29,14 @@ Supported vector formats include:
 - **GeoJSON** - A lightweight, JSON-based format for encoding geographic data structures
 - **GeoParquet** - A cloud-native columnar format optimized for large-scale vector data
 
->[!NOTE]
->Vector data ingestion is currently subject to file size limitations to ensure optimal performance. Please only ingest:
->- Shapefiles less than 2272 MB
->- GeoParquet files less than 1248 MB
->- GeoJSON files less than 1248 MB
+> [!NOTE]
+> The following file size limits apply to PMTiles conversion, not to vector data ingestion:
+>
+> - Shapefiles less than 2,272 MB
+> - GeoParquet files less than 1,248 MB
+> - GeoJSON files less than 1,248 MB
+>
+> You can ingest vector assets that exceed these limits. Remove the `visual` role from larger assets in the STAC item to skip PMTiles conversion.
 
 ## Cloud optimization of vector data
 
@@ -67,9 +70,9 @@ Within the collection's STAC items, the following conditions must be true for a 
     - `application/vnd.shp`
     - `application/geo+json`
     - `application/x-parquet`
-* The asset has a `roles` field that includes either `data` or `visual` within its list of roles.
+* The asset has a `roles` field that includes `data`, `visual`, or both within its list of roles.
 
-If these conditions are met, both GeoParquet and PMTiles assets are generated in blob storage alongside the original asset.
+The `visual` role triggers PMTiles conversion. For assets that exceed the PMTiles conversion limits, remove the `visual` role before ingestion. You can retain the `data` role to ingest the asset without generating PMTiles.
 
 ### STAC item enrichment
 
