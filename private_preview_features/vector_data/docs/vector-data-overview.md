@@ -30,13 +30,13 @@ Supported vector formats include:
 - **GeoParquet** - A cloud-native columnar format optimized for large-scale vector data
 
 > [!NOTE]
-> The following file size limits apply to PMTiles conversion, not to vector data ingestion:
+> For optimal PMTiles performance, only ingest assets for PMTiles conversion that are within the following size limits:
 >
 > - Shapefiles less than 2,272 MB
 > - GeoParquet files less than 1,248 MB
 > - GeoJSON files less than 1,248 MB
 >
-> You can ingest vector assets that exceed these limits. Remove the `visual` role from larger assets in the STAC item to skip PMTiles conversion.
+> These size limits apply only to PMTiles conversion. You can ingest vector assets that exceed these limits if you remove the `visual` role from the STAC item, which skips PMTiles generation during ingestion.
 
 ## Cloud optimization of vector data
 
