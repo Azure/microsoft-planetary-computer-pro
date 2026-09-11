@@ -1,0 +1,24 @@
+format: jb-book
+root: intro
+parts:
+  - caption: GeoAI SDK
+    chapters:
+      - file: geoai-sdk/README
+        title: Overview
+      - file: sdk-index
+        title: Documentation
+      - file: api/index
+        title: API Reference
+        sections:
+          - file: api/input
+          - file: api/output
+          - file: api/constraints
+          - file: api/models
+          - file: api/validation
+  # - caption: Models
+  #   chapters:
+  #     - file: models/placeholder
+  - caption: Examples
+    chapters:
+      - file: examples/eoos_object_detection
+      - file: examples/mars_map_generation

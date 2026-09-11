@@ -1,0 +1,73 @@
+{
+  "model_id": "microsoft/eo-os-object-detection",
+  "model_name": "EO-OS Object Detection",
+  "model_type": "object_detection",
+  "workflow_type": "aoi_based",
+  
+  "description": "High-resolution object detection model optimized for aerial imagery (NAIP)",
+  
+  "data_requirements": {
+    "required_bands": ["red", "green", "blue"],
+    "preferred_resolution_meters": 0.6,
+    "resolution_range_meters": {
+      "min": 0.3,
+      "max": 1.5,
+      "optimal": 0.6
+    },
+    "supported_collections": ["naip"]
+  },
+  
+  "preprocessing": {
+    "color_normalization": "imagenet",
+    "target_mean_rgb": [123.675, 116.28, 103.53],
+    "target_std_rgb": [58.395, 57.12, 57.375],
+    "description": "Match ImageNet/DIOR color statistics for domain adaptation"
+  },
+  
+  "foundry_api": {
+    "endpoint_path": "/score",
+    "method": "POST",
+    "payload_format": "json-base64",
+    "input_format": "png",
+    "request_format": {
+      "inputs": "base64_image",
+      "parameters": {
+        "threshold": 0.5
+      }
+    },
+    "response_format": {
+      "type": "list",
+      "fields": {
+        "label": "string",
+        "score": "float",
+        "box": {
+          "_format": "bbox_xyxy",
+          "xmin": "float",
+          "ymin": "float",
+          "xmax": "float",
+          "ymax": "float"
+        }
+      }
+    }
+  },
+
+  "parameters": {
+    "threshold": {
+      "type": "float",
+      "default": 0.5,
+      "min": 0.0,
+      "max": 1.0,
+      "description": "Detection confidence threshold"
+    },
+    "chip_size": {
+      "type": "int",
+      "default": 1024,
+      "description": "Input chip size in pixels"
+    },
+    "stride": {
+      "type": "int",
+      "default": 800,
+      "description": "Stride in pixels (controls chip overlap)"
+    }
+  }
+}
