@@ -431,6 +431,9 @@ share/python-wheels/
 *.egg
 MANIFEST
 
+# GeoAI SDK release artifacts (built by publish script)
+release-artifacts/
+
 # PyInstaller
 *.manifest
 *.spec
@@ -471,7 +474,7 @@ instance/
 .scrapy
 
 # Sphinx documentation
-docs/_build/
+docs/geoai/_build/
 
 # PyBuilder
 .pybuilder/
@@ -549,3 +552,13 @@ Thumbs.db
 
 # Notebook backup files (created by nb_edit.py)
 *.ipynb.backup_*
+
+# Environment Files
+.env
+
+# VS Code
+.vscode/
+
+# Generic input / output folders
+.inputs/
+.outputs/
