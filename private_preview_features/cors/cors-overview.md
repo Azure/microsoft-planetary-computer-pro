@@ -44,7 +44,7 @@ For your GeoCatalog, you provide two values:
 | Setting | Description | Example |
 | --- | --- | --- |
 | **Allowed origins** | The exact origins your browser application is served from. Must be fully qualified **HTTPS** origins, with no wildcards. | `https://app.contoso.com` |
-| **Max age** | How long (in seconds) the browser caches the preflight result before checking again. | `3000` |
+| **Max age** | How long (in seconds) the browser caches the preflight result before checking again. | `3600` |
 
 You can configure up to 50 allowed origins per GeoCatalog.
 

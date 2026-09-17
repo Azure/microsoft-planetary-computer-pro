@@ -33,7 +33,7 @@ Before you open a support ticket, decide on the values below. Providing complete
 | --- | --- | --- |
 | **GeoCatalog resource** | The full resource ID or the GeoCatalog endpoint URL | For example, `https://<name>.<hash>.<region>.geocatalog.spatio.azure.com` |
 | **Allowed origins** | One or more fully qualified HTTPS origins | Exact match only. No wildcards. Up to 50. |
-| **Max age** | Preflight cache duration in seconds | For example, `3000` (50 minutes) |
+| **Max age** | Preflight cache duration in seconds | For example, `3600` (60 minutes) |
 
 Allowed origins and max age are the only values you provide. The allowed HTTP methods and headers are set by the platform and can't be configured per GeoCatalog.
 
