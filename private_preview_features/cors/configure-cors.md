@@ -89,7 +89,7 @@ If the origin isn't allowed, the browser blocks the response and `fetch()` throw
 
 ### Verify managed storage range reads
 
-To confirm assets stream directly from managed storage, request a byte range from an asset URL referenced by a STAC item. You can find asset URLs in the `assets` object of a STAC item (for example, `item.assets.visual.href`):
+To confirm assets stream directly from managed storage, first obtain an authorized asset URL (for example, by getting a SAS token as described in [SAS tokens: Download raw assets](https://learn.microsoft.com/en-us/azure/planetary-computer/build-web-application#sas-tokens-download-raw-assets) and applying it to the STAC asset href), then request a byte range from that URL.
 
 ```javascript
 const response = await fetch(assetUrl, {
