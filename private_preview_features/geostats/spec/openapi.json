@@ -1,0 +1,2353 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Microsoft Planetary Computer Pro - GeoStats",
+    "version": "2026-10-01-preview",
+    "description": "GeoStats: raster-derived statistics over STAC-discovered data.\n\nSubmit geometries and a raster collection, receive analytics-ready tabular\noutput. See\ndocs/data-plane/design/geostats/how-it-works/geostats-api-design.md for the\nrationale behind the resource model, and\ndocs/data-plane/design/geostats/how-it-works/geostats-design.md for the\nunderlying algebra.",
+    "x-typespec-generated": [
+      {
+        "emitter": "@azure-tools/typespec-autorest"
+      }
+    ]
+  },
+  "schemes": [
+    "https"
+  ],
+  "x-ms-parameterized-host": {
+    "hostTemplate": "{endpoint}",
+    "useSchemePrefix": false,
+    "parameters": [
+      {
+        "name": "endpoint",
+        "in": "path",
+        "description": "GeoCatalog endpoint, e.g. https://contoso-catalog.uksouth.geocatalog.spatio.azure.com",
+        "required": true,
+        "type": "string",
+        "format": "uri",
+        "x-ms-skip-url-encoding": true
+      }
+    ]
+  },
+  "produces": [
+    "application/json"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "security": [
+    {
+      "OAuth2Auth": [
+        "https://geocatalog.spatio.azure.com/.default"
+      ]
+    }
+  ],
+  "securityDefinitions": {
+    "OAuth2Auth": {
+      "type": "oauth2",
+      "flow": "implicit",
+      "authorizationUrl": "https://login.microsoftonline.com/common/oauth2/authorize",
+      "scopes": {
+        "https://geocatalog.spatio.azure.com/.default": ""
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "GeoStats Computations"
+    },
+    {
+      "name": "GeoStats Computation Runs"
+    },
+    {
+      "name": "GeoStats Formulas"
+    }
+  ],
+  "paths": {
+    "/stac/collections/{collectionId}/computations/zonal-statistics": {
+      "get": {
+        "operationId": "Computations_List",
+        "tags": [
+          "GeoStats Computations"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/ApiVersionParameters"
+          },
+          {
+            "name": "collectionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "$ref": "#/parameters/ComputationListQuery"
+          },
+          {
+            "$ref": "#/parameters/PageQuery.top"
+          },
+          {
+            "$ref": "#/parameters/PageQuery.skip"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "schema": {
+              "$ref": "#/definitions/ComputationPage"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/Azure.Core.Foundations.ErrorResponse"
+            },
+            "headers": {
+              "x-ms-error-code": {
+                "type": "string",
+                "description": "String error code indicating what went wrong."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stac/collections/{collectionId}/computations/zonal-statistics/{computationId}": {
+      "get": {
+        "operationId": "Computations_Get",
+        "tags": [
+          "GeoStats Computations"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/ApiVersionParameters"
+          },
+          {
+            "name": "collectionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "computationId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "schema": {
+              "$ref": "#/definitions/GeoStatsComputationRequest"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/Azure.Core.Foundations.ErrorResponse"
+            },
+            "headers": {
+              "x-ms-error-code": {
+                "type": "string",
+                "description": "String error code indicating what went wrong."
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "Computations_CreateOrReplace",
+        "tags": [
+          "GeoStats Computations"
+        ],
+        "description": "Create or replace a saved computation definition.\n\nThis operation stores and validates the definition synchronously. Use the\n`run` action to execute it asynchronously.",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ApiVersionParameters"
+          },
+          {
+            "name": "collectionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "computationId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GeoStatsComputationRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The definition was replaced.",
+            "schema": {
+              "$ref": "#/definitions/GeoStatsComputationRequest"
+            }
+          },
+          "201": {
+            "description": "The definition was created.",
+            "schema": {
+              "$ref": "#/definitions/GeoStatsComputationRequest"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/Azure.Core.Foundations.ErrorResponse"
+            },
+            "headers": {
+              "x-ms-error-code": {
+                "type": "string",
+                "description": "String error code indicating what went wrong."
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "Computations_Delete",
+        "tags": [
+          "GeoStats Computations"
+        ],
+        "description": "Delete a computation definition.\n\nReturns `204` on success and `404` if the record does not exist. Runs of\nthe definition are not touched: a run is a separate resource with its own\nlifetime, and its results stay addressable after the definition it came\nfrom is gone. Deleting the parent collection removes its definitions,\nformulas, and run snapshots.",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ApiVersionParameters"
+          },
+          {
+            "name": "collectionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "computationId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The computation record was removed.\n\nDeletion is separate from cancellation. A cancelled computation keeps its\nrecord so that `Canceling` and `Canceled` are observable and so that the\npartial results already written remain addressable; deletion is what\ndisposes of it."
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/Azure.Core.Foundations.ErrorResponse"
+            },
+            "headers": {
+              "x-ms-error-code": {
+                "type": "string",
+                "description": "String error code indicating what went wrong."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stac/collections/{collectionId}/computations/zonal-statistics/{computationId}:run": {
+      "post": {
+        "operationId": "ComputationRuns_Run",
+        "tags": [
+          "GeoStats Computation Runs"
+        ],
+        "description": "Run a computation.\n\nAlways asynchronous: returns `202` with an `operation-location` header,\nfollowing the long-running action contract for an existing resource.\nThere is no synchronous path and no `Prefer: wait`, because a caller must\nhandle the asynchronous contract regardless and a second path that\nsometimes applies would double the client contract without removing either\nbranch.\n\nInput and output arguments belong to this invocation rather than the\nsaved definition. The service generates the run and status monitor id.\nEach submission starts a new run, as with ingestion runs. Clients must\nnot automatically retry submission after an ambiguous failure.",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ApiVersionParameters"
+          },
+          {
+            "name": "collectionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "computationId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GeoStatsComputationRunRequest"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "The run was accepted and is executing in the background. This is the only\noutcome: there is no synchronous path, so a caller implements one contract\nrather than two.",
+            "schema": {
+              "$ref": "#/definitions/GeoStatsOperation"
+            },
+            "headers": {
+              "operation-id": {
+                "type": "string",
+                "description": "Id of the status monitor."
+              },
+              "operation-location": {
+                "type": "string",
+                "format": "uri",
+                "description": "Url of the status monitor, which is the catalog's operations record at\n`/operations/{operationId}`."
+              },
+              "retry-after": {
+                "type": "integer",
+                "format": "int32",
+                "description": "Seconds to wait before polling the status monitor."
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/Azure.Core.Foundations.ErrorResponse"
+            },
+            "headers": {
+              "x-ms-error-code": {
+                "type": "string",
+                "description": "String error code indicating what went wrong."
+              }
+            }
+          }
+        },
+        "x-ms-long-running-operation-options": {
+          "final-state-via": "location"
+        },
+        "x-ms-long-running-operation": true
+      }
+    },
+    "/stac/collections/{collectionId}/computations/zonal-statistics/{computationId}/runs": {
+      "get": {
+        "operationId": "ComputationRuns_List",
+        "tags": [
+          "GeoStats Computation Runs"
+        ],
+        "description": "List run operation monitors, including runs of a deleted definition.",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ApiVersionParameters"
+          },
+          {
+            "name": "collectionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "computationId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "$ref": "#/parameters/PageQuery.top"
+          },
+          {
+            "$ref": "#/parameters/PageQuery.skip"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "schema": {
+              "$ref": "#/definitions/ComputationRunPage"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/Azure.Core.Foundations.ErrorResponse"
+            },
+            "headers": {
+              "x-ms-error-code": {
+                "type": "string",
+                "description": "String error code indicating what went wrong."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stac/collections/{collectionId}/computations/zonal-statistics:estimate": {
+      "post": {
+        "operationId": "Computations_Estimate",
+        "tags": [
+          "GeoStats Computations"
+        ],
+        "description": "Plan a run without executing it. Features are filtered and partitioned,\nand the STAC search bounded by each partition's envelope, exactly as the\nrun would do for the given observation strategy. The operation's\nadditionalInformation reports feature, item and pixel counts, and how\nmany compute partitions are predicted to be too large to compute as\nrequested. No raster is read and no result is published. The prediction\ncomes from measured per-pixel costs; it is not a price or duration. Each submission creates a new operation; clients must\nnot automatically retry after an ambiguous failure.",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ApiVersionParameters"
+          },
+          {
+            "name": "collectionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/GeoStatsComputationEstimateRequest"
+            }
+          }
+        ],
+        "responses": {
+          "202": {
+            "description": "The run was accepted and is executing in the background. This is the only\noutcome: there is no synchronous path, so a caller implements one contract\nrather than two.",
+            "schema": {
+              "$ref": "#/definitions/GeoStatsOperation"
+            },
+            "headers": {
+              "operation-id": {
+                "type": "string",
+                "description": "Id of the status monitor."
+              },
+              "operation-location": {
+                "type": "string",
+                "format": "uri",
+                "description": "Url of the status monitor, which is the catalog's operations record at\n`/operations/{operationId}`."
+              },
+              "retry-after": {
+                "type": "integer",
+                "format": "int32",
+                "description": "Seconds to wait before polling the status monitor."
+              }
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/Azure.Core.Foundations.ErrorResponse"
+            },
+            "headers": {
+              "x-ms-error-code": {
+                "type": "string",
+                "description": "String error code indicating what went wrong."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stac/collections/{collectionId}/formulas": {
+      "get": {
+        "operationId": "Formulas_List",
+        "tags": [
+          "GeoStats Formulas"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/ApiVersionParameters"
+          },
+          {
+            "name": "collectionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "$ref": "#/parameters/PageQuery.top"
+          },
+          {
+            "$ref": "#/parameters/PageQuery.skip"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "schema": {
+              "$ref": "#/definitions/FormulaPage"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/Azure.Core.Foundations.ErrorResponse"
+            },
+            "headers": {
+              "x-ms-error-code": {
+                "type": "string",
+                "description": "String error code indicating what went wrong."
+              }
+            }
+          }
+        }
+      }
+    },
+    "/stac/collections/{collectionId}/formulas/{formulaId}": {
+      "get": {
+        "operationId": "Formulas_Get",
+        "tags": [
+          "GeoStats Formulas"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/ApiVersionParameters"
+          },
+          {
+            "name": "collectionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "formulaId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "schema": {
+              "$ref": "#/definitions/Formula"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/Azure.Core.Foundations.ErrorResponse"
+            },
+            "headers": {
+              "x-ms-error-code": {
+                "type": "string",
+                "description": "String error code indicating what went wrong."
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "operationId": "Formulas_CreateOrReplace",
+        "tags": [
+          "GeoStats Formulas"
+        ],
+        "parameters": [
+          {
+            "$ref": "#/parameters/ApiVersionParameters"
+          },
+          {
+            "name": "collectionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "formulaId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Formula"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The request has succeeded.",
+            "schema": {
+              "$ref": "#/definitions/Formula"
+            }
+          },
+          "201": {
+            "description": "The request has succeeded and a new resource has been created as a result.",
+            "schema": {
+              "$ref": "#/definitions/Formula"
+            }
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/Azure.Core.Foundations.ErrorResponse"
+            },
+            "headers": {
+              "x-ms-error-code": {
+                "type": "string",
+                "description": "String error code indicating what went wrong."
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "operationId": "Formulas_Delete",
+        "tags": [
+          "GeoStats Formulas"
+        ],
+        "description": "Delete a formula. Computations referencing it cannot run until repaired.",
+        "parameters": [
+          {
+            "$ref": "#/parameters/ApiVersionParameters"
+          },
+          {
+            "name": "collectionId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "name": "formulaId",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "The computation record was removed.\n\nDeletion is separate from cancellation. A cancelled computation keeps its\nrecord so that `Canceling` and `Canceled` are observable and so that the\npartial results already written remain addressable; deletion is what\ndisposes of it."
+          },
+          "default": {
+            "description": "An unexpected error response.",
+            "schema": {
+              "$ref": "#/definitions/Azure.Core.Foundations.ErrorResponse"
+            },
+            "headers": {
+              "x-ms-error-code": {
+                "type": "string",
+                "description": "String error code indicating what went wrong."
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Azure.Core.Foundations.Error": {
+      "type": "object",
+      "description": "The error object.",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "One of a server-defined set of error codes."
+        },
+        "message": {
+          "type": "string",
+          "description": "A human-readable representation of the error."
+        },
+        "target": {
+          "type": "string",
+          "description": "The target of the error."
+        },
+        "details": {
+          "type": "array",
+          "description": "An array of details about specific errors that led to this reported error.",
+          "items": {
+            "$ref": "#/definitions/Azure.Core.Foundations.Error"
+          }
+        },
+        "innererror": {
+          "$ref": "#/definitions/Azure.Core.Foundations.InnerError",
+          "description": "An object containing more specific information than the current object about the error."
+        }
+      },
+      "required": [
+        "code",
+        "message"
+      ]
+    },
+    "Azure.Core.Foundations.ErrorResponse": {
+      "type": "object",
+      "description": "A response containing error details.",
+      "properties": {
+        "error": {
+          "$ref": "#/definitions/Azure.Core.Foundations.Error",
+          "description": "The error object."
+        }
+      },
+      "required": [
+        "error"
+      ]
+    },
+    "Azure.Core.Foundations.InnerError": {
+      "type": "object",
+      "description": "An object containing more specific information about the error. As per Azure REST API guidelines - https://aka.ms/AzureRestApiGuidelines#handling-errors.",
+      "properties": {
+        "code": {
+          "type": "string",
+          "description": "One of a server-defined set of error codes."
+        },
+        "innererror": {
+          "$ref": "#/definitions/Azure.Core.Foundations.InnerError",
+          "description": "Inner error."
+        }
+      }
+    },
+    "Azure.Core.uuid": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Universally Unique Identifier"
+    },
+    "BandCommonName": {
+      "type": "string",
+      "description": "Canonical band name from the STAC EO extension.\n\nBand names in expressions are common names rather than asset keys, so\n`(nir - red) / (nir + red)` resolves against whichever bands a collection\ndeclares and the same request works against HLS, Sentinel-2 and Landsat\nunchanged.\n\nThe union is open because two extension versions are in circulation and a\ncatalog holds both: EO v1.1 nests `common_name` inside `eo:bands`, while EO\nv2.0 moves bands to the STAC 1.1 core `bands` construct as `eo:common_name`\nand extends the vocabulary. The members below are the v2.0 set, which is a\nsuperset of v1.1.",
+      "enum": [
+        "pan",
+        "coastal",
+        "blue",
+        "green",
+        "green05",
+        "yellow",
+        "red",
+        "rededge",
+        "rededge071",
+        "rededge075",
+        "rededge078",
+        "nir",
+        "nir08",
+        "nir09",
+        "cirrus",
+        "swir16",
+        "swir22",
+        "lwir",
+        "lwir11",
+        "lwir12"
+      ],
+      "x-ms-enum": {
+        "name": "BandCommonName",
+        "modelAsString": true,
+        "values": [
+          {
+            "name": "pan",
+            "value": "pan"
+          },
+          {
+            "name": "coastal",
+            "value": "coastal"
+          },
+          {
+            "name": "blue",
+            "value": "blue"
+          },
+          {
+            "name": "green",
+            "value": "green"
+          },
+          {
+            "name": "green05",
+            "value": "green05"
+          },
+          {
+            "name": "yellow",
+            "value": "yellow"
+          },
+          {
+            "name": "red",
+            "value": "red"
+          },
+          {
+            "name": "rededge",
+            "value": "rededge"
+          },
+          {
+            "name": "rededge071",
+            "value": "rededge071"
+          },
+          {
+            "name": "rededge075",
+            "value": "rededge075"
+          },
+          {
+            "name": "rededge078",
+            "value": "rededge078"
+          },
+          {
+            "name": "nir",
+            "value": "nir"
+          },
+          {
+            "name": "nir08",
+            "value": "nir08"
+          },
+          {
+            "name": "nir09",
+            "value": "nir09"
+          },
+          {
+            "name": "cirrus",
+            "value": "cirrus"
+          },
+          {
+            "name": "swir16",
+            "value": "swir16"
+          },
+          {
+            "name": "swir22",
+            "value": "swir22"
+          },
+          {
+            "name": "lwir",
+            "value": "lwir"
+          },
+          {
+            "name": "lwir11",
+            "value": "lwir11"
+          },
+          {
+            "name": "lwir12",
+            "value": "lwir12"
+          }
+        ]
+      }
+    },
+    "BufferSpec": {
+      "type": "object",
+      "description": "Distance to grow the geometry by before reduction. Omit the buffer entirely\nto reduce over the geometry as drawn, which is what analytics usually wants.\n\nThe distance must be positive. The buffer is applied in the raster's CRS\nafter reprojection, so the distance is always metres: naming the property\nfor its unit is what keeps that from being a silent correctness bug on a\ngeographic CRS.",
+      "properties": {
+        "distanceMeters": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "required": [
+        "distanceMeters"
+      ]
+    },
+    "BuiltInIndex": {
+      "type": "string",
+      "description": "Built-in spectral index. The library is the on-ramp rather than the\ndestination: callers who need their own formulas use `expression`.",
+      "enum": [
+        "NDVI",
+        "EVI2",
+        "NDMI",
+        "NDWI",
+        "NBR",
+        "NDRE",
+        "BSI"
+      ],
+      "x-ms-enum": {
+        "name": "BuiltInIndex",
+        "modelAsString": true,
+        "values": [
+          {
+            "name": "NDVI",
+            "value": "NDVI"
+          },
+          {
+            "name": "EVI2",
+            "value": "EVI2"
+          },
+          {
+            "name": "NDMI",
+            "value": "NDMI"
+          },
+          {
+            "name": "NDWI",
+            "value": "NDWI"
+          },
+          {
+            "name": "NBR",
+            "value": "NBR"
+          },
+          {
+            "name": "NDRE",
+            "value": "NDRE",
+            "description": "Normalised difference red edge."
+          },
+          {
+            "name": "BSI",
+            "value": "BSI",
+            "description": "Bare soil index."
+          }
+        ]
+      }
+    },
+    "Calculation": {
+      "type": "object",
+      "description": "One inline derived band. An expression is required; built-in indices are\nreserved and currently rejected.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Output column name. Caller-controlled so that output schema does not\ndepend on expression text."
+        },
+        "index": {
+          "$ref": "#/definitions/BuiltInIndex",
+          "description": "Built-in index to evaluate."
+        },
+        "expression": {
+          "type": "string",
+          "description": "Band arithmetic over names bound by `bandMapping`, for example\n`(nir - red) / (nir + red)`.\n\nParsed with a restricted AST allowlist and lowered to the canonical\ngraph. The parser is not the security boundary; structural validation of\nthe lowered graph is."
+        },
+        "bandMapping": {
+          "type": "object",
+          "description": "Map this formula's expression names to physical assets or bands.\nFor example, `red` can bind to asset `B04`, and `nir` to band index 4 of\nasset `image`. Overrides take precedence over EO common-name resolution\nfor this formula only; sibling formulas may bind the same name differently.\nEach run snapshots these bindings together with the expression.",
+          "additionalProperties": {
+            "$ref": "#/definitions/DataBandReference"
+          }
+        }
+      },
+      "required": [
+        "name"
+      ]
+    },
+    "ComputationCalculation": {
+      "type": "object",
+      "description": "Exactly one of an inline calculation (name and expression) or a formulaId\nreferencing a saved formula in the same collection. Formula references cannot\nbe combined with inline fields or band-mapping overrides. Each run snapshots\nthe current expression and its band mappings.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Output column name. Caller-controlled so that output schema does not\ndepend on expression text."
+        },
+        "index": {
+          "$ref": "#/definitions/BuiltInIndex",
+          "description": "Built-in index to evaluate."
+        },
+        "expression": {
+          "type": "string",
+          "description": "Band arithmetic over names bound by `bandMapping`, for example\n`(nir - red) / (nir + red)`.\n\nParsed with a restricted AST allowlist and lowered to the canonical\ngraph. The parser is not the security boundary; structural validation of\nthe lowered graph is."
+        },
+        "bandMapping": {
+          "type": "object",
+          "description": "Map this formula's expression names to physical assets or bands.\nFor example, `red` can bind to asset `B04`, and `nir` to band index 4 of\nasset `image`. Overrides take precedence over EO common-name resolution\nfor this formula only; sibling formulas may bind the same name differently.\nEach run snapshots these bindings together with the expression.",
+          "additionalProperties": {
+            "$ref": "#/definitions/DataBandReference"
+          }
+        },
+        "formulaId": {
+          "type": "string"
+        }
+      }
+    },
+    "ComputationCreatedResponse": {
+      "type": "object",
+      "description": "The definition was created.",
+      "properties": {
+        "body": {
+          "$ref": "#/definitions/GeoStatsComputationRequest"
+        }
+      },
+      "required": [
+        "body"
+      ]
+    },
+    "ComputationDeletedResponse": {
+      "type": "object",
+      "description": "The computation record was removed.\n\nDeletion is separate from cancellation. A cancelled computation keeps its\nrecord so that `Canceling` and `Canceled` are observable and so that the\npartial results already written remain addressable; deletion is what\ndisposes of it."
+    },
+    "ComputationPage": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GeoStatsComputationRequest"
+          }
+        },
+        "nextLink": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "value"
+      ]
+    },
+    "ComputationPlan": {
+      "type": "object",
+      "description": "The result of planning a computation without executing it.\n\nPixels are the budget currency because they are what actually costs money;\nlimits on geometry count, time range, and scene count are proxies for it.",
+      "properties": {
+        "featureCount": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "matchedItemCount": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "estimatedPixels": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "pixelBudget": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "estimatedOutputRows": {
+          "type": "integer",
+          "format": "int64"
+        },
+        "featureBbox": {
+          "type": "array",
+          "description": "Bounding box the STAC search was bounded by, taken from the features.",
+          "items": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "featureIdentity": {
+          "$ref": "#/definitions/FeatureIdentity",
+          "description": "How output rows will be keyed back to input geometries."
+        },
+        "degradation": {
+          "$ref": "#/definitions/DegradationPlan",
+          "description": "Resolution coarsening that would be applied to bring the computation\nwithin budget, surfaced before it happens silently."
+        },
+        "referenceGrid": {
+          "$ref": "#/definitions/ReferenceGrid"
+        },
+        "warnings": {
+          "type": "array",
+          "description": "Non-fatal planning findings.",
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "required": [
+        "featureCount",
+        "matchedItemCount",
+        "estimatedPixels"
+      ]
+    },
+    "ComputationReplacedResponse": {
+      "type": "object",
+      "description": "The definition was replaced.",
+      "properties": {
+        "body": {
+          "$ref": "#/definitions/GeoStatsComputationRequest"
+        }
+      },
+      "required": [
+        "body"
+      ]
+    },
+    "ComputationRunAcceptedResponse": {
+      "type": "object",
+      "description": "The run was accepted and is executing in the background. This is the only\noutcome: there is no synchronous path, so a caller implements one contract\nrather than two.",
+      "properties": {
+        "body": {
+          "$ref": "#/definitions/GeoStatsOperation"
+        }
+      },
+      "required": [
+        "body"
+      ]
+    },
+    "ComputationRunPage": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/GeoStatsOperation"
+          }
+        },
+        "nextLink": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "value"
+      ]
+    },
+    "DataBandReference": {
+      "type": "object",
+      "description": "One physical band bound to a name used in calculations.",
+      "properties": {
+        "assetKey": {
+          "type": "string",
+          "description": "STAC asset key on each matched item."
+        },
+        "bandIndex": {
+          "type": "integer",
+          "format": "int32",
+          "description": "1-based band index within a multi-band asset. Mutually exclusive with\n`bandName`. Omit both selectors for a single-band asset.",
+          "minimum": 1
+        },
+        "bandName": {
+          "type": "string",
+          "description": "Name declared in the asset's STAC band metadata. Mutually exclusive with\n`bandIndex`.",
+          "minLength": 1
+        }
+      },
+      "required": [
+        "assetKey"
+      ]
+    },
+    "DataSource": {
+      "type": "object",
+      "properties": {
+        "source": {
+          "$ref": "#/definitions/RasterSource",
+          "description": "Catalog to resolve the collection against. `self` only for P0."
+        },
+        "datetime": {
+          "type": "string",
+          "description": "RFC 3339 interval, for example `2025-06-01/2025-06-30`."
+        },
+        "filter": {
+          "type": "object",
+          "description": "CQL2-JSON predicate selecting STAC items for computations and estimates.\nCombined with the URL's collection, datetime, and feature bounds. This is\ndistinct from input.features.filter, which selects analysis geometries.",
+          "additionalProperties": {}
+        }
+      },
+      "required": [
+        "datetime"
+      ]
+    },
+    "DegradationPlan": {
+      "type": "object",
+      "description": "Graceful degradation rather than outright rejection.",
+      "properties": {
+        "applied": {
+          "type": "boolean"
+        },
+        "nativeResolution": {
+          "type": "number",
+          "format": "double",
+          "description": "Native resolution in CRS units."
+        },
+        "evaluatedResolution": {
+          "type": "number",
+          "format": "double",
+          "description": "Resolution the computation would actually run at."
+        }
+      },
+      "required": [
+        "applied"
+      ]
+    },
+    "FeatureCollectionSource": {
+      "type": "object",
+      "description": "Where the input geometries come from. Exactly one member must be set.\n\nSupply inline GeoJSON or a catalog asset. Inline collections contain 1 to\n100 features, inclusive. The entire JSON request must be smaller than\n10,000,000 bytes. Arrow attachments are not supported.",
+      "properties": {
+        "stacAsset": {
+          "$ref": "#/definitions/StacAssetReference",
+          "description": "A GeoParquet or vector asset already held on a STAC item in this catalog.\nThe only unbounded tier: the planner reads its feature count, CRS, and\nbbox from file metadata without decoding geometries."
+        },
+        "filter": {
+          "type": "object",
+          "description": "CQL2-JSON predicate over top-level properties in the feature source.\nThe selected rows define the geometries included in the computation.\nThis is distinct from `dataSource.filter`, which selects STAC items.",
+          "additionalProperties": {}
+        },
+        "geoJson": {
+          "$ref": "#/definitions/GeoJsonFeatureCollection",
+          "description": "Inline GeoJSON FeatureCollection, bounded to a small number of features.\nRFC 7946 fixes GeoJSON to WGS 84 longitude and latitude, so this is the\none source whose CRS may be assumed rather than declared."
+        },
+        "geometryIdColumn": {
+          "type": "string",
+          "description": "Column holding the caller's stable identifier, carried verbatim into\nevery output row. Omit to identify geometries by their ordinal, in which\ncase results are returned in that same order by default. That ordinal\nmatches the order supplied only for inline `geoJson`; a `stacAsset` is\nstored re-sorted by ingestion, so name a column here to join results\nback to the rows the caller knows."
+        },
+        "geometryColumn": {
+          "type": "string",
+          "description": "Reserved; currently rejected. Geometry uses the source's default geometry column."
+        }
+      }
+    },
+    "FeatureIdentity": {
+      "type": "string",
+      "description": "How output rows are keyed back to input geometries.\n\n`column` is preferred whenever the caller has a business key, because it\nsurvives resubmission, reordering, and partial resubmission. `positional` is\nfor callers who have no such key and do not want to invent one.",
+      "enum": [
+        "column",
+        "positional"
+      ],
+      "x-ms-enum": {
+        "name": "FeatureIdentity",
+        "modelAsString": true,
+        "values": [
+          {
+            "name": "column",
+            "value": "column",
+            "description": "Keyed by a caller-named column, carried verbatim into every output row."
+          },
+          {
+            "name": "positional",
+            "value": "positional",
+            "description": "Keyed by the zero-based ordinal of the geometry as supplied. Stable only\nwithin one submission: sending the same file with rows in a different\norder produces different identities."
+          }
+        ]
+      }
+    },
+    "FeatureInput": {
+      "type": "object",
+      "description": "Input geometries and reduction mode.",
+      "properties": {
+        "features": {
+          "$ref": "#/definitions/FeatureCollectionSource",
+          "description": "Where the geometries come from."
+        },
+        "mode": {
+          "$ref": "#/definitions/SpatialMode",
+          "description": "Zonal or sample."
+        },
+        "weighting": {
+          "$ref": "#/definitions/Weighting",
+          "description": "Pixel weighting, zonal mode only."
+        },
+        "interpolation": {
+          "$ref": "#/definitions/Interpolation",
+          "description": "Interpolation, sample mode only."
+        },
+        "buffer": {
+          "$ref": "#/definitions/BufferSpec",
+          "description": "Optional buffer applied to every geometry during computation. The\ncandidate-pair estimate does not apply buffers."
+        }
+      },
+      "required": [
+        "features"
+      ]
+    },
+    "Formula": {
+      "type": "object",
+      "description": "A reusable calculation owned by the collection in the URL.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Assigned from the URL. When supplied, must match the formula id."
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description of the formula. Does not affect computation."
+        },
+        "expression": {
+          "type": "string",
+          "description": "Band arithmetic for this reusable calculation."
+        }
+      },
+      "required": [
+        "expression"
+      ],
+      "allOf": [
+        {
+          "$ref": "#/definitions/Calculation"
+        }
+      ]
+    },
+    "FormulaCreatedResponse": {
+      "type": "object",
+      "properties": {
+        "body": {
+          "$ref": "#/definitions/Formula"
+        }
+      },
+      "required": [
+        "body"
+      ]
+    },
+    "FormulaPage": {
+      "type": "object",
+      "properties": {
+        "value": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Formula"
+          }
+        },
+        "nextLink": {
+          "type": "string",
+          "format": "uri"
+        }
+      },
+      "required": [
+        "value"
+      ]
+    },
+    "FormulaReplacedResponse": {
+      "type": "object",
+      "properties": {
+        "body": {
+          "$ref": "#/definitions/Formula"
+        }
+      },
+      "required": [
+        "body"
+      ]
+    },
+    "GeoJsonFeature": {
+      "type": "object",
+      "description": "One RFC 7946 feature supplied inline for a GeoStats computation.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "Feature"
+          ],
+          "x-ms-enum": {
+            "modelAsString": false
+          }
+        },
+        "geometry": {
+          "type": "object",
+          "additionalProperties": {}
+        },
+        "properties": {
+          "type": "object",
+          "additionalProperties": {}
+        },
+        "id": {},
+        "bbox": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "required": [
+        "type",
+        "geometry",
+        "properties"
+      ]
+    },
+    "GeoJsonFeatureCollection": {
+      "type": "object",
+      "description": "Inline RFC 7946 FeatureCollection accepted by the GeoStats REST API.",
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "FeatureCollection"
+          ],
+          "x-ms-enum": {
+            "modelAsString": false
+          }
+        },
+        "features": {
+          "type": "array",
+          "description": "Between 1 and 100 analysis features.",
+          "minItems": 1,
+          "maxItems": 100,
+          "items": {
+            "$ref": "#/definitions/GeoJsonFeature"
+          }
+        },
+        "bbox": {
+          "type": "array",
+          "items": {
+            "type": "number",
+            "format": "double"
+          }
+        }
+      },
+      "required": [
+        "type",
+        "features"
+      ]
+    },
+    "GeoStatsComputation": {
+      "type": "object",
+      "description": "A saved computation definition.\n\nDurable and re-runnable: the definition is what a caller names when asking\nfor the same analysis again, so re-running last month's work does not mean\nre-sending its whole body. Execution state lives on `ComputationRun`.",
+      "properties": {
+        "computationId": {
+          "type": "string",
+          "readOnly": true
+        },
+        "request": {
+          "$ref": "#/definitions/GeoStatsComputationRequest",
+          "description": "The submitted definition, echoed verbatim."
+        },
+        "plan": {
+          "$ref": "#/definitions/ComputationPlan",
+          "description": "The most recent plan produced for this definition.",
+          "readOnly": true
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "lastModifiedAt": {
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "links": {
+          "type": "array",
+          "description": "Links to the operations available on this definition, following the same\nshape as the STAC `links` array used elsewhere in this catalog's API.",
+          "items": {
+            "$ref": "#/definitions/ResourceLink"
+          },
+          "readOnly": true
+        }
+      },
+      "required": [
+        "computationId"
+      ]
+    },
+    "GeoStatsComputationEstimateRequest": {
+      "type": "object",
+      "description": "Search, geometry and observation inputs needed to plan and cost a run.",
+      "properties": {
+        "dataSource": {
+          "$ref": "#/definitions/DataSource",
+          "description": "Datetime search in the URL's collection, with an optional CQL2-JSON filter."
+        },
+        "input": {
+          "$ref": "#/definitions/FeatureInput",
+          "description": "Input geometries and reduction mode used for the estimate."
+        },
+        "observationStrategy": {
+          "$ref": "#/definitions/ObservationStrategy",
+          "description": "The run's observation strategy. Defaults to per-item results. `mosaic` and\n`all` read one window around every feature in a partition for every scene,\nso they reach capacity with far less area than per-item reads."
+        },
+        "temporal": {
+          "$ref": "#/definitions/TemporalSpec",
+          "description": "The run's temporal settings. Requires `mosaic` or `all` and a bounded\ndatetime. The period decides how many scenes are combined at once."
+        }
+      },
+      "required": [
+        "dataSource",
+        "input"
+      ]
+    },
+    "GeoStatsComputationRequest": {
+      "type": "object",
+      "description": "A GeoStats computation.\n\nEvery field maps onto exactly one primitive's arguments, so that exposing a\ncomposable process graph later is a generalisation of this shape rather than\na breaking replacement.",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Assigned from the URL. When supplied, must match the computation id."
+        },
+        "dataSource": {
+          "$ref": "#/definitions/DataSource",
+          "description": "Time range and bands in the collection identified by the URL."
+        },
+        "observationStrategy": {
+          "$ref": "#/definitions/ObservationStrategy",
+          "description": "How observations are combined. Defaults to per-item results."
+        },
+        "mask": {
+          "$ref": "#/definitions/MaskSpec",
+          "description": "Optional validity mask."
+        },
+        "temporal": {
+          "$ref": "#/definitions/TemporalSpec",
+          "description": "Optional binning for `mosaic` and `all` observation modes. When omitted,\nthose modes reduce the whole datetime range as one period. Not valid with\n`item` mode."
+        },
+        "calculations": {
+          "type": "array",
+          "description": "Derived bands. A single pass evaluates all of them, so requesting fourteen\nindices does not mean fourteen passes over identical pixels. A calculation\nmay instead reference a saved formula in this collection. References are\nresolved on save and on each run; deleting a referenced formula makes\nsubsequent runs invalid until the definition or formula is repaired.",
+          "items": {
+            "$ref": "#/definitions/ComputationCalculation"
+          }
+        },
+        "imageChips": {
+          "type": "array",
+          "description": "Ordered expressions encoded as bands in a cropped COG stored in the\n`image_chips` binary result column. Each chip covers the bounding box of\nthe geometry being analyzed without masking pixels outside the geometry.\nThe analytical mask still applies to statistics but does not blank chip\npixels; its raw `fmask` or `scl` band can be included as another chip\nexpression. Supported for `item` and `mosaic` computations; `all` is\nrejected because several observations can contribute at each pixel.\nEach row's chip is limited to 1,048,576 bytes, both decoded float32\npixels across all bands and encoded COG bytes. Oversized chips are null;\nstatistics and their status are unchanged. Chips are not resized.",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/definitions/ImageChipBand"
+          }
+        },
+        "statistics": {
+          "type": "array",
+          "description": "Reducers applied to each calculation.",
+          "items": {
+            "$ref": "#/definitions/ReducerName"
+          }
+        }
+      },
+      "required": [
+        "dataSource",
+        "statistics"
+      ]
+    },
+    "GeoStatsComputationRunRequest": {
+      "type": "object",
+      "description": "Input and output arguments supplied for one execution of a computation.",
+      "properties": {
+        "input": {
+          "$ref": "#/definitions/FeatureInput",
+          "description": "Input geometries and reduction mode."
+        },
+        "output": {
+          "$ref": "#/definitions/OutputSpec",
+          "description": "Persistence target. Omit to publish GeoParquet in the default collection."
+        }
+      },
+      "required": [
+        "input"
+      ]
+    },
+    "GeoStatsOperation": {
+      "type": "object",
+      "description": "Long-running operation record, mirroring the catalog-wide operation shape so\nthat a GeoStats submission is polled exactly like a catalog write.\n\nThis is the status monitor. `operation-location` points at\n`/operations/{operationId}`, the catalog's existing record, rather than at a\ngeostats-specific monitor that would project the same fields under a second\nURL. The status vocabulary is that record's own, which is why it reads\n`Pending` where the Azure guidelines say `NotStarted`.",
+      "properties": {
+        "id": {
+          "$ref": "#/definitions/Azure.Core.uuid",
+          "description": "Operation id."
+        },
+        "status": {
+          "$ref": "#/definitions/GeoStatsStatus",
+          "description": "Operation status."
+        },
+        "type": {
+          "type": "string",
+          "description": "Operation type."
+        },
+        "creationTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The UTC time at which the operation was created."
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The UTC time at which the operation was started."
+        },
+        "finishTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The UTC time at which the operation finished its execution."
+        },
+        "collectionId": {
+          "type": "string",
+          "description": "Collection the run was attributed to."
+        },
+        "statusHistory": {
+          "type": "array",
+          "description": "Every status the operation has passed through, oldest first.",
+          "items": {
+            "$ref": "#/definitions/OperationStatusEntry"
+          }
+        },
+        "additionalInformation": {
+          "type": "object",
+          "description": "Per-partition counters maintained while the run executes: `TotalItems`,\n`TotalPendingItems`, `TotalSuccessfulItems` and `TotalFailedItems`,\ncarried as strings by the catalog-wide operation record.\nEstimates instead report, after successful completion: `FeatureCount`,\n`ItemCount` and `FeatureItemPairs` (their product); `EstimatedPixels`,\nfeature-item overlap pixels summed over every scene; `PartitionCount`;\n`EstimatedReadPixels`, raster pixels the run's windows read;\n`MaxScenesPerPeriod`; and `PartitionsOverCapacity`, partitions predicted\nto be too large to compute as requested. When it is non-zero, reduce the\nscenes per period, the geometry size or spread, or use `item` mode.",
+          "additionalProperties": {
+            "type": "string"
+          }
+        },
+        "error": {
+          "$ref": "#/definitions/Azure.Core.Foundations.Error",
+          "description": "Error information."
+        }
+      },
+      "required": [
+        "id",
+        "status",
+        "type",
+        "creationTime"
+      ]
+    },
+    "GeoStatsStatus": {
+      "type": "string",
+      "description": "Execution status, matching the catalog-wide operation status vocabulary.",
+      "enum": [
+        "Pending",
+        "Running",
+        "Succeeded",
+        "Canceling",
+        "Canceled",
+        "Failed"
+      ],
+      "x-ms-enum": {
+        "name": "GeoStatsStatus",
+        "modelAsString": true,
+        "values": [
+          {
+            "name": "Pending",
+            "value": "Pending"
+          },
+          {
+            "name": "Running",
+            "value": "Running"
+          },
+          {
+            "name": "Succeeded",
+            "value": "Succeeded"
+          },
+          {
+            "name": "Canceling",
+            "value": "Canceling"
+          },
+          {
+            "name": "Canceled",
+            "value": "Canceled"
+          },
+          {
+            "name": "Failed",
+            "value": "Failed"
+          }
+        ]
+      }
+    },
+    "ImageChipBand": {
+      "type": "object",
+      "description": "One band in the COG embedded in each result row.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "GeoTIFF band description and position in the requested band order."
+        },
+        "expression": {
+          "type": "string",
+          "description": "Band arithmetic evaluated against raw raster values. The analytical mask\ndoes not blank chip pixels, and its raw band may be requested here."
+        }
+      },
+      "required": [
+        "name",
+        "expression"
+      ]
+    },
+    "Interpolation": {
+      "type": "string",
+      "description": "Interpolation method for sample mode.",
+      "enum": [
+        "nearest",
+        "bilinear"
+      ],
+      "x-ms-enum": {
+        "name": "Interpolation",
+        "modelAsString": true,
+        "values": [
+          {
+            "name": "nearest",
+            "value": "nearest"
+          },
+          {
+            "name": "bilinear",
+            "value": "bilinear"
+          }
+        ]
+      }
+    },
+    "MaskBitField": {
+      "type": "object",
+      "description": "One field of a bit-packed mask band.\n\nA one-bit flag needs no `classes`: naming the bit names the class. A wider\nfield has several states that must be named, and omitting them is an error\nrather than a guess.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Field name, referenced by `exclude` and `include`."
+        },
+        "offset": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Zero-based offset of the field's lowest bit."
+        },
+        "length": {
+          "type": "integer",
+          "format": "int32",
+          "description": "Width in bits. Defaults to 1."
+        },
+        "classes": {
+          "type": "object",
+          "description": "State name to value, required when `length` exceeds 1.",
+          "additionalProperties": {
+            "format": "int32",
+            "type": "integer"
+          }
+        }
+      },
+      "required": [
+        "name",
+        "offset"
+      ]
+    },
+    "MaskClass": {
+      "type": "string",
+      "description": "A pixel class a mask can reject or keep.\n\nThe named members are canonical concepts, and each collection binds them to\nits own encoding, which is what makes one request portable: `cloud` reaches\nwhatever the legend calls cloud, whether that is a bit of HLS `Fmask`, a bit\nof Landsat `qa_pixel`, or a class of Sentinel-2 `SCL`. A concept a legend\ncannot express contributes nothing rather than failing.\n\nThe union stays open because a collection's own class names are data it\npublishes rather than vocabulary this API owns. Those pass through verbatim,\nincluding `field:class` for one field of a bit-packed band, as in\n`aerosol_level:high`.",
+      "enum": [
+        "nodata",
+        "saturated",
+        "cloud",
+        "cirrus",
+        "cloudShadow",
+        "adjacentCloud",
+        "snow",
+        "water"
+      ],
+      "x-ms-enum": {
+        "name": "MaskClass",
+        "modelAsString": true,
+        "values": [
+          {
+            "name": "nodata",
+            "value": "nodata",
+            "description": "Fill: outside the swath, or otherwise not imaged."
+          },
+          {
+            "name": "saturated",
+            "value": "saturated",
+            "description": "Detector saturated or defective."
+          },
+          {
+            "name": "cloud",
+            "value": "cloud",
+            "description": "Cloud, at whatever confidence the product reports."
+          },
+          {
+            "name": "cirrus",
+            "value": "cirrus",
+            "description": "Thin or high cirrus."
+          },
+          {
+            "name": "cloudShadow",
+            "value": "cloudShadow",
+            "description": "Shadow cast by cloud."
+          },
+          {
+            "name": "adjacentCloud",
+            "value": "adjacentCloud",
+            "description": "Dilated, or buffered adjacent to cloud."
+          },
+          {
+            "name": "snow",
+            "value": "snow",
+            "description": "Snow or ice."
+          },
+          {
+            "name": "water",
+            "value": "water",
+            "description": "Water, where the product flags it. Not rejected by `clear`."
+          }
+        ]
+      }
+    },
+    "MaskSpec": {
+      "type": "object",
+      "description": "Validity mask. Kept distinct from a conditional expression because the\nplanner must see validity in order to perform nodata-aware reduction and to\nestimate valid-pixel counts when costing.\n\nExactly one of `exclude` or `include` must be set.\n\nThe service ships no product knowledge. A mask band's legend comes either\nfrom this request or from the STAC classification extension the item\npublishes, and this request wins. Hard-coding one collection's class values\nwould carry a silent copy of someone else's product specification, wrong the\nmoment they revise it and useless to anyone with proprietary data.",
+      "properties": {
+        "asset": {
+          "type": "string",
+          "description": "Asset holding the mask band. Required with `classes` or `bits`."
+        },
+        "classes": {
+          "type": "object",
+          "description": "Legend for an enumerated mask, where the whole pixel value is one class,\nas Sentinel-2 `SCL` is. Maps a class name to its value. A value this\nlegend does not name is rejected rather than assumed valid.",
+          "additionalProperties": {
+            "format": "int32",
+            "type": "integer"
+          }
+        },
+        "bits": {
+          "type": "array",
+          "description": "Legend for a bit-packed mask, where independent fields occupy bit ranges,\nas HLS `Fmask` and Landsat `qa_pixel` are. Mutually exclusive with\n`classes`.",
+          "items": {
+            "$ref": "#/definitions/MaskBitField"
+          }
+        },
+        "exclude": {
+          "type": "array",
+          "description": "Classes to reject, keeping every other pixel.",
+          "items": {
+            "$ref": "#/definitions/MaskClass"
+          }
+        },
+        "include": {
+          "type": "array",
+          "description": "Classes to keep, rejecting every other pixel. Applies to enumerated masks\nonly: naming one field of a bit-packed mask says nothing about the others.",
+          "items": {
+            "$ref": "#/definitions/MaskClass"
+          }
+        }
+      }
+    },
+    "MosaicPriority": {
+      "type": "string",
+      "description": "Pixel priority when overlapping observations form a mosaic.",
+      "enum": [
+        "latest",
+        "earliest",
+        "preferLeastCloudy"
+      ],
+      "x-ms-enum": {
+        "name": "MosaicPriority",
+        "modelAsString": true,
+        "values": [
+          {
+            "name": "latest",
+            "value": "latest"
+          },
+          {
+            "name": "earliest",
+            "value": "earliest"
+          },
+          {
+            "name": "preferLeastCloudy",
+            "value": "preferLeastCloudy"
+          }
+        ]
+      }
+    },
+    "ObservationMode": {
+      "type": "string",
+      "description": "How observations are combined before their pixels are reduced.",
+      "enum": [
+        "item",
+        "mosaic",
+        "all"
+      ],
+      "x-ms-enum": {
+        "name": "ObservationMode",
+        "modelAsString": true,
+        "values": [
+          {
+            "name": "item",
+            "value": "item",
+            "description": "Keep each STAC item independent. This is the default."
+          },
+          {
+            "name": "mosaic",
+            "value": "mosaic",
+            "description": "Resolve overlapping observations into one image."
+          },
+          {
+            "name": "all",
+            "value": "all",
+            "description": "Retain every observation in the reduction, forming an observation cube\nover the whole datetime range or within each temporal bin."
+          }
+        ]
+      }
+    },
+    "ObservationStrategy": {
+      "type": "object",
+      "description": "How observations contribute to the computation.",
+      "properties": {
+        "mode": {
+          "type": "string",
+          "description": "Combination mode. Defaults to `item`.",
+          "default": "item",
+          "enum": [
+            "item",
+            "mosaic",
+            "all"
+          ],
+          "x-ms-enum": {
+            "name": "ObservationMode",
+            "modelAsString": true,
+            "values": [
+              {
+                "name": "item",
+                "value": "item",
+                "description": "Keep each STAC item independent. This is the default."
+              },
+              {
+                "name": "mosaic",
+                "value": "mosaic",
+                "description": "Resolve overlapping observations into one image."
+              },
+              {
+                "name": "all",
+                "value": "all",
+                "description": "Retain every observation in the reduction, forming an observation cube\nover the whole datetime range or within each temporal bin."
+              }
+            ]
+          }
+        },
+        "priority": {
+          "$ref": "#/definitions/MosaicPriority",
+          "description": "Required when `mode` is `mosaic`; invalid for `item` and `all`."
+        }
+      }
+    },
+    "OperationStatusEntry": {
+      "type": "object",
+      "description": "One transition in an operation's status history.",
+      "properties": {
+        "status": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "errorCode": {
+          "type": "string"
+        },
+        "errorMessage": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "status",
+        "timestamp"
+      ]
+    },
+    "OutputFormat": {
+      "type": "string",
+      "description": "Persisted output format. Delta is required for a OneLake Tables shortcut;\nbare GeoParquet can only land in Files and still requires the customer to\nwrite the notebook this feature exists to eliminate.",
+      "enum": [
+        "delta",
+        "geoparquet",
+        "geojson"
+      ],
+      "x-ms-enum": {
+        "name": "OutputFormat",
+        "modelAsString": true,
+        "values": [
+          {
+            "name": "delta",
+            "value": "delta"
+          },
+          {
+            "name": "geoparquet",
+            "value": "geoparquet"
+          },
+          {
+            "name": "geojson",
+            "value": "geojson"
+          }
+        ]
+      }
+    },
+    "OutputH3Resolution": {
+      "type": "number",
+      "description": "Coarse H3 resolutions that avoid high-cardinality result directories.",
+      "enum": [
+        3,
+        4,
+        5
+      ],
+      "x-ms-enum": {
+        "name": "OutputH3Resolution",
+        "modelAsString": false,
+        "values": [
+          {
+            "name": "resolution3",
+            "value": 3
+          },
+          {
+            "name": "resolution4",
+            "value": 4
+          },
+          {
+            "name": "resolution5",
+            "value": 5
+          }
+        ]
+      }
+    },
+    "OutputPartitioningSpec": {
+      "type": "object",
+      "description": "Optional physical partitions used to prune a large result dataset.",
+      "properties": {
+        "temporal": {
+          "$ref": "#/definitions/OutputTemporalPartitioningSpec"
+        },
+        "spatial": {
+          "$ref": "#/definitions/OutputSpatialPartitioningSpec"
+        }
+      }
+    },
+    "OutputSpatialPartitioningSpec": {
+      "type": "object",
+      "properties": {
+        "scheme": {
+          "$ref": "#/definitions/OutputSpatialScheme"
+        },
+        "resolution": {
+          "$ref": "#/definitions/OutputH3Resolution"
+        }
+      },
+      "required": [
+        "scheme",
+        "resolution"
+      ]
+    },
+    "OutputSpatialScheme": {
+      "type": "string",
+      "description": "Supported spatial index for assigning each feature to one home cell.",
+      "enum": [
+        "h3"
+      ],
+      "x-ms-enum": {
+        "name": "OutputSpatialScheme",
+        "modelAsString": true,
+        "values": [
+          {
+            "name": "h3",
+            "value": "h3"
+          }
+        ]
+      }
+    },
+    "OutputSpec": {
+      "type": "object",
+      "description": "Where and how results are persisted.",
+      "properties": {
+        "location": {
+          "type": "string",
+          "description": "Path results are written to, relative to the catalog's configured sink.\n\nA OneLake shortcut points at a fixed path, so a caller who wants one asks\nfor the same location on every run and creates the shortcut once. The\nservice does not register or validate the location, so a caller who\nchanges their calculations and reuses a location gets a Delta schema\nevolution rather than a rejection."
+        },
+        "stacCollectionId": {
+          "type": "string",
+          "description": "Collection the completed result is registered into as a STAC item, whose\nasset points at the written table and whose properties carry the run's\nprovenance. Defaults to the raster collection in the computation URL,\nnot the collection holding an input feature asset.\n\nThis is what persists results \"directly into the customer's GeoCatalog\":\na result is then discoverable through the existing STAC search under the\nauthorization the catalog already enforces, rather than through a second\nregistry. Row-level addressing is deliberately not offered; a STAC item\ndescribes an asset, not the features inside it."
+        },
+        "writeMode": {
+          "$ref": "#/definitions/WriteMode"
+        },
+        "format": {
+          "$ref": "#/definitions/OutputFormat"
+        },
+        "partitioning": {
+          "$ref": "#/definitions/OutputPartitioningSpec",
+          "description": "Hive-style dataset partitioning. Each feature is assigned to one H3 home\ncell; polygon intersections with other cells do not duplicate fact rows."
+        },
+        "ordering": {
+          "$ref": "#/definitions/ResultOrdering",
+          "description": "Row order in the written table. Ordering by feature is a sort, not an\ninherent property, so it is the caller's choice rather than a silent one."
+        }
+      }
+    },
+    "OutputTemporalGranularity": {
+      "type": "string",
+      "description": "Supported temporal partition columns for a large result dataset.",
+      "enum": [
+        "month"
+      ],
+      "x-ms-enum": {
+        "name": "OutputTemporalGranularity",
+        "modelAsString": true,
+        "values": [
+          {
+            "name": "month",
+            "value": "month"
+          }
+        ]
+      }
+    },
+    "OutputTemporalPartitioningSpec": {
+      "type": "object",
+      "properties": {
+        "granularity": {
+          "$ref": "#/definitions/OutputTemporalGranularity"
+        }
+      },
+      "required": [
+        "granularity"
+      ]
+    },
+    "RasterResampling": {
+      "type": "string",
+      "description": "Resampling applied to continuous raster bands during grid alignment.",
+      "enum": [
+        "nearest",
+        "bilinear",
+        "cubic",
+        "average"
+      ],
+      "x-ms-enum": {
+        "name": "RasterResampling",
+        "modelAsString": true,
+        "values": [
+          {
+            "name": "nearest",
+            "value": "nearest"
+          },
+          {
+            "name": "bilinear",
+            "value": "bilinear"
+          },
+          {
+            "name": "cubic",
+            "value": "cubic"
+          },
+          {
+            "name": "average",
+            "value": "average"
+          }
+        ]
+      }
+    },
+    "RasterSource": {
+      "type": "string",
+      "description": "Catalog the raster collection is resolved against.\n\n`self` is the only value for P0: a computation resolves rasters from the\nGeoCatalog it runs in. Open Planetary Computer imagery reaches a customer\nthrough ingestion by reference, which makes it an ordinary local collection.",
+      "enum": [
+        "self"
+      ],
+      "x-ms-enum": {
+        "name": "RasterSource",
+        "modelAsString": true,
+        "values": [
+          {
+            "name": "self",
+            "value": "self"
+          }
+        ]
+      }
+    },
+    "ReducerName": {
+      "type": "string",
+      "description": "Named reducer. In addition to the named members, `percentile_N` requests the\nNth percentile, where N is an integer from 1 through 99. The set is an\nallowlist rather than a caller-supplied callback: an unclassifiable reducer\ncannot be checked for decomposability, which would destroy the pixel-budget\nestimate and with it limits and admission.",
+      "pattern": "^(mean|min|max|count|sum|stddev|median|percentile_([1-9]|[1-9][0-9]))$"
+    },
+    "ReferenceGrid": {
+      "type": "object",
+      "description": "The CRS, resolution, and origin the computation is evaluated on. Explicit\nrather than inferred: geometries reproject to the raster's CRS, rasters are\nnot reprojected.",
+      "properties": {
+        "crs": {
+          "type": "string"
+        },
+        "resolution": {
+          "type": "number",
+          "format": "double"
+        }
+      },
+      "required": [
+        "crs"
+      ]
+    },
+    "ResourceLink": {
+      "type": "object",
+      "description": "A hypermedia link to a related resource or an available operation.",
+      "properties": {
+        "rel": {
+          "type": "string",
+          "description": "Relation type, for example `self`, `results`, `cancel`, or `delete`."
+        },
+        "href": {
+          "type": "string",
+          "format": "uri",
+          "description": "Absolute URI of the target."
+        },
+        "method": {
+          "type": "string",
+          "description": "HTTP method to use. Defaults to `GET` when absent."
+        },
+        "type": {
+          "type": "string",
+          "description": "Media type of the target representation."
+        },
+        "title": {
+          "type": "string",
+          "description": "Human-readable label."
+        }
+      },
+      "required": [
+        "rel",
+        "href"
+      ]
+    },
+    "ResultOrdering": {
+      "type": "string",
+      "description": "Row ordering of a result set.\n\nExecution partitions by scene, so results are naturally produced in\ncompletion order rather than input order. Restoring input order is\ntherefore a sort, not a free property.",
+      "enum": [
+        "featureOrder",
+        "arrival"
+      ],
+      "x-ms-enum": {
+        "name": "ResultOrdering",
+        "modelAsString": true,
+        "values": [
+          {
+            "name": "featureOrder",
+            "value": "featureOrder",
+            "description": "Ascending `featureIndex`, then timestamp, calculation, and statistic.\nThis is the default, and is what makes omitting an identifier column\nusable.\n\n`featureIndex` is the row's ordinal in the geometries as GeoStats read\nthem. For inline `geoJson` that is the order supplied, so results can be\nzipped straight back onto the caller's dataframe. A `stacAsset` is\nstored re-sorted by ingestion, so there the ordinal is a stable key for\njoining results to each other, not the caller's original row number --\nsupply `geometryIdColumn` to carry an identifier that is.\n\nThe cost is that writing cannot begin until enough partitions have\ncompleted to emit the lowest outstanding index."
+          },
+          {
+            "name": "arrival",
+            "value": "arrival",
+            "description": "Rows are written as partitions complete, in no guaranteed order. Fully\nincremental, and the consumer keys on `featureIndex` or `geometryId`."
+          }
+        ]
+      }
+    },
+    "SpatialMode": {
+      "type": "string",
+      "description": "Zonal aggregates the pixels within a polygon; sample extracts a value at a\npoint. These are different operations with different parameters, and\nconflating them is how two callers get different numbers from one request.",
+      "enum": [
+        "zonal",
+        "sample"
+      ],
+      "x-ms-enum": {
+        "name": "SpatialMode",
+        "modelAsString": true,
+        "values": [
+          {
+            "name": "zonal",
+            "value": "zonal"
+          },
+          {
+            "name": "sample",
+            "value": "sample"
+          }
+        ]
+      }
+    },
+    "StacAssetReference": {
+      "type": "object",
+      "description": "A reference to an asset on a STAC item.",
+      "properties": {
+        "collectionId": {
+          "type": "string"
+        },
+        "itemId": {
+          "type": "string"
+        },
+        "assetKey": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "collectionId",
+        "itemId",
+        "assetKey"
+      ]
+    },
+    "TemporalGridPolicy": {
+      "type": "string",
+      "description": "How temporal analysis handles scenes whose native raster grids differ.",
+      "enum": [
+        "strict",
+        "reproject"
+      ],
+      "x-ms-enum": {
+        "name": "TemporalGridPolicy",
+        "modelAsString": true,
+        "values": [
+          {
+            "name": "strict",
+            "value": "strict",
+            "description": "Reject a temporal bin unless every scene has exactly the same grid."
+          },
+          {
+            "name": "reproject",
+            "value": "reproject",
+            "description": "Align each scene to the earliest scene's grid before combining it."
+          }
+        ]
+      }
+    },
+    "TemporalSpec": {
+      "type": "object",
+      "description": "Temporal binning. The period is the unit of output: a year requested at\n`P1W` yields 52 rows per geometry per calculation per statistic, whether or\nnot any given week held usable imagery.",
+      "properties": {
+        "period": {
+          "type": "string",
+          "description": "ISO 8601 duration, for example `P1D`, `P1W`, or `P1M`. Omit to reduce the\nwhole datetime range to a single period."
+        },
+        "minValidFraction": {
+          "type": "number",
+          "format": "double",
+          "description": "Fraction of the geometry that must carry valid pixels before a value is\nreported, for example `0.9` for \"only if 90% of the field was clear\".\n\nDeliberately per geometry per period rather than a property of the item:\na scene-level `eo:cloud_cover` of 20% says nothing about whether the\ncloud sat over this particular parcel. Periods that miss the threshold\nstill produce a row, with `status` of `belowValidFraction` and the\nmeasured `coverageFraction` so a consumer can apply a different rule\nwithout recomputing."
+        },
+        "gridPolicy": {
+          "$ref": "#/definitions/TemporalGridPolicy",
+          "description": "Handling for scenes on different native grids. Defaults to `strict`.\n`reproject` uses the earliest intersecting scene in each period as the\ndestination grid."
+        },
+        "resampling": {
+          "$ref": "#/definitions/RasterResampling",
+          "description": "Resampling for continuous bands when `gridPolicy` is `reproject`.\nDefaults to `nearest`. Categorical masks always use nearest-neighbor."
+        }
+      }
+    },
+    "Weighting": {
+      "type": "string",
+      "description": "Pixel weighting for zonal mode.",
+      "enum": [
+        "area",
+        "none"
+      ],
+      "x-ms-enum": {
+        "name": "Weighting",
+        "modelAsString": true,
+        "values": [
+          {
+            "name": "area",
+            "value": "area",
+            "description": "Edge pixels contribute in proportion to the area inside the polygon."
+          },
+          {
+            "name": "none",
+            "value": "none"
+          }
+        ]
+      }
+    },
+    "WriteMode": {
+      "type": "string",
+      "description": "How a computation writes into its output location.",
+      "enum": [
+        "append",
+        "merge",
+        "overwrite"
+      ],
+      "x-ms-enum": {
+        "name": "WriteMode",
+        "modelAsString": true,
+        "values": [
+          {
+            "name": "append",
+            "value": "append"
+          },
+          {
+            "name": "merge",
+            "value": "merge"
+          },
+          {
+            "name": "overwrite",
+            "value": "overwrite"
+          }
+        ]
+      }
+    }
+  },
+  "parameters": {
+    "ApiVersionParameters": {
+      "name": "api-version",
+      "in": "query",
+      "description": "The API version to use for this operation. Required on every GeoStats route.",
+      "required": true,
+      "type": "string",
+      "enum": [
+        "2026-10-01-preview"
+      ],
+      "x-ms-enum": {
+        "name": "Versions",
+        "modelAsString": true,
+        "values": [
+          {
+            "name": "v2026_10_01_preview",
+            "value": "2026-10-01-preview"
+          }
+        ]
+      },
+      "x-ms-parameter-location": "method",
+      "x-ms-client-name": "apiVersion"
+    },
+    "ComputationListQuery": {
+      "name": "createdAfter",
+      "in": "query",
+      "description": "Return only definitions created after this instant.",
+      "required": false,
+      "type": "string",
+      "format": "date-time",
+      "x-ms-parameter-location": "method"
+    },
+    "PageQuery.skip": {
+      "name": "skip",
+      "in": "query",
+      "description": "Number of records to skip. Defaults to zero.",
+      "required": false,
+      "type": "integer",
+      "format": "int32",
+      "minimum": 0,
+      "x-ms-parameter-location": "method"
+    },
+    "PageQuery.top": {
+      "name": "top",
+      "in": "query",
+      "description": "Maximum records per page. Defaults to 100.",
+      "required": false,
+      "type": "integer",
+      "format": "int32",
+      "minimum": 1,
+      "maximum": 1000,
+      "x-ms-parameter-location": "method"
+    }
+  }
+}
