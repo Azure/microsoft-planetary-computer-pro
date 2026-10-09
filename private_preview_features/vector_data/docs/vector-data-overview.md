@@ -142,7 +142,7 @@ Use the Vector Features API to:
 Start with the OGC API landing page for your GeoCatalog. From the landing page, follow the advertised links to discover collections and their items. Feature requests use this general path:
 
 ```http
-GET https://<geocatalog-host>/data/features/collections/<collection-id>/items?api-version=2025-04-30-preview
+GET https://<geocatalog-host>/features/collections/<collection-id>/items?api-version=2026-08-01-preview
 Accept: application/geo+json
 Authorization: Bearer <access-token>
 ```
@@ -150,7 +150,7 @@ Authorization: Bearer <access-token>
 Add `bbox` for spatial filtering or add `filter` and `filter-lang=cql2-json` for property filtering. The service applies these filters before it returns the GeoJSON response, which reduces the amount of data transferred to the client.
 
 > [!IMPORTANT]
-> Keep the trailing slash in the landing-page URL (`/data/features/`). A redirect from a URL without the trailing slash can cause some clients to omit the authorization header. Never include an access token in a shared URL, project file, screenshot, or log.
+> Keep the trailing slash in the landing-page URL (`/features/`). A redirect from a URL without the trailing slash can cause some clients to omit the authorization header. Never include an access token in a shared URL, project file, screenshot, or log.
 
 ### Access, query, and filter features from QGIS
 
