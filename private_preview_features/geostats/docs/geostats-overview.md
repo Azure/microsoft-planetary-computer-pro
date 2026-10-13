@@ -59,6 +59,10 @@ The observation strategy determines how matching STAC items contribute to the re
 
 For `mosaic` and `all`, you can group observations into ISO 8601 periods such as `P1W` for weekly or `P1M` for monthly results. You can also set a minimum valid-pixel fraction. Periods that don't meet the threshold remain represented in the output with a status instead of silently disappearing.
 
+In `mosaic` mode, the priority determines which scene supplies each pixel. GeoStats considers scenes in `earliest`, `latest`, or `preferLeastCloudy` order and uses the first valid pixel in that order. `preferLeastCloudy` ranks whole scenes by their `eo:cloud_cover` value; the pixel mask still determines whether an individual pixel is usable.
+
+Periods start at the beginning of the requested `datetime` range rather than at calendar boundaries. If the range doesn't divide evenly by the requested duration, GeoStats emits a final partial period with `is_partial` set to `true`. Omitting the period for `mosaic` or `all` treats the complete time range as one period.
+
 ## Quality masks
 
 An optional mask excludes invalid raster pixels before statistics are calculated. GeoStats supports:
@@ -92,9 +96,17 @@ You can optionally buffer input geometries before analysis. Buffer distances are
 
 ## Results and provenance
 
-GeoStats can write results as GeoParquet, Delta, or GeoJSON. A successful run registers the result as a STAC item in the selected output collection. The item points to the result asset and records run provenance, so you use normal GeoCatalog discovery and authorization to access it.
+GeoStats can write results as GeoParquet, Delta, or GeoJSON. Use Delta when the result must support a OneLake Tables shortcut. GeoParquet and GeoJSON are file-based outputs; GeoParquet is the default when you omit the output settings. A successful run registers the result as a STAC item in the selected output collection. The item points to the result asset and records run provenance, so you use normal GeoCatalog discovery and authorization to access it.
 
-Result rows include the source geometry identity, observation or period timing, calculation statistics, coverage, status, and source-item provenance as applicable to the selected strategy. Empty periods and unusable observations are represented by status values rather than omitted rows, which helps downstream workflows distinguish missing imagery from masked pixels. Run-level failures are reported on the asynchronous operation.
+Result rows include the source geometry identity, observation or period timing, calculation statistics, coverage, status, and source-item provenance as applicable to the selected strategy. Row cardinality depends on the observation strategy:
+
+| Strategy | Result rows |
+| --- | --- |
+| `item` | One row for each feature-item pair whose geometry overlaps the item's raster grid. A feature with no overlapping item produces no row, and a successful run can publish an empty table. |
+| `mosaic` or `all`, without a period | One row for each input feature. |
+| `mosaic` or `all`, with a period | One row for each input feature in each period, including periods with no usable imagery. |
+
+Calculations and statistics become columns, so adding them doesn't add rows. Run-level failures are reported on the asynchronous operation.
 
 For example, an item-mode computation that requests `mean` for a calculation named `ndvi` can produce rows like these. Values are illustrative.
 
@@ -106,6 +118,19 @@ For example, an item-mode computation that requests `mean` for a calculation nam
 Calculation and statistic names form wide result columns such as `ndvi_mean`. In item mode, every intersecting acquisition produces a row even when masking removes all pixels. The null statistic and `noValidPixels` status preserve that acquisition in the time series and explain why it has no value. Counts are coverage-weighted pixel areas and can be fractional.
 
 Temporal `mosaic` and `all` computations use `period_start`, `period_end`, and `is_partial` instead of an item timestamp. They can also report `belowValidFraction` when clear coverage is below the requested threshold and `noItems` when no scene intersects a feature in a period.
+
+Use the row status and coverage columns to decide how to handle each result:
+
+| Status | Meaning | Suggested action |
+| --- | --- | --- |
+| `ok` | The statistic was computed normally. | Use the value. |
+| `belowValidFraction` | Some pixels were valid, but `spatial_valid_fraction` was below `minValidFraction`. | Relax the threshold, lengthen the period, or apply your own threshold to the reported coverage. |
+| `noValidPixels` | At least one scene intersected the feature, but every intersecting pixel was masked or nodata. | Lengthen the period or verify the mask. |
+| `noItems` | No scene in the period intersected the feature. | Lengthen the period or verify collection coverage, revisit interval, and the requested time range. |
+
+`minValidFraction` is evaluated per feature and period against `spatial_valid_fraction`, not against a scene's `eo:cloud_cover`. The `item_count` includes intersecting scenes even when all their pixels are unusable, which distinguishes `noValidPixels` from `noItems`.
+
+For `item` and `mosaic`, a `<calculation>_count` column represents valid coverage-weighted pixel area. For `all`, it represents observation weight because each valid pixel observation contributes independently. Consequently, an `all` result isn't generally the unweighted average of the corresponding item-mode rows.
 
 ## Image chips
 
@@ -119,7 +144,7 @@ GeoStats runs and estimates are always asynchronous. A submission returns `202 A
 
 Each submission creates a new operation. Don't automatically retry a submission after an ambiguous network failure because the first request might already have started a run. Check the operation and computation run list before resubmitting.
 
-The estimate endpoint plans the same geometry partitions and STAC searches as a run without reading raster values or publishing results. It reports feature, item, pixel, and partition counts and identifies partitions predicted to exceed worker capacity. An estimate isn't a price or duration quote.
+The estimate endpoint plans the same geometry partitions and STAC searches as a run without reading raster values or publishing results. It reports feature, item, pixel, and partition counts and identifies partitions predicted to exceed worker capacity. `FeatureItemPairs` is an upper bound based on the feature and item search counts, not a prediction of result-table rows. An estimate isn't a price or duration quote.
 
 ## Access and security
 

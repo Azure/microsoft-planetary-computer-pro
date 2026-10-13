@@ -3,7 +3,7 @@
   "info": {
     "title": "Microsoft Planetary Computer Pro - GeoStats",
     "version": "2026-10-01-preview",
-    "description": "GeoStats: raster-derived statistics over STAC-discovered data.\n\nSubmit geometries and a raster collection, receive analytics-ready tabular\noutput. See\ndocs/data-plane/design/geostats/how-it-works/geostats-api-design.md for the\nrationale behind the resource model, and\ndocs/data-plane/design/geostats/how-it-works/geostats-design.md for the\nunderlying algebra.",
+    "description": "GeoStats computes raster-derived statistics over STAC-discovered data.\nSubmit geometries and a raster collection to receive analytics-ready tabular\noutput.",
     "x-typespec-generated": [
       {
         "emitter": "@azure-tools/typespec-autorest"
@@ -1092,7 +1092,7 @@
       "properties": {
         "source": {
           "$ref": "#/definitions/RasterSource",
-          "description": "Catalog to resolve the collection against. `self` only for P0."
+          "description": "Catalog to resolve the collection against. Only `self` is supported."
         },
         "datetime": {
           "type": "string",
@@ -1879,7 +1879,7 @@
     },
     "OutputFormat": {
       "type": "string",
-      "description": "Persisted output format. Delta is required for a OneLake Tables shortcut;\nbare GeoParquet can only land in Files and still requires the customer to\nwrite the notebook this feature exists to eliminate.",
+      "description": "Persisted output format. Delta is required for a OneLake Tables shortcut.\nGeoParquet and GeoJSON are file-based outputs.",
       "enum": [
         "delta",
         "geoparquet",
@@ -2065,7 +2065,7 @@
     },
     "RasterSource": {
       "type": "string",
-      "description": "Catalog the raster collection is resolved against.\n\n`self` is the only value for P0: a computation resolves rasters from the\nGeoCatalog it runs in. Open Planetary Computer imagery reaches a customer\nthrough ingestion by reference, which makes it an ordinary local collection.",
+      "description": "Catalog the raster collection is resolved against.\n\n`self` is the only supported value: a computation resolves rasters from the\nGeoCatalog where it runs. Open Planetary Computer imagery can be ingested by\nreference and then used as a collection in that GeoCatalog.",
       "enum": [
         "self"
       ],
@@ -2224,7 +2224,7 @@
     },
     "TemporalSpec": {
       "type": "object",
-      "description": "Temporal binning. The period is the unit of output: a year requested at\n`P1W` yields 52 rows per geometry per calculation per statistic, whether or\nnot any given week held usable imagery.",
+      "description": "Temporal binning. The period is the unit of output: one row is emitted per\ngeometry per period, whether or not that period held usable imagery.\nCalculations and statistics are output columns rather than additional rows.",
       "properties": {
         "period": {
           "type": "string",
