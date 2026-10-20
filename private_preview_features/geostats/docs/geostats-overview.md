@@ -1,27 +1,28 @@
 ---
 title: GeoStats in Microsoft Planetary Computer Pro overview (Private Preview)
-description: Learn how GeoStats computes raster-derived statistics for points and polygons and publishes analytics-ready results in a GeoCatalog.
+description: Learn how GeoStats computes raster-derived statistics for polygons and publishes analysis-ready results.
 author: beharris
 ms.author: beharris
 ms.service: planetary-computer-pro
 ms.topic: overview
-ms.date: 10/09/2026
+ms.date: 10/20/2026
 #customer intent: As a geospatial analyst, I want to understand GeoStats so that I can derive table-ready statistics from raster data without building my own distributed processing system.
 ---
 
 # What is GeoStats in Microsoft Planetary Computer Pro? (Private Preview)
 
-GeoStats is a GeoCatalog capability that computes raster-derived statistics for points and polygons. You select raster observations from a SpatioTemporal Asset Catalog (STAC) collection, define one or more band calculations and statistics, and submit analysis geometries. GeoStats runs the computation at scale and publishes an analytics-ready table back to your GeoCatalog.
+GeoStats computes raster-derived statistics for polygons at scale. You select raster observations from a SpatioTemporal Asset Catalog (STAC) collection, define one or more band calculations and statistics, and submit analysis geometries. GeoStats publishes an analysis-ready table and can optionally include image chips with the result.
+
+In the private preview, GeoStats uses raster collections, geometry inputs, authorization, storage, and result discovery provided through Microsoft Planetary Computer Pro GeoCatalog. This integration model can evolve after the preview.
 
 GeoStats supports workflows such as:
 
-- Calculate vegetation indices for agricultural fields over time.
+- Calculate standard raster indices over areas and time, such as vegetation, water, burn, and moisture indices.
 - Summarize environmental conditions within administrative or operational boundaries.
-- Sample raster values at assets, facilities, or other point locations.
 - Produce table-ready features for forecasting, risk modeling, and reporting.
 
 > [!IMPORTANT]
-> GeoStats is available only to approved private-preview participants. The API, limits, and behavior can change before general availability. The feature must be enabled for each GeoCatalog by the Microsoft Planetary Computer Pro team.
+> GeoStats is available only to approved private-preview participants. The API, limits, and behavior can change before general availability. The Microsoft Planetary Computer Pro team contacts participating customers to collect and allow-list their Azure subscription ID.
 
 ## How GeoStats works
 
@@ -30,20 +31,58 @@ A GeoStats workflow separates a reusable computation from each execution:
 1. **Define calculations.** Save a reusable formula, or include a band expression directly in a computation.
 1. **Save a computation.** Select a raster time range, observation strategy, optional quality mask, calculations, and statistics.
 1. **Provide geometries.** Supply a small GeoJSON FeatureCollection inline or reference a vector asset on a STAC item in the GeoCatalog.
-1. **Run the computation.** Choose zonal statistics for polygons or sampling for points and specify where GeoStats publishes the result.
+1. **Run the computation.** Submit polygons for zonal statistics and specify where GeoStats publishes the result.
 1. **Monitor the operation.** Poll the operation URL returned by the service until the run reaches a terminal state.
 1. **Discover the result.** Use the existing STAC API to find the output item and access its table asset.
 
 Definitions are scoped to the raster collection in the request URL. You can run the same saved computation repeatedly with different geometry inputs or output destinations.
 
+The lifecycle is:
+
+```text
+Saved formula or inline calculation
+		    + statistics
+			   |
+			   v
+		 Saved computation
+			   |
+		  geometry + output
+			   |
+			   v
+		   Asynchronous run
+			   |
+			   v
+	     STAC item + result asset
+```
+
+| Term | Meaning |
+| --- | --- |
+| Formula | A reusable, collection-scoped expression and band mapping. |
+| Calculation | A derived raster band used by a computation, defined inline or by referencing a saved formula. |
+| Statistic | A reducer such as `mean`, `count`, or `percentile_90` applied to a calculation. |
+| Computation | A saved definition containing the raster selection, observation strategy, mask, calculations, and statistics. |
+| Run | One execution of a computation with geometry input and output settings. |
+
 ## Calculations and statistics
 
-GeoStats evaluates band arithmetic before reducing pixels to statistics. For example, you can calculate Normalized Difference Vegetation Index (NDVI) with the expression `(nir - red) / (nir + red)` and bind `nir` and `red` to assets in the source collection.
+GeoStats evaluates band arithmetic before reducing pixels to statistics. For example, you can calculate Normalized Difference Vegetation Index (NDVI) with the expression `(nir - red) / (nir + red)`. A band mapping binds each expression name to a physical STAC asset and, for a multiband asset, an optional band name or 1-based index:
+
+```json
+{
+	"expression": "(nir - red) / (nir + red)",
+	"bandMapping": {
+		"nir": { "assetKey": "B05" },
+		"red": { "assetKey": "B04" }
+	}
+}
+```
 
 You can define calculations in either of these ways:
 
-- **Saved formula** - A named calculation that computations in the same raster collection can reuse.
+- **Saved formula** - A collection-scoped expression and band mapping that computations reference by `formulaId`.
 - **Inline calculation** - An expression and band mapping stored directly in one computation.
+
+Saved and inline calculations use the same expression and band-mapping concepts, but have different request shapes and lifecycles. A formula reference can't be combined with inline fields or band-mapping overrides. List the formulas currently available to a collection with `GET /stac/collections/{collectionId}/formulas`; availability can vary by collection and preview configuration.
 
 A computation can apply multiple calculations and statistics in one pass over the raster data. Supported statistics are `mean`, `min`, `max`, `count`, `sum`, `stddev`, `median`, and integer percentiles from `percentile_1` through `percentile_99`.
 
@@ -54,23 +93,46 @@ The observation strategy determines how matching STAC items contribute to the re
 | Mode | Behavior | Common use |
 | --- | --- | --- |
 | `item` | Processes every matching STAC item independently. This mode is the default. | Preserve per-acquisition values and provenance. |
-| `mosaic` | Resolves overlapping observations into one image by using an explicit priority. | Create one clear composite for a time range or period. |
+| `mosaic` | Resolves overlapping STAC items into one raster by using an explicit priority. | Create one clear composite for a time range or period. |
 | `all` | Retains all observations when calculating statistics. | Summarize every valid observation in a time range or period. |
 
-For `mosaic` and `all`, you can group observations into ISO 8601 periods such as `P1W` for weekly or `P1M` for monthly results. You can also set a minimum valid-pixel fraction. Periods that don't meet the threshold remain represented in the output with a status instead of silently disappearing.
+For `mosaic` and `all`, you can group observations into periods. `temporal.period` accepts a positive integer number of days (`PnD`), weeks (`PnW`), calendar months (`PnM`), or calendar years (`PnY`). The minimum is `P1D`. Sub-day, zero, fractional, and compound durations such as `PT1H` and `P1DT12H` aren't supported. No explicit application-level maximum period or period count is currently enforced, but processing resources and date/time representability still impose practical limits.
 
-In `mosaic` mode, the priority determines which scene supplies each pixel. GeoStats considers scenes in `earliest`, `latest`, or `preferLeastCloudy` order and uses the first valid pixel in that order. `preferLeastCloudy` ranks whole scenes by their `eo:cloud_cover` value; the pixel mask still determines whether an individual pixel is usable.
+In `mosaic` mode, you must choose `earliest`, `latest`, or `preferLeastCloudy`. GeoStats orders matching STAC items by that priority and uses the first valid pixel at each location. `preferLeastCloudy` ranks whole STAC items by `eo:cloud_cover`; it doesn't automatically apply a per-pixel quality mask.
 
-Periods start at the beginning of the requested `datetime` range rather than at calendar boundaries. If the range doesn't divide evenly by the requested duration, GeoStats emits a final partial period with `is_partial` set to `true`. Omitting the period for `mosaic` or `all` treats the complete time range as one period.
+For example, suppose an earlier STAC item has a valid pixel value of 0.2 and `eo:cloud_cover` of 30, while a later item has a valid value of 0.6 and cloud cover of 10:
+
+| Priority | Pixel selected at that location |
+| --- | --- |
+| `earliest` | 0.2 from the earlier item |
+| `latest` | 0.6 from the later item |
+| `preferLeastCloudy` | 0.6 from the item with lower collection-level cloud cover |
+
+If the first pixel in the selected order is invalid, GeoStats considers the next item.
+
+Periods start at the beginning of the requested `datetime` range. For example, `P1W` over `2026-06-03/2026-06-20` produces:
+
+| period_start | period_end | is_partial |
+| --- | --- | --- |
+| 2026-06-03T00:00:00Z | 2026-06-10T00:00:00Z | false |
+| 2026-06-10T00:00:00Z | 2026-06-17T00:00:00Z | false |
+| 2026-06-17T00:00:00Z | 2026-06-20T00:00:00Z | true |
+
+The service includes the final partial period; callers can't drop or reject it. Omitting `temporal.period` reduces the complete bounded time range as one period. Supplying `temporal` requires `mosaic` or `all` mode.
+
+In `all` mode, GeoStats places matching STAC items on a common temporal grid, pools every valid pixel observation, and then applies the requested statistics. It doesn't average item-level statistics equally. Reprojection can make an `all` result differ slightly from a value reconstructed from item-mode sums and counts.
 
 ## Quality masks
 
-An optional mask excludes invalid raster pixels before statistics are calculated. GeoStats supports:
+Quality masking is optional and opt-in. Omitting `mask` doesn't automatically apply dataset-specific cloud, shadow, snow, or other quality masks. Raster nodata and intrinsic raster masks still apply, and non-finite source or calculation values are excluded. GeoStats supports:
 
 - Enumerated masks, where each pixel value identifies a class.
 - Bit-packed masks, where fields such as cloud, cloud shadow, cirrus, or snow occupy individual bits.
 
-The request supplies the mask legend unless the source STAC metadata provides it. Keeping the legend with the request makes the masking behavior explicit and reproducible.
+The request supplies the mask legend unless the source STAC metadata provides it. Classification metadata can resolve an explicitly requested mask's encoding; metadata alone doesn't enable masking.
+
+> [!CAUTION]
+> Mask encodings vary by raster product. An incorrect class or bit mapping can produce plausible but incorrect statistics. Validate a small, known area and time range against the source product before scaling up.
 
 ## Geometry inputs
 
@@ -81,60 +143,104 @@ GeoStats accepts two geometry input tiers:
 | Inline GeoJSON FeatureCollection | Tests and small, ad hoc analyses | 1 to 100 features |
 | STAC asset reference | Large or recurring analyses | Reference a GeoParquet or supported vector asset already stored on a STAC item |
 
+One input feature is one vector record containing one geometry and optional properties. Limits count features, so a multipart geometry in one record counts as one feature.
+
 The complete JSON request must be smaller than 10,000,000 bytes. Arrow attachments aren't supported in the private-preview API.
 
 For recurring analysis, specify `geometryIdColumn` for a stable business key. GeoStats carries that value into the output so you can reliably join results to the source geometries. If you omit it, GeoStats uses the geometry's position in the submitted source; positional identity isn't reliable across reordered or reingested datasets.
 
-## Spatial modes
+## Polygon analysis
 
-GeoStats distinguishes polygon aggregation from point sampling because they have different semantics:
+GeoStats calculates zonal statistics for polygons. Boundary pixels contribute in proportion to the fraction of each pixel inside the polygon. This area weighting is always applied and isn't customer-selectable. For example, four valid pixels that are each one-quarter covered contribute a combined `<calculation>_count` of 1.0.
 
-- **Zonal mode** aggregates pixels within polygons. You can choose area weighting so boundary pixels contribute in proportion to their overlap with each polygon.
-- **Sample mode** extracts raster values at points by using nearest-neighbor or bilinear interpolation.
+You can optionally buffer input geometries before analysis. A positive buffer grows each polygon before GeoStats selects pixels and calculates statistics, so it can change the resulting count and values. Buffer distances are expressed in meters and applied after the geometry is transformed to the raster coordinate reference system. Omit the buffer to analyze the polygon as drawn.
 
-You can optionally buffer input geometries before analysis. Buffer distances are expressed in meters and applied after the geometry is transformed to the raster coordinate reference system.
+For example, a polygon containing 10 complete valid pixels has a weighted count of 10. If buffering adds four pixels that are each half covered, the count becomes 12 and those four values contribute at half weight to statistics.
 
 ## Results and provenance
 
-GeoStats can write results as GeoParquet, Delta, or GeoJSON. Use Delta when the result must support a OneLake Tables shortcut. GeoParquet and GeoJSON are file-based outputs; GeoParquet is the default when you omit the output settings. A successful run registers the result as a STAC item in the selected output collection. The item points to the result asset and records run provenance, so you use normal GeoCatalog discovery and authorization to access it.
+GeoStats writes GeoParquet by default and can also write GeoJSON or Delta. Use Delta with a stable `output.location` when the result must be exposed as a table through a OneLake shortcut. A successful run registers the result as a STAC item for every format.
+
+If you omit `output.stacCollectionId`, GeoStats registers the result item in the original raster collection. If you name another existing collection, it registers the item there instead. GeoStats doesn't create that collection. The underlying file remains in GeoCatalog-managed storage; `stacCollectionId` controls STAC registration, while `output.location` controls the relative storage path and is required for Delta.
+
+The primary access path is to discover the result STAC item and use its table asset. If enabled, OGC API Features can query an output collection as GeoJSON. Delta supports OneLake integration, and a collection-level SAS token can provide temporary direct access to file-based assets.
 
 Result rows include the source geometry identity, observation or period timing, calculation statistics, coverage, status, and source-item provenance as applicable to the selected strategy. Row cardinality depends on the observation strategy:
 
 | Strategy | Result rows |
 | --- | --- |
-| `item` | One row for each feature-item pair whose geometry overlaps the item's raster grid. A feature with no overlapping item produces no row, and a successful run can publish an empty table. |
+| `item` | Each input feature gets one row for every intersecting STAC item, so one feature can produce many rows. A feature with no intersecting item produces no row, and a successful run can publish an empty table. |
 | `mosaic` or `all`, without a period | One row for each input feature. |
 | `mosaic` or `all`, with a period | One row for each input feature in each period, including periods with no usable imagery. |
 
 Calculations and statistics become columns, so adding them doesn't add rows. Run-level failures are reported on the asynchronous operation.
 
-For example, an item-mode computation that requests `mean` for a calculation named `ndvi` can produce rows like these. Values are illustrative.
+Output columns vary by strategy, requested statistics, and optional features:
 
-| geometry_id | item_id | timestamp | ndvi_mean | ndvi_count | status |
-| --- | --- | --- | ---: | ---: | --- |
-| zone-001 | scene-2026-08-05 | 2026-08-05T10:42:11Z | 0.61 | 1834.7 | `ok` |
-| zone-001 | scene-2026-08-10 | 2026-08-10T10:40:54Z | null | 0.0 | `noValidPixels` |
-
-Calculation and statistic names form wide result columns such as `ndvi_mean`. In item mode, every intersecting acquisition produces a row even when masking removes all pixels. The null statistic and `noValidPixels` status preserve that acquisition in the time series and explain why it has no value. Counts are coverage-weighted pixel areas and can be fractional.
-
-Temporal `mosaic` and `all` computations use `period_start`, `period_end`, and `is_partial` instead of an item timestamp. They can also report `belowValidFraction` when clear coverage is below the requested threshold and `noItems` when no scene intersects a feature in a period.
-
-Use the row status and coverage columns to decide how to handle each result:
-
-| Status | Meaning | Suggested action |
+| Category | Examples | When present |
 | --- | --- | --- |
-| `ok` | The statistic was computed normally. | Use the value. |
-| `belowValidFraction` | Some pixels were valid, but `spatial_valid_fraction` was below `minValidFraction`. | Relax the threshold, lengthen the period, or apply your own threshold to the reported coverage. |
-| `noValidPixels` | At least one scene intersected the feature, but every intersecting pixel was masked or nodata. | Lengthen the period or verify the mask. |
-| `noItems` | No scene in the period intersected the feature. | Lengthen the period or verify collection coverage, revisit interval, and the requested time range. |
+| Feature identity | `feature_index`, `geometry_id` | Every row includes positional identity; a stable geometry ID is carried when configured. |
+| Item provenance | `item_id`, `timestamp`, `band_assets` | `item` rows. |
+| Temporal provenance | `period_start`, `period_end`, `is_partial`, `item_count` | `mosaic` and `all` rows. |
+| Coverage | `spatial_valid_fraction`, `valid_observation_count`, `observation_fraction` | Temporal rows when applicable. |
+| Requested statistics | `ndvi_mean`, `ndvi_count`, or another `<calculation>_<statistic>` column | One column for each requested calculation-statistic combination. |
+| Result state | `status` | Every row. |
+| Optional output | `image_chips` | When requested for `item` or `mosaic`. |
 
-`minValidFraction` is evaluated per feature and period against `spatial_valid_fraction`, not against a scene's `eo:cloud_cover`. The `item_count` includes intersecting scenes even when all their pixels are unusable, which distinguishes `noValidPixels` from `noItems`.
+For example, an item-mode computation that requests only `mean` for a calculation named `ndvi` can produce this minimal result. Values are illustrative.
 
-For `item` and `mosaic`, a `<calculation>_count` column represents valid coverage-weighted pixel area. For `all`, it represents observation weight because each valid pixel observation contributes independently. Consequently, an `all` result isn't generally the unweighted average of the corresponding item-mode rows.
+| geometry_id | item_id | timestamp | ndvi_mean | status |
+| --- | --- | --- | ---: | --- |
+| zone-001 | item-2026-08-05 | 2026-08-05T10:42:11Z | 0.61 | `ok` |
+| zone-001 | item-2026-08-10 | 2026-08-10T10:40:54Z | null | `noValidPixels` |
+
+Calculation and statistic names form wide result columns such as `ndvi_mean`. In item mode, every intersecting STAC item produces a row even when no usable pixels remain. The null statistic and `noValidPixels` status preserve that item in the time series and explain why it has no value.
+
+Temporal `mosaic` and `all` computations use `period_start`, `period_end`, and `is_partial` instead of an item timestamp. They can also report `belowValidFraction` when clear coverage is below the requested threshold and `noItems` when no STAC item intersects a feature in a period.
+
+Use the row status and coverage columns to decide how to handle each result. `temporal.minValidFraction` defaults to `0.0`, which applies no minimum coverage threshold. `belowValidFraction` therefore occurs only when the caller supplies a higher threshold.
+
+| Status | Triggering configuration and condition | Suggested action |
+| --- | --- | --- |
+| `ok` | Usable values remained and any explicit valid-fraction threshold was met. | Use the value. |
+| `belowValidFraction` | The caller set `temporal.minValidFraction` above `0.0`, and `spatial_valid_fraction` was lower. | Relax the threshold, lengthen the period, or apply a downstream threshold. |
+| `noValidPixels` | At least one STAC item intersected the feature, but nodata, intrinsic masks, non-finite values, or an explicit quality mask removed every value. This can occur without `mask`. | Check source data, calculations, and any requested quality mask. |
+| `noItems` | No STAC item in the period intersected the feature. | Verify collection coverage, revisit interval, and time range. |
+
+`minValidFraction` is evaluated per feature and period against `spatial_valid_fraction`, not against a STAC item's `eo:cloud_cover`. The `item_count` includes intersecting STAC items even when all their pixels are unusable, which distinguishes `noValidPixels` from `noItems`.
+
+For polygons, `<calculation>_count` is the sum of valid pixel-overlap fractions, not the number of touched cells. Three fully covered valid pixels and one half-covered valid pixel produce a count of 3.5. For `item` and `mosaic`, count represents valid coverage-weighted pixel area. For `all`, it represents valid observation weight across all contributing STAC items.
+
+### Tested strategy examples
+
+An item-mode UAT used one polygon and two intersecting HLS L30 STAC items. It requested `mean`, `sum`, and `count` for the same source band:
+
+| STAC item | value_mean | value_sum | value_count | status |
+| --- | ---: | ---: | ---: | --- |
+| HLS item 1 | 0.263235166 | 7316.869886 | 27795.943822 | `ok` |
+| HLS item 2 | 0.416673688 | 2.055826 | 4.933899 | `ok` |
+
+The matching `all` run placed both items on a common reprojected temporal grid and produced one period row:
+
+| item_count | value_mean | value_sum | value_count | status |
+| ---: | ---: | ---: | ---: | --- |
+| 2 | 0.263265236 | 7319.206709 | 27801.645289 | `ok` |
+
+The pixel-pooled mean predicted from the item rows was 0.263262397, while their equal-item average was 0.339954427. The observed result confirms that `all` pools pixel observations rather than averaging item means. The small difference from the pooled prediction comes from reprojection onto the temporal grid.
+
+A separate mosaic UAT used `priority: latest`, a cloud-quality mask, reprojection, and 625 input polygons. It produced exactly one successful row per polygon, with no duplicate geometry IDs. At each grid location, only the first valid pixel in the selected STAC-item order contributed to that row; repeated observations weren't pooled as they are in `all` mode.
 
 ## Image chips
 
-An `item` or `mosaic` computation can optionally add an `image_chips` binary column to the result. Each value is a cropped Cloud Optimized GeoTIFF (COG) containing the requested band expressions for that row's geometry bounding box. Chips preserve pixels outside the exact geometry boundary, and the analytical mask used for statistics doesn't blank chip pixels.
+An `item` or `mosaic` computation can optionally add an `image_chips` binary column. GeoStats produces one Cloud Optimized GeoTIFF (COG) chip per result row, not one chip per pixel. Each chip covers the geometry's rectangular bounding box, so it includes pixels outside the exact polygon boundary. The analytical quality mask used for statistics doesn't blank pixels in the chip.
+
+```text
++-----------------------+  geometry bounding box and chip extent
+|      _________        |
+|     / polygon \       |  statistics use the polygon
+|     \_________/       |  chip retains every bounding-box pixel
++-----------------------+
+```
 
 Each decoded or encoded chip is limited to 1,048,576 bytes. If a chip exceeds the limit, its value is null while the row's statistics and status remain unchanged. Image chips aren't supported with the `all` observation strategy and aren't resized automatically.
 
@@ -144,7 +250,7 @@ GeoStats runs and estimates are always asynchronous. A submission returns `202 A
 
 Each submission creates a new operation. Don't automatically retry a submission after an ambiguous network failure because the first request might already have started a run. Check the operation and computation run list before resubmitting.
 
-The estimate endpoint plans the same geometry partitions and STAC searches as a run without reading raster values or publishing results. It reports feature, item, pixel, and partition counts and identifies partitions predicted to exceed worker capacity. `FeatureItemPairs` is an upper bound based on the feature and item search counts, not a prediction of result-table rows. An estimate isn't a price or duration quote.
+The estimate endpoint plans the same geometry partitions and STAC searches as a run without reading raster values or publishing results. Successful estimate operations expose feature, item, feature-item pair, pixel, read-pixel, partition, maximum-scene, and capacity counters in `additionalInformation`. `FeatureItemPairs` is an upper bound based on feature and item search counts, not a prediction of result-table rows. An estimate isn't a price or duration quote. For the request and response workflow, see [Estimate the run](./use-geostats.md#estimate-the-run).
 
 ## Access and security
 
@@ -154,7 +260,7 @@ GeoStats uses the same Microsoft Entra ID authentication, GeoCatalog authorizati
 
 The following limitations apply to the private preview:
 
-- GeoStats must be enabled by the Microsoft Planetary Computer Pro team for each GeoCatalog.
+- Access is limited to approved participants whose Azure subscription ID has been allow-listed by the Microsoft Planetary Computer Pro team.
 - Raster data and referenced geometry assets must be available in the GeoCatalog where the computation runs.
 - Inline GeoJSON is limited to 100 features, and the complete JSON request must be smaller than 10,000,000 bytes.
 - Runs and estimates are asynchronous; no synchronous execution path is available.

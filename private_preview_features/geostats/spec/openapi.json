@@ -3,7 +3,7 @@
   "info": {
     "title": "Microsoft Planetary Computer Pro - GeoStats",
     "version": "2026-10-01-preview",
-    "description": "GeoStats computes raster-derived statistics over STAC-discovered data.\nSubmit geometries and a raster collection to receive analytics-ready tabular\noutput.",
+    "description": "GeoStats computes raster-derived statistics over STAC-discovered data.\nSubmit geometries and a raster collection to receive analysis-ready tabular\noutput.",
     "x-typespec-generated": [
       {
         "emitter": "@azure-tools/typespec-autorest"
@@ -1191,15 +1191,7 @@
         },
         "mode": {
           "$ref": "#/definitions/SpatialMode",
-          "description": "Zonal or sample."
-        },
-        "weighting": {
-          "$ref": "#/definitions/Weighting",
-          "description": "Pixel weighting, zonal mode only."
-        },
-        "interpolation": {
-          "$ref": "#/definitions/Interpolation",
-          "description": "Interpolation, sample mode only."
+          "description": "Zonal polygon reduction. Polygon boundary pixels are always weighted by the fraction of their area inside the geometry."
         },
         "buffer": {
           "$ref": "#/definitions/BufferSpec",
@@ -1602,28 +1594,6 @@
         "name",
         "expression"
       ]
-    },
-    "Interpolation": {
-      "type": "string",
-      "description": "Interpolation method for sample mode.",
-      "enum": [
-        "nearest",
-        "bilinear"
-      ],
-      "x-ms-enum": {
-        "name": "Interpolation",
-        "modelAsString": true,
-        "values": [
-          {
-            "name": "nearest",
-            "value": "nearest"
-          },
-          {
-            "name": "bilinear",
-            "value": "bilinear"
-          }
-        ]
-      }
     },
     "MaskBitField": {
       "type": "object",
@@ -2158,10 +2128,9 @@
     },
     "SpatialMode": {
       "type": "string",
-      "description": "Zonal aggregates the pixels within a polygon; sample extracts a value at a\npoint. These are different operations with different parameters, and\nconflating them is how two callers get different numbers from one request.",
+      "description": "Zonal aggregation of raster pixels within a polygon.",
       "enum": [
-        "zonal",
-        "sample"
+        "zonal"
       ],
       "x-ms-enum": {
         "name": "SpatialMode",
@@ -2170,10 +2139,6 @@
           {
             "name": "zonal",
             "value": "zonal"
-          },
-          {
-            "name": "sample",
-            "value": "sample"
           }
         ]
       }
@@ -2228,12 +2193,15 @@
       "properties": {
         "period": {
           "type": "string",
-          "description": "ISO 8601 duration, for example `P1D`, `P1W`, or `P1M`. Omit to reduce the\nwhole datetime range to a single period."
+          "description": "A positive integer number of days (`PnD`), weeks (`PnW`), calendar months (`PnM`), or calendar years (`PnY`). The minimum is `P1D`. Sub-day, zero, fractional, and compound durations are not supported. Omit to reduce the whole bounded datetime range to a single period. A final incomplete period is included and marked as partial."
         },
         "minValidFraction": {
           "type": "number",
           "format": "double",
-          "description": "Fraction of the geometry that must carry valid pixels before a value is\nreported, for example `0.9` for \"only if 90% of the field was clear\".\n\nDeliberately per geometry per period rather than a property of the item:\na scene-level `eo:cloud_cover` of 20% says nothing about whether the\ncloud sat over this particular parcel. Periods that miss the threshold\nstill produce a row, with `status` of `belowValidFraction` and the\nmeasured `coverageFraction` so a consumer can apply a different rule\nwithout recomputing."
+          "description": "Fraction of the geometry that must carry valid pixels before a value is\nreported, for example `0.9` for \"only if 90% of the field was clear\".\nDefaults to `0.0`, which applies no minimum valid-coverage threshold.\n\nDeliberately per geometry per period rather than a property of the item:\na STAC item-level `eo:cloud_cover` of 20% says nothing about whether the\ncloud sat over this particular parcel. Periods that miss an explicitly\nconfigured threshold still produce a row, with `status` of\n`belowValidFraction` and the measured `spatial_valid_fraction`.",
+          "default": 0.0,
+          "minimum": 0.0,
+          "maximum": 1.0
         },
         "gridPolicy": {
           "$ref": "#/definitions/TemporalGridPolicy",
@@ -2243,29 +2211,6 @@
           "$ref": "#/definitions/RasterResampling",
           "description": "Resampling for continuous bands when `gridPolicy` is `reproject`.\nDefaults to `nearest`. Categorical masks always use nearest-neighbor."
         }
-      }
-    },
-    "Weighting": {
-      "type": "string",
-      "description": "Pixel weighting for zonal mode.",
-      "enum": [
-        "area",
-        "none"
-      ],
-      "x-ms-enum": {
-        "name": "Weighting",
-        "modelAsString": true,
-        "values": [
-          {
-            "name": "area",
-            "value": "area",
-            "description": "Edge pixels contribute in proportion to the area inside the polygon."
-          },
-          {
-            "name": "none",
-            "value": "none"
-          }
-        ]
       }
     },
     "WriteMode": {

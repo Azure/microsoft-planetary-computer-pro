@@ -5,7 +5,7 @@ author: beharris
 ms.author: beharris
 ms.service: planetary-computer-pro
 ms.topic: how-to
-ms.date: 10/09/2026
+ms.date: 10/20/2026
 #customer intent: As a geospatial analyst, I want to run GeoStats against raster data and field boundaries so that I can use the resulting statistics in analysis and reporting.
 ---
 
@@ -23,7 +23,7 @@ Before you begin, you need:
 - An existing GeoCatalog with GeoStats enabled.
 - The **GeoCatalog Administrator** role on the GeoCatalog. The GeoCatalog Reader role can't save or run computations.
 - A raster STAC collection in the GeoCatalog. Each item must expose the raster and mask assets used in the requests.
-- An output collection for the result STAC item, plus a unique computation ID and output location for this run.
+- A unique computation ID. This example also uses an existing dedicated output collection; if you omit one, GeoStats registers the result item in the original raster collection.
 - [Azure CLI](/cli/azure/install-azure-cli) installed and signed in to the tenant that contains the GeoCatalog.
 
 The examples use API version `2026-10-01-preview`.
@@ -48,9 +48,17 @@ export ACCESS_TOKEN=$(az account get-access-token \
 
 Use the GeoCatalog data-plane endpoint, not the Azure Resource Manager resource ID. Don't include a trailing slash in `GEOCATALOG_ENDPOINT`.
 
-## Save an NDVI formula
+## Discover or save an NDVI formula
 
-A formula is a reusable calculation stored in, and available only to, the raster collection identified in the URL. This example is for a collection whose items store red and near-infrared data in separate single-band Cloud Optimized GeoTIFF (COG) assets, such as a Sentinel-2 collection. Change the asset keys to match the source STAC items.
+A formula is a reusable calculation stored in, and available only to, the raster collection identified in the URL. Formula availability can vary by collection and private-preview configuration. List the collection's saved formulas before creating a duplicate:
+
+```bash
+curl --request GET \
+  "${GEOCATALOG_ENDPOINT}/stac/collections/${RASTER_COLLECTION_ID}/formulas?api-version=${GEOSTATS_API_VERSION}" \
+  --header "Authorization: Bearer ${ACCESS_TOKEN}"
+```
+
+The following example is for a collection whose items store red and near-infrared data in separate single-band Cloud Optimized GeoTIFF (COG) assets, such as a Sentinel-2 collection. Change the asset keys to match the source STAC items.
 
 Create a file named `formula.json` with the following content:
 
@@ -87,15 +95,6 @@ For a multiband asset, map both expression names to the same asset and select ea
   "red": { "assetKey": "image", "bandIndex": 4 }
 }
 ```
-
-> [!TIP]
-> If the STAC collection declares the Electro-Optical (EO) extension and its bands include common names such as `red` and `nir`, GeoStats might already have preconfigured this formula from the collection metadata. Check the collection's saved formulas before creating a duplicate:
->
-> ```bash
-> curl --request GET \
->   "${GEOCATALOG_ENDPOINT}/stac/collections/${RASTER_COLLECTION_ID}/formulas?api-version=${GEOSTATS_API_VERSION}" \
->   --header "Authorization: Bearer ${ACCESS_TOKEN}"
-> ```
 
 ## Save a computation
 
@@ -156,6 +155,52 @@ curl --request PUT \
 
 The service validates and stores the definition synchronously. It returns `201 Created` for a new computation or `200 OK` when it replaces an existing computation. Saving a computation doesn't execute it.
 
+The time range is part of the saved computation, not the run request. To use the same computation ID for a different time range, replace the saved definition with an updated `dataSource.datetime`. You can instead create another computation when both definitions must remain available.
+
+## Choose an observation strategy
+
+The preceding computation uses `item`, the default strategy. Each input feature produces one row for every intersecting STAC item:
+
+```json
+"observationStrategy": {
+  "mode": "item"
+}
+```
+
+Use `mosaic` to produce one resolved raster for the complete bounded time range or for each requested period. You must select the STAC-item priority:
+
+```json
+"observationStrategy": {
+  "mode": "mosaic",
+  "priority": "latest"
+},
+"temporal": {
+  "period": "P1W",
+  "gridPolicy": "reproject",
+  "resampling": "nearest"
+}
+```
+
+Priority can be `earliest`, `latest`, or `preferLeastCloudy`. At each grid location, the first valid pixel in that order contributes to the result.
+
+Use `all` when every valid pixel observation from every matching STAC item should contribute:
+
+```json
+"observationStrategy": {
+  "mode": "all"
+},
+"temporal": {
+  "period": "P1W",
+  "minValidFraction": 0.9,
+  "gridPolicy": "reproject",
+  "resampling": "nearest"
+}
+```
+
+`all` requires a bounded `dataSource.datetime` interval. It pools observations on a common temporal grid; it doesn't average item-mode rows. Omitting `temporal.period` reduces the entire bounded interval as one period. Omitting `minValidFraction` uses `0.0`, so no minimum valid-coverage threshold is applied.
+
+Periods support positive whole days, weeks, calendar months, or calendar years, with a minimum of `P1D`. GeoStats retains a final incomplete period and marks it with `is_partial: true`.
+
 ## Estimate the run
 
 An estimate plans geometry partitions and matching raster items without reading raster values or publishing output. Use it to identify a request that is predicted to exceed worker capacity before you submit the run.
@@ -215,7 +260,7 @@ curl --include --request POST \
 
 The service returns `202 Accepted`. Copy the `operation-location` response header and poll it as described in [Monitor the operation](#monitor-the-operation). A successful estimate reports counts as strings in `additionalInformation`, including `FeatureCount`, `ItemCount`, `FeatureItemPairs`, `EstimatedPixels`, `EstimatedReadPixels`, `PartitionCount`, and `PartitionsOverCapacity`. `FeatureItemPairs` is an upper bound based on the feature and item search counts; it isn't the expected number of rows in the published result table.
 
-If `PartitionsOverCapacity` is greater than zero, reduce the time range, geometry size or spread, or number of scenes combined per period. You can also use `item` mode instead of `mosaic` or `all`. The estimate is a capacity prediction, not a price or duration quote.
+If `PartitionsOverCapacity` is greater than zero, reduce the time range, geometry size or spread, or number of STAC items combined per period. You can also use `item` mode instead of `mosaic` or `all`. The estimate is a capacity prediction, not a price or duration quote.
 
 ## Run the computation
 
@@ -261,7 +306,9 @@ Create a file named `run.json`:
 }
 ```
 
-The `location` is relative to the GeoCatalog's configured output sink. Use a unique location unless you intentionally want the selected write mode to modify an existing dataset.
+The output collection must already exist; GeoStats doesn't create it. If `stacCollectionId` is omitted, GeoStats registers the result item in the original raster collection. The underlying file remains in GeoCatalog-managed storage.
+
+The optional `location` is relative to the GeoCatalog's configured output sink. Use a unique location unless you intentionally want the selected write mode to modify an existing dataset. Delta output requires `location` so that a OneLake shortcut can target a stable table path.
 
 Submit the run and save the response headers:
 
@@ -312,6 +359,8 @@ This discovery request uses the GeoCatalog STAC API version, not the GeoStats AP
 
 Identify the item created by your run and inspect its assets. The result asset points to the GeoParquet table at the output location. Use the item's provenance properties to associate the result with the GeoStats run and source data.
 
+Discovering the result STAC item and accessing its table asset is the primary output workflow. OGC API Features and direct file access are optional alternatives.
+
 Join result rows back to your input features by using the geometry identifier carried from `geometryIdColumn`. An item-mode result from this example contains columns like these:
 
 | Column | Meaning |
@@ -326,7 +375,7 @@ For example:
 
 | geometry_id | item_id | timestamp | ndvi_mean | status |
 | --- | --- | --- | ---: | --- |
-| example-zone | scene-2026-08-05 | 2026-08-05T10:42:11Z | 0.61 | `ok` |
+| example-zone | item-2026-08-05 | 2026-08-05T10:42:11Z | 0.61 | `ok` |
 
 ### Query the result with OGC API Features
 
