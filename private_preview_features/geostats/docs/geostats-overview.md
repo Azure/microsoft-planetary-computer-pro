@@ -84,6 +84,42 @@ You can define calculations in either of these ways:
 
 Saved and inline calculations use the same expression and band-mapping concepts, but have different request shapes and lifecycles. A formula reference can't be combined with inline fields or band-mapping overrides. List the formulas currently available to a collection with `GET /stac/collections/{collectionId}/formulas`; availability can vary by collection and preview configuration.
 
+### Built-in formulas
+
+When a collection declares compatible bands using STAC Electro-Optical (EO) common names, GeoStats automatically adds the corresponding built-in formulas. A formula is added only when all of its required bands can be resolved without ambiguity.
+
+| Formula ID | Index | Required EO common-name bands |
+| --- | --- | --- |
+| `bsi` | Bare Soil Index | `swir16`, `red`, `nir`, `blue` |
+| `ebbi` | Enhanced Built-Up and Bareness Index | `swir16`, `nir`, `lwir11` |
+| `evi2` | Two-band Enhanced Vegetation Index | `nir`, `red` |
+| `ibi` | Index-based Built-up Index | `swir16`, `nir`, `red`, `green` |
+| `nbr` | Normalized Burn Ratio | `nir`, `swir22` |
+| `ndbi` | Normalized Difference Built-up Index | `swir16`, `nir` |
+| `ndmi` | Normalized Difference Moisture Index | `nir`, `swir16` |
+| `ndre` | Normalized Difference Red Edge Index | `nir`, `rededge` |
+| `ndsi` | Normalized Difference Snow Index | `green`, `swir16` |
+| `ndvi` | Normalized Difference Vegetation Index | `nir`, `red` |
+| `ndwi` | Normalized Difference Water Index | `green`, `nir` |
+
+In the October 2026 validation snapshot, 11 of 138 Open Planetary Computer collections receive at least one built-in formula when copied into a GeoCatalog. This compatibility matrix was validated against collection metadata and, except where noted, by running each listed formula over a real STAC item.
+
+| Open Planetary Computer collection | Built-in formulas | Notes |
+| --- | --- | --- |
+| `sentinel-2-l2a` | `bsi`, `evi2`, `ibi`, `nbr`, `ndbi`, `ndmi`, `ndsi`, `ndvi`, `ndwi` | `ndre` isn't added because multiple assets declare `rededge`; `ebbi` requires `lwir11`. |
+| `landsat-c2-l2` | `bsi`, `ebbi`, `evi2`, `ibi`, `nbr`, `ndbi`, `ndmi`, `ndsi`, `ndvi`, `ndwi` | Uses `nir08` as the NIR band. |
+| `naip` | `evi2`, `ndvi`, `ndwi` | The collection doesn't declare SWIR bands. |
+| `hls2-s30` | `bsi`, `evi2`, `ibi`, `nbr`, `ndbi`, `ndmi`, `ndsi`, `ndvi`, `ndwi` | `ebbi` requires `lwir11`. |
+| `hls2-l30` | `bsi`, `ebbi`, `evi2`, `ibi`, `nbr`, `ndbi`, `ndmi`, `ndsi`, `ndvi`, `ndwi` | All required bands resolve unambiguously. |
+| `modis-09A1-061` | `bsi`, `evi2`, `ibi`, `nbr`, `ndbi`, `ndmi`, `ndsi`, `ndvi`, `ndwi` | Uses `nir08` as the NIR band; `ebbi` requires `lwir11`. |
+| `modis-43A4-061` | `bsi`, `evi2`, `ibi`, `nbr`, `ndbi`, `ndmi`, `ndsi`, `ndvi`, `ndwi` | Uses `nir08` as the NIR band; `ebbi` requires `lwir11`. |
+| `landsat-c2-l1` | `evi2`, `ndvi`, `ndwi` | Uses `nir08` as the NIR band; the collection doesn't declare SWIR bands. |
+| `aster-l1t` | `evi2`, `ibi`, `ndbi`, `ndmi`, `ndsi`, `ndvi`, `ndwi` | Uses `nir08` as the NIR band; multiple assets declare `swir22`. |
+| `planet-nicfi-analytic` | `evi2`, `ndvi`, `ndwi` | Formula availability was verified, but running them requires access to the licensed imagery. |
+| `modis-09Q1-061` | `evi2`, `ndvi` | Uses `nir08` as the NIR band; the collection doesn't declare SWIR or green bands. |
+
+Other Open Planetary Computer collections don't currently receive built-ins because their metadata doesn't declare all bands required by a formula or declares a required band ambiguously across multiple assets. Collection metadata and built-in definitions can change, so use the formulas endpoint as the source of truth for the formulas available in a specific GeoCatalog collection.
+
 A computation can apply multiple calculations and statistics in one pass over the raster data. Supported statistics are `mean`, `min`, `max`, `count`, `sum`, `stddev`, `median`, and integer percentiles from `percentile_1` through `percentile_99`.
 
 ## Observation strategies

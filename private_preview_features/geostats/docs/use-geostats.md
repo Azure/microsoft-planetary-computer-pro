@@ -50,7 +50,7 @@ Use the GeoCatalog data-plane endpoint, not the Azure Resource Manager resource 
 
 ## Discover or save an NDVI formula
 
-A formula is a reusable calculation stored in, and available only to, the raster collection identified in the URL. Formula availability can vary by collection and private-preview configuration. List the collection's saved formulas before creating a duplicate:
+A formula is a reusable calculation stored in, and available only to, the raster collection identified in the URL. GeoStats automatically seeds compatible built-in formulas when a collection declares the required STAC EO common-name bands. The [GeoStats overview](./geostats-overview.md#built-in-formulas) lists the built-ins and their compatibility with Open Planetary Computer collections. List the formulas available in the target collection before creating a duplicate:
 
 ```bash
 curl --request GET \
