@@ -26,38 +26,23 @@ GeoStats supports workflows such as:
 
 ## How GeoStats works
 
-A GeoStats workflow has two phases. First, define the reusable analysis:
+Defining a GeoStats analysis starts with the raster observations, geometries, calculations, and statistics you want to combine. The API separates the reusable analysis settings from the inputs and output settings that can change for each run.
 
-1. **Choose the raster collection and calculation.** Use an available built-in formula, save a reusable formula, or plan an inline band expression.
-1. **Save the computation.** Set the raster time range, observation strategy, optional temporal grouping and quality mask, calculations, and statistics. The time range belongs to this saved definition.
+| Input | What you define | Where you supply it |
+| --- | --- | --- |
+| Raster collection | The STAC collection containing the raster items and assets to analyze. Formulas and computations are scoped to this collection. | Collection ID in the API request URL |
+| Raster selection | The bounded time range used to select STAC items from the raster collection. | Saved computation |
+| Input geometry | The polygons to analyze, supplied as an inline GeoJSON FeatureCollection or as a vector asset referenced from a STAC item. You can identify a property to carry into the result as a stable geometry ID. | Run request |
+| Calculation | A derived raster value defined either by referencing a saved formula or by providing an inline expression and band mapping. A computation can include multiple calculations. | Saved computation; reusable formulas are saved separately on the raster collection |
+| Statistics | The reducers to apply to each calculation, such as `mean`, `count`, or `percentile_90`. | Saved computation |
+| Observation handling | Whether matching items are processed independently with `item`, resolved into a `mosaic`, or pooled with `all`, plus any temporal grouping. | Saved computation |
+| Data-quality options | An optional quality mask and, for temporal analysis, a minimum valid-coverage threshold. | Saved computation |
+| Geometry processing | An optional buffer that grows each input polygon before GeoStats selects contributing pixels. | Run request |
+| Output | The result format, STAC collection registration, and optional storage location. | Run request |
 
-Then, execute that definition one or more times:
+A saved computation can be run repeatedly with different geometries or output destinations. To change the raster time range, calculations, statistics, observation strategy, or other reusable analysis settings, update the computation or save another one. Saving a formula or computation doesn't execute the analysis.
 
-1. **Choose the geometries and output.** Supply a small GeoJSON FeatureCollection inline or reference a vector asset on a STAC item, then choose the result format and destination. These values belong to the run request.
-1. **Optionally estimate the work.** Submit the equivalent data source, observation strategy, and geometry input to the estimate endpoint. An estimate plans partitions and matching items but doesn't read raster values or publish output.
-1. **Run the saved computation.** Submit the geometry input and output settings to the computation's run endpoint.
-1. **Monitor the operation.** Poll the operation URL returned by the service until the estimate or run reaches a terminal state.
-1. **Discover the result.** After a run succeeds, use the STAC API to find the output item and access its table asset.
-
-Formulas and computations are scoped to the raster collection in the request URL. Saving either one doesn't execute an analysis. You can run the same saved computation repeatedly with different geometry inputs or output destinations; change or replace the computation when its time range or analysis settings must change.
-
-The lifecycle is:
-
-```text
-Saved formula or inline calculation
-		    + statistics
-			   |
-			   v
-		 Saved computation
-			   |
-		  geometry + output
-			   |
-			   v
-		   Asynchronous run
-			   |
-			   v
-	     STAC item + result asset
-```
+For the complete REST workflow to discover or save a formula, save a computation, estimate and submit a run, monitor the asynchronous operation, and find its output, see [Use GeoStats to calculate zonal statistics](./use-geostats.md).
 
 | Term | Meaning |
 | --- | --- |
