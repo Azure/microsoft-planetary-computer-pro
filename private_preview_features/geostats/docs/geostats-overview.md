@@ -5,15 +5,15 @@ author: beharris
 ms.author: beharris
 ms.service: planetary-computer-pro
 ms.topic: overview
-ms.date: 10/20/2026
+ms.date: 10/21/2026
 #customer intent: As a geospatial analyst, I want to understand GeoStats so that I can derive table-ready statistics from raster data without building my own distributed processing system.
 ---
 
 # What is GeoStats in Microsoft Planetary Computer Pro? (Private Preview)
 
-GeoStats computes raster-derived statistics for polygons at scale. You select raster observations from a SpatioTemporal Asset Catalog (STAC) collection, define one or more band calculations and statistics, and submit analysis geometries. GeoStats publishes an analysis-ready table and can optionally include image chips with the result.
+GeoStats computes raster-derived statistics for geometries at scale. You select raster observations from a SpatioTemporal Asset Catalog (STAC) collection, define one or more band calculations and statistics, and submit analysis geometries. GeoStats publishes an analysis-ready table and can optionally include image chips with the result.
 
-In the private preview, GeoStats uses raster collections, geometry inputs, authorization, storage, and result discovery provided through Microsoft Planetary Computer Pro GeoCatalog. This integration model can evolve after the preview.
+In the private preview, GeoStats uses raster collections, geometry inputs, authorization, storage, and result discovery provided through Microsoft Planetary Computer Pro GeoCatalog. This data access pattern can evolve after the preview.
 
 GeoStats supports workflows such as:
 
@@ -22,20 +22,24 @@ GeoStats supports workflows such as:
 - Produce table-ready features for forecasting, risk modeling, and reporting.
 
 > [!IMPORTANT]
-> GeoStats is available only to approved private-preview participants. The API, limits, and behavior can change before general availability. The Microsoft Planetary Computer Pro team contacts participating customers to collect and allow-list their Azure subscription ID.
+> GeoStats is available only to approved private-preview participants. The API, limits, and behavior can change before general availability. Contact the Microsoft Planetary Computer Pro team with your Azure Subscription ID and GeoCatalog ID if you are interested in participating.
 
 ## How GeoStats works
 
-A GeoStats workflow separates a reusable computation from each execution:
+A GeoStats workflow has two phases. First, define the reusable analysis:
 
-1. **Define calculations.** Save a reusable formula, or include a band expression directly in a computation.
-1. **Save a computation.** Select a raster time range, observation strategy, optional quality mask, calculations, and statistics.
-1. **Provide geometries.** Supply a small GeoJSON FeatureCollection inline or reference a vector asset on a STAC item in the GeoCatalog.
-1. **Run the computation.** Submit polygons for zonal statistics and specify where GeoStats publishes the result.
-1. **Monitor the operation.** Poll the operation URL returned by the service until the run reaches a terminal state.
-1. **Discover the result.** Use the existing STAC API to find the output item and access its table asset.
+1. **Choose the raster collection and calculation.** Use an available built-in formula, save a reusable formula, or plan an inline band expression.
+1. **Save the computation.** Set the raster time range, observation strategy, optional temporal grouping and quality mask, calculations, and statistics. The time range belongs to this saved definition.
 
-Definitions are scoped to the raster collection in the request URL. You can run the same saved computation repeatedly with different geometry inputs or output destinations.
+Then, execute that definition one or more times:
+
+1. **Choose the geometries and output.** Supply a small GeoJSON FeatureCollection inline or reference a vector asset on a STAC item, then choose the result format and destination. These values belong to the run request.
+1. **Optionally estimate the work.** Submit the equivalent data source, observation strategy, and geometry input to the estimate endpoint. An estimate plans partitions and matching items but doesn't read raster values or publish output.
+1. **Run the saved computation.** Submit the geometry input and output settings to the computation's run endpoint.
+1. **Monitor the operation.** Poll the operation URL returned by the service until the estimate or run reaches a terminal state.
+1. **Discover the result.** After a run succeeds, use the STAC API to find the output item and access its table asset.
+
+Formulas and computations are scoped to the raster collection in the request URL. Saving either one doesn't execute an analysis. You can run the same saved computation repeatedly with different geometry inputs or output destinations; change or replace the computation when its time range or analysis settings must change.
 
 The lifecycle is:
 
@@ -126,11 +130,38 @@ A computation can apply multiple calculations and statistics in one pass over th
 
 The observation strategy determines how matching STAC items contribute to the result.
 
-| Mode | Behavior | Common use |
-| --- | --- | --- |
-| `item` | Processes every matching STAC item independently. This mode is the default. | Preserve per-acquisition values and provenance. |
-| `mosaic` | Resolves overlapping STAC items into one raster by using an explicit priority. | Create one clear composite for a time range or period. |
-| `all` | Retains all observations when calculating statistics. | Summarize every valid observation in a time range or period. |
+| Mode | How observations contribute | Result rows | Interpretation of `<calculation>_count` |
+| --- | --- | --- | --- |
+| `item` | Each matching STAC item is processed independently. This mode is the default. | One row for each intersecting feature-item pair. | Valid coverage-weighted pixel area for that feature-item pair. |
+| `mosaic` | Items are ordered by an explicit priority, and the first valid pixel at each location contributes. | One row per feature, or per feature and period. | Valid coverage-weighted pixel area in the resolved mosaic. |
+| `all` | Every valid pixel observation from every matching item contributes. | One row per feature, or per feature and period. | Valid observation weight across all contributing items. |
+
+Adding calculations or statistics adds columns, not rows. In `item` mode, a feature that intersects two STAC items produces two rows. A feature that intersects no item produces no placeholder row. In `mosaic` and `all` modes, each feature produces one row for the complete time range or one row per requested period, including periods with no usable imagery.
+
+### Compare item, mosaic, and all
+
+Consider one polygon that fully covers two pixels on a common grid. An earlier item contains values 0.2 and 0.4. A later item contains 0.6 at the first pixel and nodata at the second. The following simplified outputs request `mean` and `count`; no quality mask or reprojection changes the values.
+
+In `item` mode, each intersecting item produces an independent row:
+
+| geometry_id | item_id | value_mean | value_count | status |
+| --- | --- | ---: | ---: | --- |
+| zone-001 | item-earlier | 0.3 | 2.0 | `ok` |
+| zone-001 | item-later | 0.6 | 1.0 | `ok` |
+
+In `mosaic` mode with `priority: latest`, the later value wins at the first pixel and the earlier value supplies the second pixel because the later item is nodata there. The resolved values 0.6 and 0.4 produce one row:
+
+| geometry_id | item_count | value_mean | value_count | status |
+| --- | ---: | ---: | ---: | --- |
+| zone-001 | 2 | 0.5 | 2.0 | `ok` |
+
+In `all` mode, all three valid observations contribute. The values 0.2, 0.4, and 0.6 produce one row:
+
+| geometry_id | item_count | value_mean | value_count | status |
+| --- | ---: | ---: | ---: | --- |
+| zone-001 | 2 | 0.4 | 3.0 | `ok` |
+
+This example uses whole pixels, so each contributes a weight of 1. Polygon-boundary pixels contribute fractional weights. Real `mosaic` and `all` runs can also reproject observations to a common grid, which can change the exact values and weights.
 
 For `mosaic` and `all`, you can group observations into periods. `temporal.period` accepts a positive integer number of days (`PnD`), weeks (`PnW`), calendar months (`PnM`), or calendar years (`PnY`). The minimum is `P1D`. Sub-day, zero, fractional, and compound durations such as `PT1H` and `P1DT12H` aren't supported. No explicit application-level maximum period or period count is currently enforced, but processing resources and date/time representability still impose practical limits.
 
