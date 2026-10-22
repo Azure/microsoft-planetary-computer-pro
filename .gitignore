@@ -563,3 +563,6 @@ Thumbs.db
 # Generic input / output folders
 .inputs/
 .outputs/
+
+# Local demo recordings and exported maps
+/docs/

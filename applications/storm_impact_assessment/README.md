@@ -10,6 +10,49 @@ Running the notebook in this project produces an interactive map that allows use
 ![Hurricane Helene Infrastructure Analysis](docs/media/Hurricane-Helene-Infra-Analysis.gif)
 📥 [Download the interactive map](https://github.com/Azure/microsoft-planetary-computer-pro/releases/tag/storm_impact_assessment) to explore the results locally.
 
+### Opening exported maps without an API key
+
+New exports use **OpenFreeMap Positron**, a light-gray OpenStreetMap-based
+street map that keeps storm and infrastructure overlays prominent. Double-click
+the HTML file to open it in a browser: no API key, Python process, or local web
+server is required. A **WebGL-enabled browser** and internet access are needed
+for the vector tiles, fonts, and Leaflet/MapLibre libraries. Storm tracks, impact zones, and infrastructure are
+embedded in the HTML; opening the map does not run Aurora or query Azure.
+GeoCatalog links still require the viewer's own Azure access.
+
+CARTO now requires a key for the raster tiles used by older exports. Its
+unauthenticated response can be an HTTP 200 image saying **API KEY REQUIRED**,
+not an HTTP error. To repair an older export, including the released Helene
+sample, run this from the application directory:
+
+```powershell
+python scripts\basemap.py "hurricane_helene_2024_infrastructure_impact.html" "hurricane_helene_2024_infrastructure_impact_positron.html"
+```
+
+The original file is preserved, and forecasts do not need to be rerun.
+The repair command expects the original CARTO-based export, not a previously
+repaired NASA or OpenFreeMap copy. The full infrastructure layers, controls,
+and animation remain unchanged. The renderer is pinned to MapLibre GL JS
+5.24.0 and MapLibre GL Leaflet 0.1.4. If the renderer or map requests fail,
+the page displays an error instead of silently switching to another provider.
+
+[OpenFreeMap](https://openfreemap.org/) permits commercial use of its public
+service without an API key, but offers **no SLA**. Network restrictions,
+service outages, or future provider policy changes can affect the background.
+This uses OpenFreeMap's vector service, not the public OpenStreetMap raster
+tile server, whose web-referrer requirement does not fit the `file://` workflow.
+See also [CARTO's key requirement](https://docs.carto.com/faqs/carto-basemaps).
+
+**Keep the linked attribution visible:** OpenMapTiles and OpenStreetMap
+contributors are credited on the map, alongside OpenFreeMap and a link to
+the style credits. OSM data is licensed under **ODbL 1.0**. Positron's design
+uses **CC BY 4.0**, with upstream CARTO/Stamen/Paul Norman design credits under
+**CC BY 3.0**; see the [complete license notices](https://github.com/hyperknot/openfreemap/blob/main/LICENSE.md).
+If you redistribute adapted OSM infrastructure datasets, ODbL share-alike
+obligations may apply independently of the basemap. Displaying the map does
+not automatically put the notebook's code under ODbL. Preserve applicable
+library and style notices when redistributing their code.
+
 ## 🎯 Main Notebook
 
 **[hurricane_forecast_infra_impact.ipynb](hurricane_forecast_infra_impact.ipynb)** - An interactive workflow that showcases:
@@ -53,8 +96,26 @@ The notebook works with **both historical or active tropical storm** from the IB
 
 2. **Install dependencies**
    ```bash
-   pip install -r requirements.txt
+   python -m pip install --no-cache-dir -r requirements.txt
    ```
+
+   Install into the same environment selected as the notebook kernel. On Windows
+   ARM devices, use **x64 Python** if the configured package feed does not provide
+   ARM64 builds of dependencies such as `torch`. For example, with x64 Python 3.12
+   installed, run from this application directory:
+
+   ```powershell
+   py -3.12 -c "import sysconfig; print(sysconfig.get_platform())"
+   # Confirm win-amd64 above before creating the environment.
+   py -3.12 -m venv .venv
+   .\.venv\Scripts\python.exe -m pip install --no-cache-dir -r requirements.txt
+   ```
+
+   In VS Code, select `.venv\Scripts\python.exe` using the notebook's kernel picker.
+   The first code cell also installs requirements, displays pip output, and stops
+   with an error if installation fails. Restart the kernel **only after success**.
+   A persistent hash mismatch with the cache disabled requires checking the
+   configured feed or proxy; do not disable hash verification or replace hashes.
 
 3. **Configure credentials**
    
@@ -88,6 +149,7 @@ The notebook works with **both historical or active tropical storm** from the IB
 | `xarray` / `cfgrib` / `netcdf4` | Multi-dimensional weather data |
 | `cartopy` | Geospatial visualization |
 | `ipyleaflet` / `ipywidgets` | Interactive maps |
+| `folium` | Standalone HTML maps with OpenFreeMap Positron |
 | `azure-identity` / `azure-storage-blob` | Azure authentication & storage |
 
 ## 📁 Project Structure
@@ -99,7 +161,9 @@ The notebook works with **both historical or active tropical storm** from the IB
 ├── deploy/                                 # Azure deployment templates
 │   └── azuredeploy.json                    # ARM template
 ├── scripts/                                # Helper scripts
-│   └── nb_edit.py                          # Notebook editor (see below)
+│   ├── nb_edit.py                          # Notebook editor (see below)
+│   └── basemap.py                          # No-key basemap and HTML export repair
+├── tests/                                  # Basemap and notebook setup regression tests
 ├── docs/                                   # Documentation
 │   ├── ARCHITECTURE.md                     # Architecture overview
 │   └── IMPACT_SWATH_ALGORITHM.md           # Swath algorithm reference
