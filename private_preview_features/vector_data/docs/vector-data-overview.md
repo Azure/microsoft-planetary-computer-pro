@@ -5,7 +5,7 @@ author: beharris
 ms.author: beharris
 ms.service: planetary-computer-pro
 ms.topic: concept-article
-ms.date: 08/24/2026
+ms.date: 10/23/2026
 
 ms.custom:
 # customer intent: As a GeoCatalog User I want to understand how vector data is supported in Microsoft Planetary Computer Pro so that I can ingest, manage, and visualize vector data formats.
@@ -14,7 +14,7 @@ ms.custom:
 
 Microsoft Planetary Computer Pro now supports ingestion, cloud optimization, visualization, and feature-level access for vector data. By using this preview feature, you can work with vector datasets alongside your raster and data cube assets, providing a comprehensive platform for geospatial analysis and visualization.
 
-Vector files in Shapefile, GeoJSON, and GeoParquet formats can be converted to cloud-native formats: GeoParquet for analysis and PMTiles for visualization. Vector feature collections provide another access model for retrieving and filtering individual features through an API that complies with OGC API - Features.
+Vector files in Shapefile, GeoJSON, and GeoParquet formats can be converted to cloud-native formats: GeoParquet for analysis and PMTiles for visualization. OGC API - Tiles serves vector tiles backed by the generated PMTiles archives, while OGC API - Features provides another access model for retrieving and filtering individual features.
 
 > [!IMPORTANT]
 > Vector data support is currently in preview. Features and capabilities are subject to change. Provide your feedback to help improve this functionality.
@@ -60,7 +60,7 @@ For visualization purposes, the process also converts vector data to PMTiles for
 - **Serverless delivery** - No tile server required; you can serve tiles directly from object storage.
 - **Scalable rendering** - Efficient rendering of vector data at any zoom level.
 
-The process stores the PMTiles archives in blob storage and references them in the STAC items, enabling visualization through the Vector Tile API.
+The process stores the PMTiles archives in blob storage and references them in the STAC items. OGC API - Tiles serves Mapbox Vector Tiles (MVT) from these archives for scalable visualization.
 
 ### STAC item properties that trigger cloud optimization
 
@@ -96,37 +96,57 @@ Vector data cloud optimization provides several key benefits:
 
 If you don't want cloud optimization for your vector assets, disable it by removing `data` and `visual` from the asset's `roles` list in the STAC item JSON before ingestion.
 
-## Vector Tile API
+## OGC API - Tiles
 
-While the Microsoft Planetary Computer Pro Explorer doesn't yet support interactive visualization of vector tiles, the Vector Tile API enables you to access and render your vector data outside of the web interface.
+OGC API - Tiles provides a standards-based `/visual` endpoint for discovering and retrieving vector tiles. It replaces the earlier Vector Tile API proof-of-concept under `/data/vector`; the old routes aren't available and don't redirect to the new API.
 
-The Vector Tile API provides access to vector tiles in standard formats, such as MVT (Mapbox Vector Tiles), that mapping libraries and GIS applications can consume. This access allows you to:
+The API serves Mapbox Vector Tiles (MVT) from the PMTiles archives generated during ingestion. Mapping libraries and GIS applications can use these tiles to:
 
 - Build custom web maps by using libraries like Mapbox GL JS, Leaflet, or OpenLayers
 - Integrate vector data into desktop GIS applications
 - Create specialized visualization applications for your vector datasets
 
-The API automatically serves tiles from the PMTiles archives generated during ingestion, providing efficient, cloud-optimized access to your vector data at any zoom level.
+OGC API - Tiles is available under API version `2026-10-01-preview`. Start at the landing page and follow its links to discover collections, tile matrix sets, styles, tilesets, and tiles:
+
+```http
+GET https://<geocatalog-host>/visual?api-version=2026-10-01-preview
+Authorization: Bearer <access-token>
+```
+
+For example, a collection vector tile uses this path:
+
+```http
+GET https://<geocatalog-host>/visual/collections/<collection-id>/tiles/WebMercatorQuad/<tile-matrix>/<tile-row>/<tile-column>?api-version=2026-10-01-preview
+Accept: application/vnd.mapbox-vector-tile
+Authorization: Bearer <access-token>
+```
+
+The tile coordinates are ordered as zoom, row, and column (`z/y/x`). This differs from the `z/x/y` order used by many XYZ URL templates. The API also supports dataset, item, and registered-search tile origins and Mapbox Style Specification v8 styles.
+
+> [!IMPORTANT]
+> OGC API - Tiles is a private preview and must be enabled on the GeoCatalog. The `api-version` query parameter is required on every request. An authorized request returns `404` when the feature isn't enabled.
+
+For the complete operation list and schemas, see the [OGC API - Tiles API reference](../spec/ogc-tiles-api.md).
 
 ### Access vector tiles from QGIS
 
 QGIS users can access vector tiles stored in Planetary Computer Pro in several ways:
 
 - **Access PMTiles from blob storage** - Load PMTiles assets directly from Azure Blob Storage by using the `/vsicurl/` prefix with a SAS token.
-- **Use the Vector Tile API** - Connect to the Vector Tile API to stream tiles and apply custom styles.
+- **Use OGC API - Tiles** - Create a generic vector tile connection to stream authenticated MVT tiles from a `/visual/collections/<collection-id>/tiles/WebMercatorQuad/{z}/{y}/{x}` URL. Include `api-version=2026-10-01-preview` and configure the bearer token as an HTTP header.
 - **Download and load locally** - Download PMTiles assets to local storage for offline use.
 
 QGIS doesn't currently support loading vector data directly through a STAC connection. For detailed instructions on configuring QGIS to access your GeoCatalog, see [Configure QGIS to access a GeoCatalog resource](./configure-qgis.md).
 
 ### Access vector tiles from ArcGIS Pro
 
-ArcGIS Pro doesn't currently support PMTiles through STAC connections. The Vector Tile API serves Mapbox Vector Tiles (MVT) from PMTiles archives, but the ArcGIS Pro Tile XYZ service doesn't currently support authentication, which limits this approach for secured GeoCatalog resources.
+ArcGIS Pro doesn't currently support PMTiles through STAC connections. OGC API - Tiles serves MVT from PMTiles archives, but ArcGIS Pro's Tile XYZ service doesn't currently support authentication, which limits this approach for secured GeoCatalog resources.
 
 As an alternative, support for loading GeoParquet assets through STAC connections is coming soon. Cloud-optimized assets use the `.parquet` extension that ArcGIS Pro expects, which will enable direct access to vector data with attribute and spatial query capabilities. For guidance on setting up a GeoCatalog connection, see [Configure ArcGIS Pro to access a GeoCatalog](./create-connection-arc-gis-pro.md).
 
 ## Vector Features API
 
-The Vector Features API exposes individual vector features and their properties through the GeoCatalog implementation of [OGC API - Features](https://ogcapi.ogc.org/features/). Unlike the Vector Tile API, which returns rendered map tiles for visualization, the Vector Features API returns vector features as GeoJSON for query, analysis, and display.
+The Vector Features API exposes individual vector features and their properties through the GeoCatalog implementation of [OGC API - Features](https://ogcapi.ogc.org/features/). Unlike OGC API - Tiles, which returns MVT for client-side map rendering, the Vector Features API returns vector features as GeoJSON for query, analysis, and display.
 
 Use the Vector Features API to:
 
@@ -136,6 +156,8 @@ Use the Vector Features API to:
 - Filter on feature properties by using Common Query Language (CQL2) JSON expressions and `filter-lang=cql2-json`.
 - Select the properties to return, limit the page size, and follow response links to retrieve additional pages.
 - Use the same standards-based endpoint from custom applications, QGIS, and ArcGIS Pro.
+
+For the complete operation and schema reference, see the [Vector Features API OpenAPI definition](../spec/vector-features-api.json).
 
 ### Access, query, and filter features through the API
 
@@ -166,6 +188,8 @@ For authenticated CQL2 property filtering during the current preview, use an int
 
 ## Related content
 
+- [OGC API - Tiles API reference](../spec/ogc-tiles-api.md)
+- [Vector Features API OpenAPI definition](../spec/vector-features-api.json)
 - [Supported data types in Microsoft Planetary Computer Pro](./supported-data-types.md)
 - [Configure QGIS to access a GeoCatalog resource](./configure-qgis.md)
 - [Configure ArcGIS Pro to access a GeoCatalog](./create-connection-arc-gis-pro.md)

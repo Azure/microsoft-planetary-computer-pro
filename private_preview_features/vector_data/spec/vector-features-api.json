@@ -1,0 +1,579 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Microsoft Planetary Computer Pro Vector Features API",
+    "version": "2026-08-01-preview"
+  },
+  "paths": {
+    "/features/": {
+      "get": {
+        "tags": [
+          "OGC API - Features"
+        ],
+        "summary": "OGC API - Features landing page",
+        "operationId": "landing_features__get",
+        "parameters": [
+          {
+            "name": "api-version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Version"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Landing Features  Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/features/conformance": {
+      "get": {
+        "tags": [
+          "OGC API - Features"
+        ],
+        "summary": "OGC API - Features conformance declaration",
+        "operationId": "conformance_features_conformance_get",
+        "parameters": [
+          {
+            "name": "api-version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Version"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "additionalProperties": true,
+                  "title": "Response Conformance Features Conformance Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/features/collections": {
+      "get": {
+        "tags": [
+          "OGC API - Features"
+        ],
+        "summary": "List feature collections",
+        "operationId": "list_collections_features_collections_get",
+        "parameters": [
+          {
+            "name": "f",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "F"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Version"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/features/collections/{collectionId}": {
+      "get": {
+        "tags": [
+          "OGC API - Features"
+        ],
+        "summary": "Describe a feature collection",
+        "operationId": "describe_collection_features_collections__collectionId__get",
+        "parameters": [
+          {
+            "name": "collectionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Collectionid"
+            }
+          },
+          {
+            "name": "f",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "F"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Version"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/features/collections/{collectionId}/items": {
+      "get": {
+        "tags": [
+          "OGC API - Features"
+        ],
+        "summary": "Fetch features",
+        "operationId": "get_features_features_collections__collectionId__items_get",
+        "parameters": [
+          {
+            "name": "collectionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Collectionid"
+            }
+          },
+          {
+            "name": "bbox",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Bbox"
+            }
+          },
+          {
+            "name": "datetime",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Datetime"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Limit"
+            }
+          },
+          {
+            "name": "token",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Token"
+            }
+          },
+          {
+            "name": "f",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "F"
+            }
+          },
+          {
+            "name": "filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Filter"
+            }
+          },
+          {
+            "name": "filter-lang",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Filter-Lang"
+            }
+          },
+          {
+            "name": "stac_filter",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "CQL2-JSON filter over STAC item properties, used to select which items of the collection contribute feature assets. Unlike 'filter', which selects features, this narrows the STAC item search itself.",
+              "title": "Stac Filter"
+            },
+            "description": "CQL2-JSON filter over STAC item properties, used to select which items of the collection contribute feature assets. Unlike 'filter', which selects features, this narrows the STAC item search itself."
+          },
+          {
+            "name": "stac_item_id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Restrict the read to these STAC item ids. Repeatable; omit to read every item of the collection.",
+              "title": "Stac Item Id"
+            },
+            "description": "Restrict the read to these STAC item ids. Repeatable; omit to read every item of the collection."
+          },
+          {
+            "name": "asset",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "array",
+                  "items": {
+                    "type": "string"
+                  }
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Restrict the read to these asset keys. Repeatable; omit to read every GeoParquet asset of every selected item.",
+              "title": "Asset"
+            },
+            "description": "Restrict the read to these asset keys. Repeatable; omit to read every GeoParquet asset of every selected item."
+          },
+          {
+            "name": "properties",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Comma-separated attribute names to include in each feature's properties (OGC API - Features Part 6). Omit to return every property; an empty value returns none. Geometry and id are always returned.",
+              "title": "Properties"
+            },
+            "description": "Comma-separated attribute names to include in each feature's properties (OGC API - Features Part 6). Omit to return every property; an empty value returns none. Geometry and id are always returned."
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Version"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/features/collections/{collectionId}/items/{featureId}": {
+      "get": {
+        "tags": [
+          "OGC API - Features"
+        ],
+        "summary": "Fetch a single feature",
+        "operationId": "get_feature_features_collections__collectionId__items__featureId__get",
+        "parameters": [
+          {
+            "name": "collectionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Collectionid"
+            }
+          },
+          {
+            "name": "featureId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Featureid"
+            }
+          },
+          {
+            "name": "f",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "F"
+            }
+          },
+          {
+            "name": "properties",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Comma-separated attribute names to include in the feature's properties (OGC API - Features Part 6). Omit to return every property; an empty value returns none.",
+              "title": "Properties"
+            },
+            "description": "Comma-separated attribute names to include in the feature's properties (OGC API - Features Part 6). Omit to return every property; an empty value returns none."
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Version"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/features/collections/{collectionId}/queryables": {
+      "get": {
+        "tags": [
+          "OGC API - Features"
+        ],
+        "summary": "Filterable attributes (queryables) for a collection",
+        "operationId": "get_collection_queryables_features_collections__collectionId__queryables_get",
+        "parameters": [
+          {
+            "name": "collectionId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Collectionid"
+            }
+          },
+          {
+            "name": "api-version",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Api-Version"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {},
+  "tags": []
+}
