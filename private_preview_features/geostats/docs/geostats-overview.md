@@ -5,7 +5,7 @@ author: beharris
 ms.author: beharris
 ms.service: planetary-computer-pro
 ms.topic: overview
-ms.date: 10/21/2026
+ms.date: 10/30/2026
 #customer intent: As a geospatial analyst, I want to understand GeoStats so that I can derive table-ready statistics from raster data without building my own distributed processing system.
 ---
 
@@ -42,7 +42,7 @@ Defining a GeoStats analysis starts with the raster observations, geometries, ca
 
 A saved computation can be run repeatedly with different geometries or output destinations. To change the raster time range, calculations, statistics, observation strategy, or other reusable analysis settings, update the computation or save another one. Saving a formula or computation doesn't execute the analysis.
 
-For the complete REST workflow to discover or save a formula, save a computation, estimate and submit a run, monitor the asynchronous operation, and find its output, see [Use GeoStats to calculate zonal statistics](./use-geostats.md).
+For the recommended preset-first workflow, see [Quickstart: Run a built-in GeoStats formula](./run-built-in-formula.md). For the complete REST workflow to save custom formulas, configure advanced processing, estimate and submit a run, monitor the asynchronous operation, and find its output, see [Use GeoStats to calculate zonal statistics](./use-geostats.md).
 
 | Term | Meaning |
 | --- | --- |
@@ -76,6 +76,8 @@ Saved and inline calculations use the same expression and band-mapping concepts,
 ### Built-in formulas
 
 When a collection declares compatible bands using STAC Electro-Optical (EO) common names, GeoStats automatically adds the corresponding built-in formulas. A formula is added only when all of its required bands can be resolved without ambiguity.
+
+Start by listing the formulas available to your collection and reference a returned formula by `formulaId`. This approach uses the expression and collection-specific band mapping that GeoStats already resolved, avoiding manual asset selection for source products whose bands can have different native resolutions. Don't manually recreate a built-in expression or its band mapping. Follow [Quickstart: Run a built-in GeoStats formula](./run-built-in-formula.md) for the discovery and run workflow.
 
 | Formula ID | Index | Required EO common-name bands |
 | --- | --- | --- |
