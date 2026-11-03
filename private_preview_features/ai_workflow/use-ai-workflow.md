@@ -1,22 +1,22 @@
 ---
-title: Example of How to Use GeoAI Orchestrator 
+title: Example of How to Use AI Workflow
 description: Learn how to run MARS on NAIP imagery for two periods, monitor workflow runs, and compare building predictions in GeoCatalog.
 author: aloverro
 ms.author: adamloverro
 ms.service: planetary-computer-pro
 ms.topic: how-to
 ms.date: 10/29/2026
-# customer intent: As a geospatial developer, I want to run GeoAI Orchestrator on imagery from two periods so that I can compare residential development.
+# customer intent: As a geospatial developer, I want to run AI Workflow on imagery from two periods so that I can compare residential development.
 ---
 
-# Example of How to Use GeoAI Orchestrator
+# Example of How to Use AI Workflow
 
-This example walks through how GeoAI Orchestrator is used to extract building footprints from NAIP imagery of Union Park, Little Elm, Texas, for two periods: 2012-2014 and 2020-2022. Run the MARS Automated Feature Extraction model separately for each period over the same area, and then compare the results.
+This example walks through how AI Workflow is used to extract building footprints from NAIP imagery of Union Park, Little Elm, Texas, for two periods: 2012-2014 and 2020-2022. Run the MARS Automated Feature Extraction model separately for each period over the same area, and then compare the results.
 
 The input collection contains Union Park imagery acquired between 2012 and 2022. Each workflow filters that collection by acquisition date and selects the most recent matching item. For the input data in this example, the selected images are from July 2014 and July 2022.
 
 > [!IMPORTANT]
-> GeoAI Orchestrator is currently in invite-only private preview. Complete [Get started with GeoAI Orchestrator](./get-started-ai-workflow.md) before following this example. Features and capabilities are subject to change.
+> AI Workflow is currently in invite-only private preview. Complete [Get started with AI Workflow](./get-started-ai-workflow.md) before following this example. Features and capabilities are subject to change.
 
 ## Example settings
 
@@ -51,7 +51,7 @@ The example follows this API sequence:
 
 Confirm that:
 
-- GeoAI Orchestrator is enabled for your GeoCatalog.
+- AI Workflow is enabled for your GeoCatalog.
 - MARS is deployed through Microsoft Foundry.
 - The deployed endpoint is registered with GeoCatalog.
 - GeoCatalog is authorized to invoke the endpoint through a managed identity.
@@ -460,10 +460,9 @@ Cancellation is asynchronous. The state might initially remain `Running`, or the
 
 ## Reference documentation
 
-- [GeoAI Orchestrator overview](./ai-workflow-overview.md)
-- [Get started with GeoAI Orchestrator](./get-started-ai-workflow.md)
-- [GeoAI Orchestrator API specification](./openapi.json)
+- [AI Workflow overview](./ai-workflow-overview.md)
+- [Get started with AI Workflow](./get-started-ai-workflow.md)
+- [AI Workflow API specification](./openapi.json)
 - [Microsoft Planetary Computer Pro - Microsoft Azure](https://azure.microsoft.com/en-us/products/planetary-computer-pro)
 - [Microsoft Planetary Computer Pro - Microsoft Learn](https://learn.microsoft.com/en-us/azure/planetary-computer/)
-
 
