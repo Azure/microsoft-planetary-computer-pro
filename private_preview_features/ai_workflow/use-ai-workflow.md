@@ -669,6 +669,53 @@ scene content, and confidence threshold. Use the EO-OS default threshold of
 objects and false positives. More detections do not necessarily mean better
 accuracy.
 
+## Troubleshooting
+
+Start with `GET /ai/workflows/{workflowId}/runs/{runId}` for the affected run.
+For `Failed` runs, inspect `error.code` and `error.message` before changing the
+workflow or retrying it.
+
+| Symptom | What to check and do |
+| --- | --- |
+| Run stays `Running` for a large AOI | Inference can finish before merging and publishing finish. For large AOIs, use `FixedSize` instead of `MatchInput` to publish separate grid-cell items incrementally. Check the output collection for items with this `workflow_run_id`; `percentComplete: 0` alone doesn't mean the run has stopped progressing. |
+| Run is `Failed` with a validation error | Read `error.code` and `error.message` to identify the failed validation, such as an unsupported model, invalid input or hyperparameter, or missing collection. Correct the reported field in the saved workflow or create the missing collection before starting a new run. |
+| Run fails during patch processing | `WorkflowExecutionError` can include `NoDataInAOI` (all patches failed) or `PartialDataProcessed` (some patches failed). Check AOI coverage, input filters, tile limit, and asset access. Partial outputs don't establish complete coverage; valid imagery with no detections isn't a no-data failure. |
+| Execution takes longer than expected | Check the model endpoint's health, compute capacity, and throttling or timeout responses. AI Workflow inference concurrency adjusts automatically based on endpoint responses and latency. |
+| Results aren't in the expected collection | Check `outputCollectionId` in the workflow used for the run, then filter that collection's items by `workflow_run_id`. With `FixedSize`, inspect individual grid-cell items rather than looking for one AOI-wide item. Cells without detections don't produce items. If the run failed, inspect its error rather than assuming publication completed. |
+| GeoCatalog API returns `401` or `403` | Confirm that the token is for the GeoCatalog API, hasn't expired, and belongs to an identity with the required access. Refresh an expired token and update `HEADERS`; refreshing a token doesn't fix missing permissions. |
+| Workflow can't invoke the model endpoint | `EndpointResolutionError` with `Invalid modelEndpoint: <url>` can indicate an unregistered endpoint: register the exact `modelEndpoint` URL as an ingestion source. For `InvalidModelEndpointAuth`, check Microsoft Entra endpoint authentication and the source's managed identity attachment and endpoint role assignment. |
+
+For example, a missing output collection produces these run details:
+
+```json
+{
+    "status": "Failed",
+    "error": {
+        "code": "InvalidOutputCollection",
+        "message": "Provided output collection is invalid or not found: 'mars-example-output'"
+    }
+}
+```
+
+Create `mars-example-output`, or correct `outputCollectionId`, before starting
+a new run. A retry without fixing the collection won't resolve this error.
+
+For missing or partially processed imagery, the run error code is
+`WorkflowExecutionError`. An example message for one failed AOI is:
+
+```text
+Workflow failed: 1 of 1 AOIs failed: ['<aoi-id>'] | reasons: ['NoDataInAOI']
+```
+
+When some patches succeed and others fail, the reason is `PartialDataProcessed`
+instead. These reasons summarize patch failures; check input coverage and asset
+access as well as model-endpoint errors. Lowering a detection threshold doesn't
+resolve missing source imagery.
+
+If the problem persists, include the workflow ID, run ID, error code and
+message, and model endpoint name when contacting support. Don't include access
+tokens or signed asset URLs.
+
 ## Reference documentation
 
 - [AI Workflow overview](./ai-workflow-overview.md)
