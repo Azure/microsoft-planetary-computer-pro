@@ -1,27 +1,27 @@
 ---
-title: Get started with GeoAI Orchestrator
+title: Get started with AI Workflow
 description: Learn how to deploy a supported model, configure managed identity access, register a model endpoint, and prepare output collections.
 author: aloverro
 ms.author: adamloverro
 ms.service: planetary-computer-pro
 ms.topic: how-to
 ms.date: 10/29/2026
-# customer intent: As a geospatial developer, I want to prepare my GeoCatalog and model endpoint so that I can run GeoAI Orchestrator workflows.
+# customer intent: As a geospatial developer, I want to prepare my GeoCatalog and model endpoint so that I can use AI Workflow.
 ---
 
-# Get started with GeoAI Orchestrator
+# Get started with AI Workflow
 
-Before you run a GeoAI Orchestrator, deploy a supported model, authorize your GeoCatalog to invoke the model through managed identity, register the endpoint, and create an output collection. This article walks you through that initial setup.
+Before you run an AI Workflow, deploy a supported model, authorize your GeoCatalog to invoke the model through managed identity, register the endpoint, and create an output collection. This article walks you through that initial setup.
 
-For a feature overview, supported models, and pricing, see [GeoAI Orchestrator in Microsoft Planetary Computer Pro](./ai-workflow-overview.md).
+For a feature overview, supported models, and pricing, see [AI Workflow in Microsoft Planetary Computer Pro](./ai-workflow-overview.md).
 
 > [!IMPORTANT]
-> GeoAI Orchestrator is currently in invite-only private preview. Contact the Microsoft Planetary Computer team to enable it for your GeoCatalog. Features and capabilities are subject to change.
+> AI Workflow is currently in invite-only private preview. Contact the Microsoft Planetary Computer team to enable it for your GeoCatalog. Features and capabilities are subject to change.
 
 ## Prerequisites
 
 - Microsoft Planetary Computer Pro deployed in your Azure subscription. See [Deploy a GeoCatalog resource](https://learn.microsoft.com/azure/planetary-computer/deploy-geocatalog-resource).
-- GeoAI Orchestrator feature enabled for your GeoCatalog. Please open an Azure support ticket to get this enabled.
+- AI Workflow feature enabled for your GeoCatalog. Please open an Azure support ticket to get this enabled.
 - Supported geospatial data ingested into a GeoCatalog collection. Review the [input data requirements](./input-data-requirements.md) and the selected model's card to confirm that your data meets its requirements.
 - Sufficient GPU quota and compute capacity for the selected model deployment.
 
@@ -72,7 +72,7 @@ Use a user-assigned managed identity so that GeoCatalog can securely access the 
 
 ### Step 3: Register the model endpoint
 
-During private preview, register the deployed model endpoint as an ingestion source so that GeoAI Orchestrator can invoke it with the managed identity.
+During private preview, register the deployed model endpoint as an ingestion source so that AI Workflow can invoke it with the managed identity.
 
 1. In your GeoCatalog, go to **Settings** and select **Create Ingestion Source**.
 
@@ -124,10 +124,10 @@ Create a destination collection for inference results.
 
 For additional guidance, see [Create STAC collections](https://learn.microsoft.com/en-us/azure/planetary-computer/create-stac-collection?tabs=restapi).
 
-Your GeoCatalog is now ready to use GeoAI Orchestrator. For the API definitions, see the [API specification](./openapi.json).
+Your GeoCatalog is now ready to use AI Workflow. For the API definitions, see the [API specification](./openapi.json).
 
 ## Related content
 
-- [GeoAI Orchestrator Overview](./ai-workflow-overview.md)
+- [AI Workflow Overview](./ai-workflow-overview.md)
 - [Example of How AI Orchestrator is Used](./use-ai-workflow.md)
 - [Input Data Requirements](./input-data-requirements.md)

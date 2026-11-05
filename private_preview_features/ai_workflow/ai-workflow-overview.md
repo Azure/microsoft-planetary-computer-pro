@@ -1,34 +1,34 @@
 ---
-title: GeoAI Orchestrator in Microsoft Planetary Computer Pro
-description: Learn about GeoAI Orchestrator, its key benefits, supported geospatial AI models, and private preview pricing.
+title: AI Workflow in Microsoft Planetary Computer Pro
+description: Learn about AI Workflow, its key benefits, supported geospatial AI models, and private preview pricing.
 author: aloverro
 ms.author: adamloverro
 ms.service: planetary-computer-pro
 ms.topic: overview
 ms.date: 10/29/2026
-# customer intent: As a geospatial analyst or developer, I want to understand GeoAI Orchestrator so that I can run repeatable inference on GeoCatalog data.
+# customer intent: As a geospatial analyst or developer, I want to understand AI Workflow so that I can run repeatable inference on GeoCatalog data.
 ---
 
-# GeoAI Orchestrator in Microsoft Planetary Computer Pro
+# AI Workflow in Microsoft Planetary Computer Pro
 
-GeoAI Orchestrator is an orchestration feature in Microsoft Planetary Computer Pro that enables you to run inference with geospatial AI models from Microsoft Foundry or Azure Machine Learning with data stored in your GeoCatalog.
+AI Workflow is an orchestration feature in Microsoft Planetary Computer Pro that enables you to run inference with geospatial AI models from Microsoft Foundry or Azure Machine Learning with data stored in your GeoCatalog.
 
 Instead of manually coordinating data preparation, model execution, and output management through building custom inference pipelines, you can use a repeatable, cloud-based workflow to transform geospatial data into insights and inference results.
 
-GeoAI Orchestrator supports selected geospatial AI models hosted in Microsoft Foundry and Azure Machine Learning.
+AI Workflow supports selected geospatial AI models hosted in Microsoft Foundry and Azure Machine Learning.
 
 > [!IMPORTANT]
-> GeoAI Orchestrator is currently in invite-only private preview. Contact the Microsoft Planetary Computer team to enable it for your GeoCatalog. Features and capabilities are subject to change.
+> AI Workflow is currently in invite-only private preview. Contact the Microsoft Planetary Computer team to enable it for your GeoCatalog. Features and capabilities are subject to change.
 
 ## Key benefits
 
-GeoAI Orchestrator streamlines GeoAI inference into a single workflow, so you can focus on insights rather than model and data orchestration.
+AI Workflow streamlines GeoAI inference into a single workflow, so you can focus on insights rather than model and data orchestration.
 
-![Reference architecture for GeoAI Orchestrator.](./media/image1.png)
+![Reference architecture for AI Workflow.](./media/image1.png)
 
 *Figure 1 - Reference architecture.*
 
-Use GeoAI Orchestrator to:
+Use AI Workflow to:
 
 - **Connect data and models** - Connect geospatial data, models, and outputs through simple API calls.
 - **Simplify operations** - Operationalize AI models without writing custom orchestration code.
@@ -38,7 +38,7 @@ Use GeoAI Orchestrator to:
 
 ## Supported models
 
-GeoAI Orchestrator supports the following models deployed through Microsoft Foundry:
+AI Workflow supports the following models deployed through Microsoft Foundry:
 
 | Model | Model catalog ID |
 | --- | --- |
@@ -51,7 +51,7 @@ Review the [input data requirements](./input-data-requirements.md) and the assoc
 ## Pricing
 
 > [!NOTE]
-> GeoAI Orchestrator is available at no additional cost during private preview. Underlying Azure resource charges still apply.
+> AI Workflow is available at no additional cost during private preview. Underlying Azure resource charges still apply.
 
 You can incur charges for:
 
@@ -59,10 +59,10 @@ You can incur charges for:
 - GPU resources consumed by deployed AI models for inference.
 
 > [!IMPORTANT]
-> Avoid large-scale STAC ingestion while running GeoAI Orchestrator jobs during private preview. Concurrent ingestion and inference workloads can increase CPU utilization and affect workflow performance or execution times.
+> Avoid large-scale STAC ingestion while running AI Workflow jobs during private preview. Concurrent ingestion and inference workloads can increase CPU utilization and affect workflow performance or execution times.
 
 ## Reference Documents
 
-- [Get Started with GeoAI Orchestrator](./get-started-ai-workflow.md)
-- [Example of how GeoAI Orchestrator is Used](./use-ai-workflow.md)
+- [Get Started with AI Workflow](./get-started-ai-workflow.md)
+- [Example of how AI Workflow is Used](./use-ai-workflow.md)
 - [Input Data Requirements](./input-data-requirements.md)

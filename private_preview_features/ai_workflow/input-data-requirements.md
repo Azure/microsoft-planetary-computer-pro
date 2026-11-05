@@ -1,20 +1,20 @@
 ---
-title: Input data requirements for GeoAI Orchestrator supported models
-description: Learn the imagery, STAC metadata, video, and telemetry requirements for models supported by GeoAI Orchestrator.
+title: Input data requirements for AI Workflow supported models
+description: Learn the imagery, STAC metadata, video, and telemetry requirements for models supported by AI Workflow.
 author: aloverro
 ms.author: adamloverro
 ms.service: planetary-computer-pro
 ms.topic: concept-article
 ms.date: 10/29/2026
-# customer intent: As a geospatial developer, I want to understand model input requirements so that I can prepare data for GeoAI Orchestrator.
+# customer intent: As a geospatial developer, I want to understand model input requirements so that I can prepare data for AI Workflow.
 ---
 
-# Input data requirements for GeoAI Orchestrator supported models
+# Input data requirements for AI Workflow supported models
 
-This article describes the input data requirements for each model supported by GeoAI Orchestrator. Use these requirements when preparing data for ingestion into Microsoft Planetary Computer Pro.
+This article describes the input data requirements for each model supported by AI Workflow. Use these requirements when preparing data for ingestion into Microsoft Planetary Computer Pro.
 
 > [!IMPORTANT]
-> GeoAI Orchestrator is currently in invite-only private preview. Features and capabilities are subject to change.
+> AI Workflow is currently in invite-only private preview. Features and capabilities are subject to change.
 
 ## EO_OS Object Detection Model
 
@@ -142,6 +142,6 @@ An item is rejected immediately, without retry, under the following conditions:
 
 ## Related content
 
-- [GeoAI Orchestrator overview](./ai-workflow-overview.md)
-- [Get started with GeoAI Orchestrator](./get-started-ai-workflow.md)
-- [Use GeoAI Orchestrator to compare residential development](./use-ai-workflow.md)
+- [AI Workflow overview](./ai-workflow-overview.md)
+- [Get started with AI Workflow](./get-started-ai-workflow.md)
+- [Use AI Workflow to compare residential development](./use-ai-workflow.md)
