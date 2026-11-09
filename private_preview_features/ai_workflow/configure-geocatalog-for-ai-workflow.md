@@ -1,5 +1,5 @@
 ---
-title: Get started with AI Workflow
+title: Configure your GeoCatalog for AI Workflow
 description: Learn how to deploy a supported model, configure managed identity access, register a model endpoint, and prepare output collections.
 author: aloverro
 ms.author: adamloverro
@@ -9,7 +9,7 @@ ms.date: 10/29/2026
 # customer intent: As a geospatial developer, I want to prepare my GeoCatalog and model endpoint so that I can use AI Workflow.
 ---
 
-# Get started with AI Workflow
+# Configure your GeoCatalog for AI Workflow
 
 Before you run an AI Workflow, deploy a supported model, authorize your GeoCatalog to invoke the model through managed identity, register the endpoint, and create an output collection. This article walks you through that initial setup.
 
@@ -21,9 +21,10 @@ For a feature overview, supported models, and pricing, see [AI Workflow in Micro
 ## Prerequisites
 
 - Microsoft Planetary Computer Pro deployed in your Azure subscription. See [Deploy a GeoCatalog resource](https://learn.microsoft.com/azure/planetary-computer/deploy-geocatalog-resource).
-- AI Workflow feature enabled for your GeoCatalog. Please open an Azure support ticket to get this enabled.
+
+- Submit a form using the following link to get AI Workflow enabled in your GeoCatalog: [Planetary Computer Pro - Request to test a Feature in Private Preview](https://forms.cloud.microsoft/Pages/DesignPageV2.aspx?subpage=design&id=v4j5cvGGr0GRqy180BHbR9JBG4XVVlZKhac1ChBrBzJUQTM3TVRIRDBDOTVPNExIUlcwUURKVFhSMCQlQCN0PWcu)
 - Supported geospatial data ingested into a GeoCatalog collection. Review the [input data requirements](./input-data-requirements.md) and the selected model's card to confirm that your data meets its requirements.
-- Sufficient GPU quota and compute capacity for the selected model deployment.
+- Sufficient GPU quota and compute capacity for the selected model deployment. The minimum viable GPU configuration for the supported models is 2× NVIDIA T4 GPUs, though this may result in high inference latency. The recommended configuration is 1× NVIDIA A100 GPU or higher for optimal performance. The link below provides instructions for requesting GPU quota in Azure. Quota approval does not guarantee GPU capacity. Availability varies by Azure region and subscription. https://learn.microsoft.com/en-us/azure/quotas/quickstart-increase-quota-portal
 
 
 ## Initial setup

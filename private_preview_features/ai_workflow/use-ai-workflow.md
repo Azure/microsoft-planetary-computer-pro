@@ -1,22 +1,22 @@
 ---
-title: Example of How to Use AI Workflow
+title: Use AI Workflow
 description: Learn how to run MARS on NAIP imagery for two periods, monitor workflow runs, and compare building predictions in GeoCatalog.
 author: aloverro
 ms.author: adamloverro
 ms.service: planetary-computer-pro
-ms.topic: how-to
+ms.topic: quickstart / tutorial
 ms.date: 11/02/2026
 # customer intent: As a geospatial developer, I want to run AI Workflow on imagery from two periods so that I can compare residential development.
 ---
 
-# Example of How to Use AI Workflow
+# Using AI Workflow to Extract Building Footprints from NAIP Imagery
 
 This example walks through how AI Workflow is used to extract building footprints from NAIP imagery of Union Park, Little Elm, Texas, for two periods: 2012-2014 and 2020-2022. Run the MARS Automated Feature Extraction model separately for each period over the same area, and then compare the results.
 
 The input collection contains Union Park imagery acquired between 2012 and 2022. Each workflow filters that collection by acquisition date and selects the most recent matching item. For the input data in this example, the selected images are from July 2014 and July 2022.
 
 > [!IMPORTANT]
-> AI Workflow is currently in invite-only private preview. Complete [Get started with AI Workflow](./get-started-ai-workflow.md) before following this example. Features and capabilities are subject to change.
+> AI Workflow is currently in invite-only private preview. Complete [Configure your GeoCatalog for AI Workflow](./configure-geocatalog-for-ai-workflow.md) before following this example. Features and capabilities are subject to change.
 
 ## Example settings
 
@@ -57,11 +57,10 @@ Confirm that:
 - The deployed endpoint is registered with GeoCatalog.
 - GeoCatalog is authorized to invoke the endpoint through a managed identity.
 - You have a GeoCatalog API access token with permissions to create and run workflows. See [Configure application authentication](https://learn.microsoft.com/azure/planetary-computer/application-authentication).
-- The input and output collections described in the following sections exist.
 - The input imagery is accessible and meets the model's input requirements.
 - Python and the `requests` package are available for the API examples.
 
-### Prepare the input collection
+## Prepare the input collection
 
 Create a STAC collection named `union-park-naip` and ingest NAIP items covering Union Park from 2012 through 2022. For your own scenario, create a collection containing imagery for your location and dates of interest.
 
@@ -82,9 +81,9 @@ MARS uses the red, green, and blue (RGB) bands. Ingest the items and ensure thei
 
 _Input NAIP imagery of Union Park in July 2014 and July 2022. The selected area changes from site preparation to a residential neighborhood._
 
-### Prepare the output collections
+## Prepare the output collections
 
-Create `union-park-buildings-2012-2014` and `union-park-buildings-2020-2022` by using the [output collection configuration](./get-started-ai-workflow.md#step-4-create-an-output-stac-collection). Separate collections make the results easy to locate and compare.
+Create `union-park-buildings-2012-2014` and `union-park-buildings-2020-2022` by using the [output collection configuration](./configure-geocatalog-for-ai-workflow.md#step-4-create-an-output-stac-collection). Separate collections make the results easy to locate and compare.
 
 ## Configure Workflow
 
@@ -487,7 +486,7 @@ Create a new workflow for fixed-size output, similar to the earlier Union Park
 example. The complete definition below uses MARS, the `Building` category, and
 the 2020-2022 input range. First, create the output collection
 `mars-example-output` using the
-[output collection configuration](./get-started-ai-workflow.md#step-4-create-an-output-stac-collection),
+[output collection configuration](./configure-geocatalog-for-ai-workflow.md#step-4-create-an-output-stac-collection),
 then define the new workflow:
 
 ```python
@@ -599,7 +598,7 @@ and output settings unchanged so that the threshold is the comparison variable.
 
 Before running the example, ingest NAIP imagery covering the AOI between 2020
 and 2024 into `input-naip`. Create `eoos-hyperparam` using the
-[output collection configuration](./get-started-ai-workflow.md#step-4-create-an-output-stac-collection),
+[output collection configuration](./configure-geocatalog-for-ai-workflow.md#step-4-create-an-output-stac-collection),
 and set `EOOS_MODEL_ENDPOINT` to your registered EO-OS endpoint URL.
 
 ```python
@@ -719,7 +718,7 @@ tokens or signed asset URLs.
 ## Reference documentation
 
 - [AI Workflow overview](./ai-workflow-overview.md)
-- [Get started with AI Workflow](./get-started-ai-workflow.md)
+- [Configure your GeoCatalog for AI Workflow](./configure-geocatalog-for-ai-workflow.md)
 - [AI Workflow API specification](./openapi.json)
 - [Microsoft Planetary Computer Pro - Microsoft Azure](https://azure.microsoft.com/en-us/products/planetary-computer-pro)
 - [Microsoft Planetary Computer Pro - Microsoft Learn](https://learn.microsoft.com/en-us/azure/planetary-computer/)

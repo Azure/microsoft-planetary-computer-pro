@@ -63,6 +63,6 @@ You can incur charges for:
 
 ## Reference Documents
 
-- [Get Started with AI Workflow](./get-started-ai-workflow.md)
+- [Configure your GeoCatalog for AI Workflow](./configure-geocatalog-for-ai-workflow.md)
 - [Example of how AI Workflow is Used](./use-ai-workflow.md)
 - [Input Data Requirements](./input-data-requirements.md)

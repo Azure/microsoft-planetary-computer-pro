@@ -143,5 +143,5 @@ An item is rejected immediately, without retry, under the following conditions:
 ## Related content
 
 - [AI Workflow overview](./ai-workflow-overview.md)
-- [Get started with AI Workflow](./get-started-ai-workflow.md)
+- [Configure your GeoCatalog for AI Workflow](./configure-geocatalog-for-ai-workflow.md)
 - [Use AI Workflow to compare residential development](./use-ai-workflow.md)
