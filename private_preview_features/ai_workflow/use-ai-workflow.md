@@ -56,9 +56,9 @@ Confirm that:
 - MARS is deployed through Microsoft Foundry.
 - The deployed endpoint is registered with GeoCatalog.
 - GeoCatalog is authorized to invoke the endpoint through a managed identity.
-- You have a GeoCatalog API access token with permissions to create and run workflows. See [Configure application authentication](https://learn.microsoft.com/azure/planetary-computer/application-authentication).
+- You have a GeoCatalog API access token obtained using your user account, which has the GeoCatalog Administrator role on the target GeoCatalog.
 - The input imagery is accessible and meets the model's input requirements.
-- Python and the `requests` package are available for the API examples.
+- Python and `requests` are installed for the API examples. Recommended versions: Python 3.12.x and `requests` 2.33.0.
 
 ## Prepare the input collection
 
@@ -576,6 +576,43 @@ Your run produces new item IDs and can
 produce different detection counts.
 
 ## Configure Model Hyperparameters
+
+Use the model API to discover available models and inspect their IDs, names,
+descriptions, and supported `modelHyperparameters` with default values.
+List models by sending this request to your GeoCatalog endpoint:
+
+```http
+GET /ai/models?api-version=2026-08-01-preview
+```
+
+The response's `value` array currently lists three models: EO-OS Object
+Detection (`microsoft/eo-os-object-detection`), MARS
+(`microsoft/mars-map-autoregressive`), and FMV (`microsoft/fmv`).
+
+To inspect a particular model, use `GET /ai/models/{modelId}`. For example,
+retrieve EO-OS Object Detection:
+
+```http
+GET /ai/models/eo-os-object-detection?api-version=2026-08-01-preview
+```
+
+Example response:
+
+```json
+{
+    "id": "microsoft/eo-os-object-detection",
+    "name": "EO-OS Object Detection",
+    "description": "High-resolution object detection model optimized for aerial imagery",
+    "modelHyperparameters": {
+        "threshold": 0.5,
+        "chip_size": 1024,
+        "stride": 800
+    }
+}
+```
+
+Use the returned `id` as the workflow's `modelId`. The example below shows how
+to set `modelHyperparameters` when creating a workflow.
 
 Model hyperparameters control model-specific behavior. Earlier, the MARS
 example used `"categories": ["Building"]` to select the requested feature
