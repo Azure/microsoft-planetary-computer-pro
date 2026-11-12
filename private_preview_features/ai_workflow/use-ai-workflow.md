@@ -194,7 +194,10 @@ run_ids = {}
 - **`areaOfInterest`** selects the neighborhood to process. Bounding-box order is `[west, south, east, north]`.
 - **`categories`** requests `Building` predictions.
 - **`outputCollectionId`** identifies where results are published.
-- **`outputSize`** controls how predictions are grouped into output STAC items. `MatchInput` merges predictions into one output covering the AOI. For large AOIs, use `FixedSize` to publish separate grid-cell items, as shown in the [large-AOI example](#run-geoai-orchestrator-for-large-aois).
+- **`outputSize`** controls how predictions are grouped into output STAC items.
+  `MatchInput` produces one output per AOI up to 10 square kilometres.
+  Larger AOIs automatically use grid output. See
+  [large-AOI behavior](#run-ai-workflow-for-large-aois).
 
 For the four acquisitions in this example:
 
@@ -462,11 +465,16 @@ Cancellation is asynchronous. The state might initially remain `Running`, or the
 
 ## Run AI Workflow for Large AOIs
 
-Large AOIs are areas spanning more than 10 square kilometres. For these areas,
-use `FixedSize`, for example:
+For AOIs larger than 10 square kilometres, AI Workflow automatically switches
+from `MatchInput` (the default) to 1,000-by-1,000-metre `FixedSize` output grid cells.
+Results are published incrementally as grid cells finish, so you can access
+them without waiting for the entire AOI to complete.
+AOIs of 10 square kilometres or less keep the requested output size.
+
+To request grid output explicitly, use:
 `"outputSize": {"kind": "FixedSize", "width": 1000, "height": 1000}`.
-`MatchInput` creates one merged output per AOI. For
-very large areas, merging can take a long time or exceed memory limits.
+For AOIs above 10 square kilometres, width and height are capped at 1,000
+metres each; smaller values are kept.
 
 `FixedSize` divides the AOI into grid cells and publishes results incrementally
 as cells finish. Each published cell is a separate STAC item with a GeoTIFF
@@ -477,8 +485,6 @@ detections will not produce an item.
 > [!NOTE]
 > Width and height are EPSG:3857 projected metres, not pixels or exact ground
 > distances. Cells at the AOI boundary are clipped to the AOI.
-> Set both dimensions to 1,000 metres or less for efficient
-> output size and publishing rate.
 
 ### Example: Union Park across 20 grid cells
 
@@ -713,7 +719,7 @@ workflow or retrying it.
 
 | Symptom | What to check and do |
 | --- | --- |
-| Run stays `Running` for a large AOI | Inference can finish before merging and publishing finish. For large AOIs, use `FixedSize` instead of `MatchInput` to publish separate grid-cell items incrementally. Check the output collection for items with this `workflow_run_id`; `percentComplete: 0` alone doesn't mean the run has stopped progressing. |
+| Run stays `Running` for a large AOI | Results become available one grid cell at a time while the run continues. Check the output collection for items with this `workflow_run_id`; `percentComplete: 0` alone doesn't mean progress has stopped. See [large-AOI behavior](#run-ai-workflow-for-large-aois). |
 | Run is `Failed` with a validation error | Read `error.code` and `error.message` to identify the failed validation, such as an unsupported model, invalid input or hyperparameter, or missing collection. Correct the reported field in the saved workflow or create the missing collection before starting a new run. |
 | Run fails during patch processing | `WorkflowExecutionError` can include `NoDataInAOI` (all patches failed) or `PartialDataProcessed` (some patches failed). Check AOI coverage, input filters, tile limit, and asset access. Partial outputs don't establish complete coverage; valid imagery with no detections isn't a no-data failure. |
 | Execution takes longer than expected | Check the model endpoint's health, compute capacity, and throttling or timeout responses. AI Workflow inference concurrency adjusts automatically based on endpoint responses and latency. |
