@@ -133,7 +133,7 @@ For the complete operation list and schemas, see the [OGC API - Tiles API refere
 QGIS users can access vector tiles stored in Planetary Computer Pro in several ways:
 
 - **Access PMTiles from blob storage** - Load PMTiles assets directly from Azure Blob Storage by using the `/vsicurl/` prefix with a SAS token.
-- **Use OGC API - Tiles** - Create a generic vector tile connection to stream authenticated MVT tiles from a `/visual/collections/<collection-id>/tiles/WebMercatorQuad/{z}/{y}/{x}` URL. Include `api-version=2026-10-01-preview` and configure the bearer token as an HTTP header.
+- **Use OGC API - Tiles** - Create a generic vector tile connection to stream authenticated MVT tiles from a `/visual/collections/<collection-id>/tiles/WebMercatorQuad/{z}/{y}/{x}` URL. Include `api-version=2026-10-01-preview` and select the Microsoft Planetary Computer authentication configuration used by your STAC connection. QGIS acquires the Microsoft Entra token and adds the authorization header automatically, so you don't need to obtain or maintain a bearer token manually.
 - **Download and load locally** - Download PMTiles assets to local storage for offline use.
 
 QGIS doesn't currently support loading vector data directly through a STAC connection. For detailed instructions on configuring QGIS to access your GeoCatalog, see [Configure QGIS to access Microsoft Planetary Computer Pro](https://learn.microsoft.com/azure/planetary-computer/configure-qgis).
@@ -176,9 +176,9 @@ Add `bbox` for spatial filtering or add `filter` and `filter-lang=cql2-json` for
 
 ### Access, query, and filter features from QGIS
 
-QGIS includes a native OGC API Features provider. Create an API Header authentication configuration for the Microsoft Entra bearer token, and then create a WFS / OGC API Features connection to the GeoCatalog landing page. Enable **Only request features overlapping the view extent** so QGIS sends a `bbox` with feature requests and the service performs spatial filtering.
+QGIS includes a native OGC API Features provider. Create a WFS / OGC API Features connection to the GeoCatalog landing page and select the Microsoft Planetary Computer authentication configuration used by your STAC connection. QGIS acquires the Microsoft Entra token and adds the authorization header automatically, so you don't need to create an API Header configuration or maintain a bearer token manually. Enable **Only request features overlapping the view extent** so QGIS sends a `bbox` with feature requests and the service performs spatial filtering.
 
-During the current preview, authenticated collection discovery, map display, and extent-based filtering are supported. Native QGIS attribute subset requests might not propagate authentication reliably. To apply a CQL2 property filter, you can send an authenticated request from the QGIS Python Console and load the returned GeoJSON as a temporary layer.
+This authentication workflow has been validated with the OGC API - Features and OGC API - Tiles endpoints in QGIS 4.2.1. During the current preview, authenticated collection discovery, map display, and extent-based filtering are supported. Native QGIS attribute subset requests might not propagate authentication reliably. To apply a CQL2 property filter, you can send an authenticated request from the QGIS Python Console and load the returned GeoJSON as a temporary layer.
 
 ### Access, query, and filter features from ArcGIS Pro
 
