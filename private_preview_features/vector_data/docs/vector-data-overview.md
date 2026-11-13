@@ -136,13 +136,13 @@ QGIS users can access vector tiles stored in Planetary Computer Pro in several w
 - **Use OGC API - Tiles** - Create a generic vector tile connection to stream authenticated MVT tiles from a `/visual/collections/<collection-id>/tiles/WebMercatorQuad/{z}/{y}/{x}` URL. Include `api-version=2026-10-01-preview` and configure the bearer token as an HTTP header.
 - **Download and load locally** - Download PMTiles assets to local storage for offline use.
 
-QGIS doesn't currently support loading vector data directly through a STAC connection. For detailed instructions on configuring QGIS to access your GeoCatalog, see [Configure QGIS to access a GeoCatalog resource](./configure-qgis.md).
+QGIS doesn't currently support loading vector data directly through a STAC connection. For detailed instructions on configuring QGIS to access your GeoCatalog, see [Configure QGIS to access Microsoft Planetary Computer Pro](https://learn.microsoft.com/azure/planetary-computer/configure-qgis).
 
 ### Access vector tiles from ArcGIS Pro
 
 ArcGIS Pro doesn't currently support PMTiles through STAC connections. OGC API - Tiles serves MVT from PMTiles archives, but ArcGIS Pro's Tile XYZ service doesn't currently support authentication, which limits this approach for secured GeoCatalog resources.
 
-As an alternative, support for loading GeoParquet assets through STAC connections is coming soon. Cloud-optimized assets use the `.parquet` extension that ArcGIS Pro expects, which will enable direct access to vector data with attribute and spatial query capabilities. For guidance on setting up a GeoCatalog connection, see [Configure ArcGIS Pro to access a GeoCatalog](./create-connection-arc-gis-pro.md).
+As an alternative, support for loading GeoParquet assets through STAC connections is coming soon. Cloud-optimized assets use the `.parquet` extension that ArcGIS Pro expects, which will enable direct access to vector data with attribute and spatial query capabilities. For guidance on setting up a GeoCatalog connection, see [Use ArcGIS Pro with Microsoft Planetary Computer Pro](https://learn.microsoft.com/azure/planetary-computer/create-connection-arc-gis-pro?tabs=public).
 
 ## Vector Features API
 
@@ -190,7 +190,7 @@ For authenticated CQL2 property filtering during the current preview, use an int
 
 - [OGC API - Tiles API reference](../spec/ogc-tiles-api.md)
 - [Vector Features API OpenAPI definition](../spec/vector-features-api.json)
-- [Supported data types in Microsoft Planetary Computer Pro](./supported-data-types.md)
-- [Configure QGIS to access a GeoCatalog resource](./configure-qgis.md)
-- [Configure ArcGIS Pro to access a GeoCatalog](./create-connection-arc-gis-pro.md)
-- [Build applications with Microsoft Planetary Computer Pro](./build-applications-with-planetary-computer-pro.md)
+- [Supported data types in Microsoft Planetary Computer Pro](https://learn.microsoft.com/azure/planetary-computer/supported-data-types)
+- [Configure QGIS to access Microsoft Planetary Computer Pro](https://learn.microsoft.com/azure/planetary-computer/configure-qgis)
+- [Use ArcGIS Pro with Microsoft Planetary Computer Pro](https://learn.microsoft.com/azure/planetary-computer/create-connection-arc-gis-pro?tabs=public)
+- [Connect and build applications with your data](https://learn.microsoft.com/azure/planetary-computer/build-applications-with-planetary-computer-pro)
