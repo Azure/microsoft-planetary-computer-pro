@@ -182,9 +182,11 @@ During the current preview, authenticated collection discovery, map display, and
 
 ### Access, query, and filter features from ArcGIS Pro
 
-ArcGIS Pro can discover and display collections through a native OGC API Features connection when the endpoint uses an authentication method supported by ArcGIS Pro. The native client sends bounding boxes for extent-based requests, allowing the service to limit the features returned for the visible map area.
+ArcGIS Pro 3.4 and later support OAuth 2.0 authentication for native OGC API server connections. Create the connection with the GeoCatalog landing-page URL (`https://<geocatalog-host>/features/`), add `api-version` with the value `2026-08-01-preview` as a custom request parameter, and select the Microsoft Entra authentication connection that you use for GeoCatalog access. For instructions to create that authentication connection, see [Use ArcGIS Pro with Microsoft Planetary Computer Pro](https://learn.microsoft.com/azure/planetary-computer/create-connection-arc-gis-pro?tabs=public).
 
-For authenticated CQL2 property filtering during the current preview, use an integrated ArcGIS Pro notebook to request filtered GeoJSON and convert the response to a feature class with ArcPy. A native ArcGIS Pro definition query can filter the displayed layer locally, but it isn't currently guaranteed to send a CQL2 filter to the service.
+Native ArcGIS Pro discovery and display have been validated with an anonymous OGC API Features endpoint, but the OAuth 2.0 connection to a secured GeoCatalog hasn't yet been validated end to end during this preview. The native client sends bounding boxes for extent-based requests when connected, allowing the service to limit the features returned for the visible map area.
+
+If the native connection doesn't authenticate, use an integrated ArcGIS Pro notebook to acquire a Microsoft Entra token, request GeoJSON from the Vector Features API, and convert the response to a feature class with ArcPy. Use the same notebook approach for authenticated CQL2 property filtering during the current preview. A native ArcGIS Pro definition query can filter the displayed layer locally, but it isn't currently guaranteed to send a CQL2 filter to the service.
 
 ## Related content
 
