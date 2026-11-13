@@ -21,11 +21,15 @@ For a feature overview, supported models, and pricing, see [AI Workflow in Micro
 ## Prerequisites
 
 - Microsoft Planetary Computer Pro deployed in your Azure subscription. See [Deploy a GeoCatalog resource](https://learn.microsoft.com/azure/planetary-computer/deploy-geocatalog-resource).
-
-- Submit a form using the following link to get AI Workflow enabled in your GeoCatalog: [Planetary Computer Pro - Request to test a Feature in Private Preview](https://forms.cloud.microsoft/Pages/DesignPageV2.aspx?subpage=design&id=v4j5cvGGr0GRqy180BHbR9JBG4XVVlZKhac1ChBrBzJUQTM3TVRIRDBDOTVPNExIUlcwUURKVFhSMCQlQCN0PWcu)
+- Submit a form using the following link to get AI Workflow enabled in your GeoCatalog: [Planetary Computer Pro - Request to test a Feature in Private Preview](https://aka.ms/mpcpro/preview)
 - Supported geospatial data ingested into a GeoCatalog collection. Review the [input data requirements](./input-data-requirements.md) and the selected model's card to confirm that your data meets its requirements.
-- Sufficient GPU quota and compute capacity for the selected model deployment. The minimum viable GPU configuration for the supported models is 2× NVIDIA T4 GPUs, though this may result in high inference latency. The recommended configuration is 1× NVIDIA A100 GPU or higher for optimal performance. The link below provides instructions for requesting GPU quota in Azure. Quota approval does not guarantee GPU capacity. Availability varies by Azure region and subscription. https://learn.microsoft.com/en-us/azure/quotas/quickstart-increase-quota-portal
+- Sufficient GPU quota and compute capacity for the selected model deployment. 
+    - The minimum viable GPU configuration for the supported models is 2× NVIDIA T4 GPUs, though this may result in high inference latency. 
+    - The recommended configuration is 1× NVIDIA A100 GPU or higher for optimal performance. 
+    - Request Foundry VM Quota using by following this process: [Manage and increase quotas for hub resources (classic)](https://learn.microsoft.com/en-us/azure/foundry-classic/how-to/hub-quota). 
 
+> [!NOTE]
+> Quota approval does not guarantee GPU capacity. Availability varies by Azure region and subscription
 
 ## Initial setup
 

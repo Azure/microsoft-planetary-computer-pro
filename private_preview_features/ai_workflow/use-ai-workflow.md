@@ -4,7 +4,7 @@ description: Learn how to run MARS on NAIP imagery for two periods, monitor work
 author: aloverro
 ms.author: adamloverro
 ms.service: planetary-computer-pro
-ms.topic: quickstart / tutorial
+ms.topic: quickstart
 ms.date: 11/02/2026
 # customer intent: As a geospatial developer, I want to run AI Workflow on imagery from two periods so that I can compare residential development.
 ---
@@ -48,19 +48,13 @@ The example follows this API sequence:
 1. View and compare results.
 1. Cancel a run, if needed.
 
-## Before you begin
+## Prerequisites
 
-Confirm that:
-
-- AI Workflow is enabled for your GeoCatalog.
-- MARS is deployed through Microsoft Foundry.
-- The deployed endpoint is registered with GeoCatalog.
-- GeoCatalog is authorized to invoke the endpoint through a managed identity.
+- [Configure your GeoCatalog for AI Workflow](./configure-geocatalog-for-ai-workflow.md) is enabled for your GeoCatalog.
 - You have a GeoCatalog API access token obtained using your user account, which has the GeoCatalog Administrator role on the target GeoCatalog.
-- The input imagery is accessible and meets the model's input requirements.
 - Python and `requests` are installed for the API examples. Recommended versions: Python 3.12.x and `requests` 2.33.0.
 
-## Prepare the input collection
+## Step 1. Prepare the input collection
 
 Create a STAC collection named `union-park-naip` and ingest NAIP items covering Union Park from 2012 through 2022. For your own scenario, create a collection containing imagery for your location and dates of interest.
 
@@ -81,11 +75,11 @@ MARS uses the red, green, and blue (RGB) bands. Ingest the items and ensure thei
 
 _Input NAIP imagery of Union Park in July 2014 and July 2022. The selected area changes from site preparation to a residential neighborhood._
 
-## Prepare the output collections
+## Step 2. Prepare the output collections
 
 Create `union-park-buildings-2012-2014` and `union-park-buildings-2020-2022` by using the [output collection configuration](./configure-geocatalog-for-ai-workflow.md#step-4-create-an-output-stac-collection). Separate collections make the results easy to locate and compare.
 
-## Configure Workflow
+## Step 3. Configure Workflow
 
 Run the code blocks in order in the same Python session. Set the following environment variables before running the code:
 
@@ -98,7 +92,7 @@ Run the code blocks in order in the same Python session. Set the following envir
 > [!IMPORTANT]
 > Don't store access tokens in source code or commit them to source control.
 
-## Step 1: Create or replace a workflow
+## Step 4. Create or replace a workflow
 
 ```python
 import os
@@ -236,7 +230,7 @@ print(
 
 A successful request returns `201 Created` for a new workflow or `200 OK` for a replacement. Confirm that `create_response["id"]` equals `WORKFLOW_ID` and that the response includes `createdAt` and `lastModifiedAt`.
 
-## Step 2: List workflows
+## Step 5. List workflows
 
 Use `GET /ai/workflows` to confirm that the workflow is available. Follow `nextLink` so that workflows on later pages aren't missed.
 
@@ -259,7 +253,7 @@ print(WORKFLOW_ID in ids)
 
 Each successful request returns `200 OK`. The workflow appears in the complete list with its saved definition, and `WORKFLOW_ID in ids` evaluates to `True`.
 
-## Step 3: Get the workflow
+## Step 6. Get the workflow
 
 Use `GET /ai/workflows/{workflowId}` to inspect the saved input range, AOI, model settings, and output collection before running inference.
 
@@ -282,7 +276,7 @@ A successful request returns `200 OK` with the persisted workflow definition. Ve
 - `modelInput` contains the configured datetime filter, descending sort, and item limit.
 - `areaOfInterest` and `outputCollectionId` match your requested configuration.
 
-## Step 4: Run the workflow
+## Step 7. Run the workflow
 
 Use `POST /ai/workflows/{workflowId}:run` to start execution of the saved workflow.
 
@@ -306,7 +300,7 @@ A successful request returns `202 Accepted` with run metadata such as `id`, `wor
 
 Save the returned run ID. Acceptance doesn't mean inference has finished, and calling this API again starts another run.
 
-## Step 5: Get the workflow run status
+## Step 8. Get the workflow run status
 
 Use `GET /ai/workflows/{workflowId}/runs/{runId}` to poll until the run reaches `Succeeded`, `Failed`, or `Canceled`.
 
@@ -338,7 +332,7 @@ Each successful status request returns `200 OK`. The sample prints lifecycle sta
 > [!NOTE]
 > This sample waits up to 30 minutes. Reaching the polling timeout doesn't cancel the run.
 
-## Step 6: Repeat for the second input range
+## Step 9. Repeat for the second input range
 
 Keep the input collection, AOI, endpoint, and model settings unchanged. Switch to the second period:
 
@@ -358,7 +352,7 @@ print(run_ids)
 
 You now have two distinct workflow definitions and runs, one per input range. Each run uses the same geographic area but a different selected acquisition.
 
-## Step 7: List workflow runs
+## Step 10. List workflow runs
 
 Use `GET /ai/workflows/{workflowId}/runs` to review each workflow's execution history and confirm that the submitted run is present.
 
@@ -381,7 +375,7 @@ for period, scenario in SCENARIOS.items():
 
 Each successful request returns `200 OK`. The sample prints `True` for both periods. Run records include lifecycle state, progress, and timestamps.
 
-## Step 8: View and compare results
+## Step 11. View and compare results
 
 Open the configured output collections in GeoCatalog:
 
@@ -411,7 +405,7 @@ Both runs should publish outputs to their configured collections so that you can
 - The same area contains residential streets and houses in July 2022.
 - Existing buildings, such as the school, provide a recognizable reference.
 
-## Step 9: Cancel a run (optional)
+## Step 12. Cancel a run (optional)
 
 Use `POST /ai/workflows/{workflowId}/runs/{runId}:cancel` if you need to stop a run. Skip this step for the comparison runs until their results are collected.
 
@@ -537,7 +531,7 @@ WORKFLOW_BODY = {
 }
 ```
 
-Save `WORKFLOW_BODY` using the `PUT` request in step 1, without rerunning its
+Save `WORKFLOW_BODY` using the `PUT` request in step 4, without rerunning its
 setup code. Then follow steps 4-5 to run the workflow and check its status.
 
 <img src="./media/union-park-input-grid.jpg" alt="Union Park NAIP imagery divided into 20 labeled output grid cells, arranged in five columns and four rows." width="700">
@@ -681,7 +675,7 @@ WORKFLOW_BODY = {
 }
 ```
 
-Save the definition using the `PUT` request in step 1, then follow steps 4-5 to
+Save the definition using the `PUT` request in step 4, then follow steps 7-8 to
 run it and check its status. Repeat this block with `THRESHOLD = 0.9` and
 `WORKFLOW_ID = "eoos-09-threshold"`, then save and run the second workflow. Retain
 both run IDs to distinguish their results in the shared output collection.
