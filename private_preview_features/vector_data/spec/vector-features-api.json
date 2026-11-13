@@ -16,15 +16,11 @@
           {
             "name": "api-version",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
+              "type": "string",
+              "enum": [
+                "2026-08-01-preview"
               ],
               "title": "Api-Version"
             }
@@ -57,15 +53,11 @@
           {
             "name": "api-version",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
+              "type": "string",
+              "enum": [
+                "2026-08-01-preview"
               ],
               "title": "Api-Version"
             }
@@ -114,15 +106,11 @@
           {
             "name": "api-version",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
+              "type": "string",
+              "enum": [
+                "2026-08-01-preview"
               ],
               "title": "Api-Version"
             }
@@ -176,15 +164,11 @@
           {
             "name": "api-version",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
+              "type": "string",
+              "enum": [
+                "2026-08-01-preview"
               ],
               "title": "Api-Version"
             }
@@ -412,15 +396,11 @@
           {
             "name": "api-version",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
+              "type": "string",
+              "enum": [
+                "2026-08-01-preview"
               ],
               "title": "Api-Version"
             }
@@ -501,15 +481,11 @@
           {
             "name": "api-version",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
+              "type": "string",
+              "enum": [
+                "2026-08-01-preview"
               ],
               "title": "Api-Version"
             }
@@ -547,15 +523,11 @@
           {
             "name": "api-version",
             "in": "query",
-            "required": false,
+            "required": true,
             "schema": {
-              "anyOf": [
-                {
-                  "type": "string"
-                },
-                {
-                  "type": "null"
-                }
+              "type": "string",
+              "enum": [
+                "2026-08-01-preview"
               ],
               "title": "Api-Version"
             }
