@@ -5,13 +5,15 @@ author: beharris
 ms.author: beharris
 ms.service: planetary-computer-pro
 ms.topic: how-to
-ms.date: 10/20/2026
+ms.date: 10/30/2026
 #customer intent: As a geospatial analyst, I want to run GeoStats against raster data and field boundaries so that I can use the resulting statistics in analysis and reporting.
 ---
 
 # Use GeoStats to calculate zonal statistics (Private Preview)
 
 This article shows how to use the GeoStats REST API to calculate mean Normalized Difference Vegetation Index (NDVI) for polygons. You save a reusable formula and computation, estimate the work, submit an asynchronous run, and find the GeoParquet result in your GeoCatalog.
+
+When GeoStats provides a built-in formula for your raster collection, use it instead of writing an expression or mapping bands manually. Start with [Quickstart: Run a built-in GeoStats formula](./run-built-in-formula.md). Continue with this article when you need advanced configuration or a custom formula that isn't available as a compatible built-in.
 
 > [!IMPORTANT]
 > GeoStats is available only to approved private-preview participants. The feature must be enabled for your GeoCatalog by the Microsoft Planetary Computer Pro team.
@@ -57,6 +59,10 @@ curl --request GET \
   "${GEOCATALOG_ENDPOINT}/stac/collections/${RASTER_COLLECTION_ID}/formulas?api-version=${GEOSTATS_API_VERSION}" \
   --header "Authorization: Bearer ${ACCESS_TOKEN}"
 ```
+
+If the response includes `ndvi`, reference it directly in the computation and skip the rest of this section. Don't recreate its expression or band mapping. Open Planetary Computer origin alone doesn't guarantee availability: ingestion must preserve the required collection and item band metadata and source assets. GeoStats doesn't seed formulas whose required bands are missing or ambiguous.
+
+Only create a custom formula when the formulas endpoint doesn't return the calculation you need and you have verified the source assets, band metadata, and resolution behavior.
 
 The following example is for a collection whose items store red and near-infrared data in separate single-band Cloud Optimized GeoTIFF (COG) assets, such as a Sentinel-2 collection. Change the asset keys to match the source STAC items.
 
@@ -453,5 +459,6 @@ For referenced assets, always supply a stable business key in `geometryIdColumn`
 
 ## Related content
 
+- [Quickstart: Run a built-in GeoStats formula](./run-built-in-formula.md)
 - [GeoStats overview](./geostats-overview.md)
 - [GeoStats REST API specification](../spec/openapi.json)
